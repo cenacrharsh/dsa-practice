@@ -48,23 +48,24 @@ void sorting012Array(int arr[], int n)
 > Space Complexity: O(1)
 */
 
-void sorting012Array2(int arr[], int n)
+void sorting012Array(int a[], int n)
 {
+ // Write your code here
  int l = 0, mid = 0, h = n - 1;
 
- while (l <= h)
+ while (mid <= h)
  {
-  if (arr[mid] == 0)
+  if (a[mid] == 0)
   {
-   swap(arr[l++], arr[mid++]);
+   swap(a[l++], a[mid++]);
   }
-  else if (arr[mid] == 1)
+  else if (a[mid] == 1)
   {
-   l++;
+   mid++;
   }
-  else if (arr[mid] == 2)
+  else if (a[mid] == 2)
   {
-   swap(arr[l], arr[h--]);
+   swap(a[l], a[h--]);
   }
  }
 }
