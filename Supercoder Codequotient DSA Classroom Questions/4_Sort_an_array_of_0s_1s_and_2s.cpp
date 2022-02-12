@@ -65,7 +65,7 @@ void sorting012Array(int a[], int n)
   }
   else if (a[mid] == 2)
   {
-   swap(a[l], a[h--]);
+   swap(a[mid], a[h--]);
   }
  }
 }

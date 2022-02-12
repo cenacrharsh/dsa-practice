@@ -7,7 +7,6 @@ void sorting012Array(int a[], int n)
 {
  // Write your code here
  int l = 0, mid = 0, h = n - 1;
-
  while (mid <= h)
  {
   if (a[mid] == 0)
@@ -20,7 +19,7 @@ void sorting012Array(int a[], int n)
   }
   else if (a[mid] == 2)
   {
-   swap(a[l], a[h--]);
+   swap(a[mid], a[h--]);
   }
  }
 }
