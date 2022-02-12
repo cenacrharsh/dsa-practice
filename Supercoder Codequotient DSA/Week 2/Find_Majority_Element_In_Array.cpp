@@ -1,9 +1,11 @@
-#include<bits/stdc++.h>
-#include<vector>
-#include<algorithm>
-#include<climits>
+#include <bits/stdc++.h>
+#include <vector>
+#include <algorithm>
+#include <climits>
 using namespace std;
 
+//! Approach 1
+/*
 int getFirstOcc(int arr[], int l, int r, int k)
 {
  while (l <= r)
@@ -86,6 +88,45 @@ int getMajorityElement(int array[], int size)
    ans = array[i];
   }
  }
+ int requiredCount = size / 2;
+ if (maxCount > requiredCount)
+ {
+  return ans;
+ }
+ else
+ {
+  return -1;
+ }
+}
+*/
+
+//! Approach 2
+
+int getMajorityElement(int array[], int size)
+{
+ // Enter Your Code
+ sort(array, array + size);
+ int maxCount = INT_MIN;
+ int ans = -1;
+ int i = 0;
+ int startVertex = 0;
+
+ while (i < size)
+ {
+  while (array[i] == array[i + 1])
+  {
+   i++;
+  }
+  int tempCount = i - startVertex + 1;
+  if (tempCount > maxCount)
+  {
+   maxCount = tempCount;
+   ans = array[i];
+  }
+  startVertex = i + 1;
+  i++;
+ }
+
  int requiredCount = size / 2;
  if (maxCount > requiredCount)
  {
