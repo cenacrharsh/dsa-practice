@@ -102,6 +102,11 @@ int getMajorityElement(int array[], int size)
 
 //! Approach 2
 
+/*
+> Time Complexity: O(n)
+> Space Complexity: O(1)
+*/
+
 int getMajorityElement(int array[], int size)
 {
  // Enter Your Code
