@@ -3,13 +3,14 @@
 #include <algorithm>
 using namespace std;
 
-// Explanation - https://www.youtube.com/watch?v=QM0klnvTQzk
+//! Using Hashmap
+//> Explanation - https://www.youtube.com/watch?v=QM0klnvTQzk
 
 int subArrayCount(vector<int> &arr, int k)
 {
- // HashMap to store frequency.
+ //* HashMap to store frequency.
  unordered_map<int, int> remMap;
- // Add base case in hashmap.
+ //* Add base case in hashmap.
  remMap[0] = 1;
  int count = 0;
  long summ = 0;
