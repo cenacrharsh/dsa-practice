@@ -95,10 +95,10 @@ vector<int> majorityElementII(vector<int> &arr)
  return majorityElement;
 }
 
-//! Approach 2
+//! Approach 2 - hashmap
 
 /*
-> Time Complexity: O(n)
+> Time Complexity: O(n) / O(n*logn)
 > Space Complexity: O(n)
 */
 
