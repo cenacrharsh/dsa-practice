@@ -6,11 +6,20 @@
 #include <climits>
 using namespace std;
 
+//! Approach 1 - Moore's Voting Algo
+
 /*
-> Moore Voting Algorithm
+> Boyer Moore Voting Algorithm
 * If the Majority element was x, and it by any chance appears on the left prefix, then it count at max can be (lenOfLeftPrefix / 2). So since it has to appear more than N/2 times, it is bound to appear as a majority in the last suffix.
 
 # prefix is the left part of array at which point our count = 0, i.e. n(majority) = n(minority) upto this point, hence since majority has to appear > n/2 times, it becomes majority the right parefix or leftover part of array
+
+! only one element can be majority element as only one element can occur more than n/2 times
+*/
+
+/*
+> Time Complexity: O(n)
+> Space Complexity: O(1)
 */
 
 class Solution
@@ -39,8 +48,6 @@ public:
   return candidate;
  }
 };
-
-//! Approach 1 - Moore's Voting Algo
 
 //! Approach 2 - Hasmap
 
@@ -74,6 +81,11 @@ public:
 };
 
 //! Approach 3
+
+/*
+> Time Complexity: O(n * log n)
+> Space Complexity: O(1)
+*/
 
 class Solution
 {
