@@ -25,30 +25,27 @@ Invalid: - _ -
 #include <unordered_map>
 using namespace std;
 
-class Solution
+bool isPossible(int *arr, int n)
 {
-public:
- bool checkPossibility(vector<int> &nums)
+ //  Write your code here.
+ int count = 0;
+ for (int i = 1; i < n; i++)
  {
-  int count = 0;
-  for (int i = 1; i < nums.size(); i++)
+  if (arr[i] < arr[i - 1])
   {
-   if (nums[i] < nums[i - 1])
+   // i - 2 is lower than i
+   if (i == 1 || arr[i - 2] <= arr[i])
    {
-    // i - 2 is lower than i
-    if (i == 1 || nums[i - 2] <= nums[i])
-    {
-     nums[i - 1] = nums[i];
-     count++;
-    }
-    // i - 2 is above i
-    else
-    {
-     nums[i] = nums[i - 1];
-     count++;
-    }
+    arr[i - 1] = arr[i];
+    count++;
+   }
+   // i - 2 is above i
+   else
+   {
+    arr[i] = arr[i - 1];
+    count++;
    }
   }
-  return (count <= 1);
  }
-};
+ return (count <= 1);
+}
