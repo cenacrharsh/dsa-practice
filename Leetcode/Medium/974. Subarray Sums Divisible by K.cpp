@@ -22,7 +22,7 @@ public:
    rem = sum % k;
    if (rem < 0)
    {
-    rem += k; // Kn-y = Kn'-y+k
+    rem += k; // Kn - y = Kn - y + K - K = K(n-1) + (K-y) = Kn' - y + K, eg. 7n - 4 = 7n' + 3
    }
 
    if (remainder.find(rem) != remainder.end())
