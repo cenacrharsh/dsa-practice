@@ -5,6 +5,34 @@
 #include <unordered_map>
 using namespace std;
 
+//! Approach 1 -> 2 traversals
+class Solution
+{
+public:
+ int pivotIndex(vector<int> &nums)
+ {
+  int totalSum = 0;
+  for (int i = 0; i < nums.size(); i++)
+  {
+   totalSum += nums[i];
+  }
+  int leftSum = 0;
+  for (int i = 0; i < nums.size(); i++)
+  {
+   if (i != 0)
+   {
+    leftSum += nums[i - 1];
+   }
+   if ((totalSum - leftSum - nums[i]) == leftSum)
+   {
+    return i;
+   }
+  }
+  return -1;
+ }
+};
+
+//! Approach 2 -> 3 traversals
 class Solution
 {
 public:
