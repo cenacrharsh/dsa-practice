@@ -20,7 +20,7 @@ int rotationCount(int arr[], int size)
  while (l <= r)
  {
   // if array already sorted
-  if (arr[l] == arr[r])
+  if (arr[l] <= arr[r])
   {
    return l;
   }
