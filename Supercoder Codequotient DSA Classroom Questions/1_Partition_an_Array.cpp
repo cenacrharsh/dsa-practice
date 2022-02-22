@@ -3,6 +3,8 @@
 #include <algorithm>
 using namespace std;
 
+//! New Array and 2 traversals
+
 /*
 > Time Complexity: O(n+n) => O(n)
 > Space Complexity: O(n)
@@ -30,6 +32,8 @@ void partitionArray(int arr[], int n, int x)
  }
 }
 
+//! New Array and 1 traversal
+
 /*
 > Time Complexity: O(n)
 > Space Complexity: O(n)
@@ -52,6 +56,8 @@ void partitionArray2(int arr[], int n, int x)
   }
  }
 }
+
+//! No new array and one traversal, using 2 ptrs
 
 /*
 > Time Complexity: O(n)
