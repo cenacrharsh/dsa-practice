@@ -7,9 +7,8 @@ using namespace std;
 
 string compressString(string str)
 {
- // Write your code here
- int n = str.length;
  string res;
+ int n = str.size();
  int i, j = 0;
  for (int i = 0; i < n; i++)
  {
@@ -25,11 +24,11 @@ string compressString(string str)
 
   if (count > 1)
   {
-   string s = to_string(count);
-   res += s;
+   string countString = to_string(count);
+   res += countString;
   }
  }
- res += "\0";
+ return res;
 }
 
 int main()
