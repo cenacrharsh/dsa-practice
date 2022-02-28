@@ -25,6 +25,6 @@ int checkRotation(char str1[], char str2[])
   {
    return true;
   }
-  return false;
  }
+ return false;
 }
