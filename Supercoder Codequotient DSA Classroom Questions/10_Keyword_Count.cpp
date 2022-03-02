@@ -42,4 +42,5 @@ int keyword_count(string str, string word)
    }
   }
  }
+ return count;
 }
