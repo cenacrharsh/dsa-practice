@@ -25,7 +25,7 @@ int countVowelSubstring(string str)
       str[i] == 'U')
   {
    //* everytime before updating count, doing the modulo operation to avoid integer overflow
-   count = (count + (n - 1) % 10007) % 10007;
+   count = (count + (n - i) % 10007) % 10007;
   }
  }
  return count;
