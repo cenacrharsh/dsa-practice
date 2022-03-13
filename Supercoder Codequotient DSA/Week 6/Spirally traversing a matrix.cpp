@@ -58,12 +58,12 @@ void printSpiral(int a[ROWS][COLS], int r, int c)
 
 int main()
 {
- int r, c;
- cin >> r >> c;
- int a[ROWS][COLS], i, j;
- for (i = 0; i < r; i++)
-  for (j = 0; j < c; j++)
-   cin >> a[i][j];
- printSpiral(a, r, c);
- return 0;
+  int r, c;
+  cin>>r>>c;
+  int a[ROWS][COLS], i, j;
+  for(i = 0; i < r; i++)
+    for(j = 0; j < c; j++)
+      cin>>a[i][j];
+  printSpiral(a, r, c);
+  return 0;
 }
