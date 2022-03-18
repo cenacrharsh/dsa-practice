@@ -45,11 +45,11 @@ public:
    ListNode *first = current->next;
    ListNode *second = current->next->next;
 
-   first->next = second->next;  // 1 -> 3, 3 -> NULL
-   current->next = second;      // head -> 2, 1 -> 4
-   current->next->next = first; // 2 -> 1, 4 -> 3
+   first->next = second->next;  //* 1 -> 3, 3 -> NULL
+   current->next = second;      //* head -> 2, 1 -> 4
+   current->next->next = first; //* 2 -> 1, 4 -> 3
 
-   current = current->next->next; // head -> 1
+   current = current->next->next; //* head -> 1
   }
   return temp->next;
  }
