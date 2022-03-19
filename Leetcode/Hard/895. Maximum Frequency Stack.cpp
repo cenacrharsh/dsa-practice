@@ -6,6 +6,26 @@
 #include <cstring>
 using namespace std;
 
+/*
+EXPLANATION
+0. We will take a variable max_frequency which indicate the maximum number of ocurrence.
+
+1. We will consider a frequency map that will count the occurences of each element.
+
+2. We will also consider a map group_stack which will group the elements with the same frequecy. Example if two elements have same count then we will add them in stack with the recent element at the top.
+
+3. When we will push the elements
+We will increment its frequency
+Update the maximum occurence element
+group the element with its frequency
+
+4. When we will pop the element from stack
+We will take out the max_frequency element.
+Remove it from group_stack
+Decrement its freuency
+Return it
+*/
+
 class FreqStack
 {
 public:
@@ -38,9 +58,11 @@ public:
   group_stack[max_frequency].pop();
   // Decrement its count
   frequency[top_max_frequency]--;
-  // If there is no element of maximum frquency the decrement max_frequency
+  // If there is no element of maximum  remaining then we decrement max_frequency
   if (group_stack[max_frequency].size() == 0)
+  {
    max_frequency--;
+  }
   return top_max_frequency;
  }
 };
