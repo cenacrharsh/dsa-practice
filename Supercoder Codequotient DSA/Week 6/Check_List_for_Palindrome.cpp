@@ -24,19 +24,6 @@ struct Node
   struct Node *next;
 };
 
-void forwardPrint(struct Node *head)
-{
-  if (head == NULL)
-    return;
-
-  struct Node *temp = head;
-  while (temp != NULL)
-  {
-    cout << temp->data << " ";
-    temp = temp->next;
-  }
-}
-
 int compare(struct Node *head1, struct Node *head2)
 {
   struct Node *curr1 = head1;
