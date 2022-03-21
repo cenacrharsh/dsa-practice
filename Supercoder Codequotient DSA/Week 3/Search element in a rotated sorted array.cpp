@@ -5,6 +5,13 @@
 #include <unordered_map>
 using namespace std;
 
+//! Approach 1 - Using One Binary Search
+
+/*
+> Time Complexity: O(log n)
+> Space Complexity: O(1)
+*/
+
 int searchRotatedSortedArray(int arr[], int n, int k)
 {
  // Write your code here
@@ -42,7 +49,7 @@ int searchRotatedSortedArray(int arr[], int n, int k)
  return -1;
 }
 
-//! Approach 2 - Using Binary Search
+//! Approach 2 - Using 2 Binary Search
 
 /*
 > Time Complexity: O(2 * log n)
