@@ -18,73 +18,52 @@ public:
  }
 };
 
-/*
-First, create an empty dummy linked list, which will store the final sorted array. (let this be called ‘sorted’).
-
-Create a pointer ‘current’ which will be used to iterate over the given SLL. Initially, ‘current’ points to the head of the linked list.
-
-Now we will select the elements of the linked list one by one using a while loop and store them at their correct position in the sorted list.
-
-As we will be modifying the next pointer of the current node, it is better to store the original next pointer in a temporary variable, so that it is not lost and we can carry out the next iterations.
-
-To place a node at its correct position in the sorted list, we use a function called “sortedInsert” which takes the head of the sorted list and the new node to be inserted as parameters.
-
-In the “sortedInsert” function, we again make use of pointers to keep track of the position where the element should be inserted and then modify the original links to accommodate the new node.
-
-Finally, return the sorted list and terminate.
-*/
-
-/*
- Time Complexity : O(N^2)
- Space Complexity : O(1)
-
- where 'N' is the number of nodes in the list
-*/
-
-// Function to insert an element at its correct position in sorted order.
-void sortedInsert(Node **head, Node *newnode)
+struct ListNode
 {
+ int val;
+ ListNode *next;
+ ListNode() : val(0), next(nullptr) {}
+ ListNode(int x) : val(x), next(nullptr) {}
+ ListNode(int x, ListNode *next) : val(x), next(next) {}
+};
 
- Node *current;
-
- if (*head == NULL || ((*head)->data >= newnode->data))
+class Solution
+{
+public:
+ ListNode *insertionSortList(ListNode *head)
  {
-  newnode->next = *head;
-  *head = newnode;
- }
-
- else
- {
-  current = *head;
-  while (current->next and current->next->data < newnode->data)
+  if (head == NULL || head->next == NULL)
   {
-   current = current->next;
+   return head;
   }
-  newnode->next = current->next;
-  current->next = newnode;
+  ListNode *dummy = new ListNode(-1);
+  dummy->next = head;
+
+  ListNode *prev = dummy, *curr = dummy->next;
+  while (curr != NULL)
+  {
+   if (curr->next && (curr->next->val < curr->val))
+   {
+    //! finding correct position
+    while (prev->next && (prev->next->val < curr->next->val))
+    {
+     prev = prev->next;
+    }
+    //! rearranging pointers
+    ListNode *temp = prev->next;
+    prev->next = curr->next; //* next to prev is the correct pos for node at curr->next, hence we make the connection, and temp already stores the original node at that pos to avoid loosing it
+
+    curr->next = curr->next->next; //* since node at curr->next is to be removed, curr->next skips it and points to node ahead of it
+
+    prev->next->next = temp; //* prev->next now contains our newly inserted node, which now must point to the node we save in temp, that is the node earlier pointed to by prev, now since our newly inserted node sits in b/w them it should point to that node
+
+    prev = dummy; //* resetting prev
+   }
+   else
+   {
+    curr = curr->next;
+   }
+  }
+  return dummy->next;
  }
-}
-
-Node *insertionSortLL(Node *head)
-{
-
- // To store the final sorted list
- Node *sorted = NULL;
-
- // Current pointer, to iterate over the entire list
- Node *current = head;
-
- /*
-This loops takes each element in the loop and calls sortedInsert function for it,
-to insert it at its correct position in the final list
-*/
-
- while (current)
- {
-  Node *next = current->next;
-  sortedInsert(&sorted, current);
-  current = next;
- }
-
- return sorted;
-}
+};
