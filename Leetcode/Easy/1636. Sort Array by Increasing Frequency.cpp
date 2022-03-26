@@ -6,6 +6,31 @@
 #include <cstring>
 using namespace std;
 
+//# Tutorial: https://www.youtube.com/watch?v=PjKjbpI2Z3s
+
+//! Using Lambda Func in Sort Func
+
+//> Lamda Func: [&] (parameters) { return Expresssion }
+
+class Solution
+{
+public:
+ vector<int> frequencySort(vector<int> &nums)
+ {
+  unordered_map<int, int> freq;
+  for (auto i : nums)
+  {
+   freq[i]++;
+  }
+
+  //* using lambda func
+  sort(nums.begin(), nums.end(), [&](int a, int b)
+       { return (freq[a] != freq[b] ? freq[a] < freq[b] : a > b); });
+
+  return nums;
+ }
+};
+
 //# Tutorial: https://www.youtube.com/watch?v=S6UvwcpVnxc
 
 //! Using Hashmap & Vector of Vector
