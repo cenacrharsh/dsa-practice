@@ -6,6 +6,37 @@
 #include <cstring>
 using namespace std;
 
+//# Tutorial: https://www.youtube.com/watch?v=tbJt-0oazp4, https://www.youtube.com/watch?v=trFw8IDw2Vg,
+
+//! Using Hashmap & Priority Queues
+
+class Solution
+{
+public:
+ string frequencySort(string s)
+ {
+  unordered_map<char, int> freq; // char, int
+  for (int i = 0; i < s.size(); i++)
+  {
+   freq[s[i]]++;
+  }
+  priority_queue<pair<int, char>> pq; // int, char so heapify func is called on int
+
+  for (int i = 0; i < s.size(); i++)
+  {
+   pq.push({freq[s[i]], s[i]});
+  }
+
+  string ans = "";
+  while (!pq.empty())
+  {
+   ans += pq.top().second;
+   pq.pop();
+  }
+  return ans;
+ }
+};
+
 //# Tutorial: https://www.youtube.com/watch?v=vltY5jxqcco
 
 //! Using Array of Pairs
