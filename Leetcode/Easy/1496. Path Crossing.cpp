@@ -36,8 +36,6 @@ public:
     y--;
    }
 
-   cout << x << " " << y << endl;
-
    if (coordinates.find({x, y}) != coordinates.end())
    {
     return true;
