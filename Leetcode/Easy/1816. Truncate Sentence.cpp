@@ -11,6 +11,18 @@ class Solution
 public:
  string truncateSentence(string s, int k)
  {
+  for (int i = 0; i < s.size(); ++i)
+   if (s[i] == ' ' && --k == 0)
+    return s.substr(0, i);
+  return s;
+ }
+};
+
+class Solution
+{
+public:
+ string truncateSentence(string s, int k)
+ {
   string ans = "";
   string word = "";
   int count = 0;
