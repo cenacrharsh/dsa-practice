@@ -29,12 +29,22 @@ class Solution
 public:
  char findTheDifference(string s, string t)
  {
-  int ans = 0;
-  for (auto &x : t)
-   ans += x; // int+char=>int+ASCII of char
-  for (auto &x : s)
-   ans -= x;
-  return char(ans); // converting ASCII to char
+  char c = 0;
+  for (char ch : t)
+  {
+   c += ch;
+  }
+  for (char ch : s)
+  {
+   c -= ch;
+  }
+  return c;
+  // int ans = 0;
+  // for (auto &x : t)
+  //  ans += x; // int+char=>int+ASCII of char
+  // for (auto &x : s)
+  //  ans -= x;
+  // return char(ans); // converting ASCII to char
  }
 };
 
