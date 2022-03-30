@@ -6,6 +6,30 @@ using namespace std;
 
 //# Tutorial - https://www.youtube.com/watch?v=20v8zSo2v18
 
+class Solution
+{
+public:
+ int subarraySum(vector<int> &nums, int k)
+ {
+  int count = 0;
+  int prefixSum = 0;
+  unordered_map<int, int> prefixSumMap; // prefixSum -> freq
+  prefixSumMap[prefixSum] = 1;
+  for (int i = 0; i < nums.size(); i++)
+  {
+   prefixSum += nums[i];
+
+   if (prefixSumMap.find(prefixSum - k) != prefixSumMap.end())
+   {
+    count += prefixSumMap[prefixSum - k];
+   }
+
+   prefixSumMap[prefixSum]++;
+  }
+  return count;
+ }
+};
+
 #include <unordered_map>
 
 class Solution
