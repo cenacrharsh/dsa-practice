@@ -31,34 +31,28 @@ public:
 // };
 // The above declaration is already done. Complete the function given below.
 
-//> Function to create Circular queue
-void QueueArray::enQueue(int value)
+void QueueArray::enQueue(int data)
 {
- if ((front == 0 && rear == SIZE - 1) ||
-     (rear == (front - 1) % (SIZE - 1)))
+ // Write your code here
+ if (front == (rear + 1) % SIZE)
  {
   return;
  }
  else if (front == -1) /* Insert First Element */
  {
   front = rear = 0;
-  queue[rear] = value;
- }
- else if (rear == SIZE - 1 && front != 0)
- {
-  rear = 0;
-  queue[rear] = value;
+  queue[rear] = data;
  }
  else
  {
-  rear++;
-  queue[rear] = value;
+  rear = (rear + 1) % SIZE;
+  queue[rear] = data;
  }
 }
 
-//> Function to delete element from Circular Queue
 int QueueArray::deQueue()
 {
+ // Write your code here
  if (front == -1)
  {
   return -1;
@@ -71,11 +65,10 @@ int QueueArray::deQueue()
   front = -1;
   rear = -1;
  }
- else if (front == SIZE - 1)
-  front = 0;
  else
-  front++;
-
+ {
+  front = (front + 1) % SIZE;
+ }
  return data;
 }
 
