@@ -33,6 +33,8 @@ void swapNodes(struct Node **head, int x, int y)
   curr = curr->next;
  }
 
+ //* edge case - both nodes are next to each other
+
  // head/-> <-x-> <-     -> <-y-> <-/NULL
  if (first && second && (first != second))
  {
