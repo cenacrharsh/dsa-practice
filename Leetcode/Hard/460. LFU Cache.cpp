@@ -63,8 +63,8 @@ public:
 class LFUCache
 {
  int maxCacheSize, minFreq, currSize;
- map<int, Node *> keyNodeMap;
- map<int, List *> freqListMap;
+ map<int, Node *> keyNodeMap;  //* key -> Node
+ map<int, List *> freqListMap; //* freq -> List
 
 public:
  LFUCache(int capacity)
@@ -76,6 +76,7 @@ public:
 
  void updateFreqListMap(Node *node)
  {
+  //* remove node from it's curr freq list and erase it's entry in map
   keyNodeMap.erase(node->key);
   freqListMap[node->count]->removeNode(node);
 
@@ -90,6 +91,7 @@ public:
    nextHigherFreqList = freqListMap[node->count + 1];
   }
   node->count += 1;
+  //* add node to it's updated freq list and make new entries of list and node in both maps
   nextHigherFreqList->addNodeToFront(node);
 
   freqListMap[node->count] = nextHigherFreqList;
@@ -98,6 +100,7 @@ public:
 
  int get(int key)
  {
+  //* if key already exists in cache
   if (keyNodeMap.find(key) != keyNodeMap.end())
   {
    Node *currNode = keyNodeMap[key];
@@ -123,6 +126,7 @@ public:
   }
   else
   {
+   //* if cache is full
    if (currSize == maxCacheSize)
    {
     List *list = freqListMap[minFreq];
@@ -130,11 +134,13 @@ public:
     freqListMap[minFreq]->removeNode(list->tail->prev);
     currSize--;
    }
+
    currSize++;
    //* new value has to be added which is not there previously, therefore minFreq = 1 now, since freq 1 list would have atleast one node now i.e. the curr node
    minFreq = 1;
 
    List *listFreq = new List();
+   //* if a list with minFreq already exists
    if (freqListMap.find(minFreq) != freqListMap.end())
    {
     listFreq = freqListMap[minFreq];
