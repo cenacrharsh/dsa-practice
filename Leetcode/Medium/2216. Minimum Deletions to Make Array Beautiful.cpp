@@ -28,6 +28,7 @@ public:
    }
   }
 
+  //* if after deletion array has odd no. of elements we drop the last element as we want a even sized array
   if ((n - deletions) % 2 == 1)
   {
    deletions++;
