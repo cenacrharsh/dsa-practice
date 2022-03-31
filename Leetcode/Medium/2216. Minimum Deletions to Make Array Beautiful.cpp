@@ -6,6 +6,37 @@
 #include <cstring>
 using namespace std;
 
+//# Tutorial : https://www.youtube.com/watch?v=A98psR_mIMQ
+
+//! Shift Index = i - deletions
+
+class Solution
+{
+public:
+ int minDeletion(vector<int> &nums)
+ {
+  int deletions = 0;
+  int n = nums.size();
+  //* we don't need to check for last element, as it has no i+1 th element
+  for (int i = 0; i < n - 1; i++)
+  {
+   int shiftIndex = i - deletions;
+   //* if the new index of element in even and the next element is = then deletions++
+   if ((shiftIndex % 2 == 0) && (nums[i] == nums[i + 1]))
+   {
+    deletions++;
+   }
+  }
+
+  if ((n - deletions) % 2 == 1)
+  {
+   deletions++;
+  }
+
+  return deletions;
+ }
+};
+
 //! 2 ptrs
 
 class Solution
