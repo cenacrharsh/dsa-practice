@@ -10,6 +10,15 @@ using namespace std;
 
 //! Using Min Priority Queue
 
+/*
+* Time complexity:
+Construction: O(N * logK)
+Adding: O(logK)
+
+* Space Complexity:
+O(K) (can be reduced to O(1) by reusing memory of the existing array
+*/
+
 class KthLargest
 {
 public:
