@@ -30,13 +30,17 @@ int canTransformed(int a, int b, int c, int d)
   return 1;
  }
 
- int sum = a + b;
- if (canTransformed(sum, b, c, d))
- {
-  return 1;
- }
- else
- {
-  return canTransformed(a, sum, c, d);
- }
+ return canTransformed(a + b, b, c, d) || canTransformed(a, a + b, c, d);
+
+ /*
+  int sum = a + b;
+  if (canTransformed(sum, b, c, d))
+  {
+   return 1;
+  }
+  else
+  {
+   return canTransformed(a, sum, c, d);
+  }
+  */
 }

@@ -10,6 +10,7 @@ int N;
 
 bool isSafe(int board[][10], int r, int c)
 {
+ //* column
  int i, j;
  for (i = 0; i < r; i++)
  {
@@ -17,6 +18,7 @@ bool isSafe(int board[][10], int r, int c)
    return false;
  }
 
+ //* left diagonal
  i = r - 1;
  j = c - 1;
  while (i >= 0 && j >= 0)
@@ -27,6 +29,7 @@ bool isSafe(int board[][10], int r, int c)
   j--;
  }
 
+ //* right diagonal
  i = r - 1;
  j = c + 1;
  while (i >= 0 && j < N)
