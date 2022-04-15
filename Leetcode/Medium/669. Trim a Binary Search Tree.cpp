@@ -6,7 +6,7 @@
 #include <cstring>
 using namespace std;
 
-//# Tutorial: https://www.youtube.com/watch?v=hFwakLj7wFA
+//# Tutorial: https://www.youtube.com/watch?v=hFwakLj7wFA, https://www.youtube.com/watch?v=bTA3OLAeTi4
 
 struct TreeNode
 {
@@ -28,18 +28,25 @@ public:
    return NULL;
   }
 
+  //* if root is in range
+  if (root->val >= low && root->val <= high)
+  {
+   root->left = trimBST(root->left, low, high);
+   root->right = trimBST(root->right, low, high);
+   return root;
+  }
+
+  //* if root is more than high, so we need lesser values to be in range
   if (root->val > high)
   {
    return trimBST(root->left, low, high);
   }
 
+  //* if root is less than low, so we need higher values to be in range
   if (root->val < low)
   {
    return trimBST(root->right, low, high);
   }
-
-  root->left = trimBST(root->left, low, high);
-  root->right = trimBST(root->right, low, high);
 
   return root;
  }
