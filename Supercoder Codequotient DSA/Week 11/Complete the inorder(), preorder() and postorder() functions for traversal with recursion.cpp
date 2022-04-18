@@ -1,9 +1,4 @@
 #include <bits/stdc++.h>
-#include <vector>
-#include <algorithm>
-#include <climits>
-#include <unordered_map>
-#include <cstring>
 using namespace std;
 
 struct Node
@@ -12,22 +7,33 @@ struct Node
  Node *left, *right;
 };
 
-struct Node *newNode(int data)
+Node *newNode(int data)
 {
- struct Node *node = new Node();
+ Node *node = new Node();
  node->data = data;
  node->left = node->right = NULL;
  return (node);
 }
 
-void inOrder(struct Node *root)
+Node *insertLevelOrder(int arr[], Node *root, int i, int n)
 {
- if (root != NULL)
+ if (i < n)
  {
-  inOrder(root->left);
-  printf("%d ", root->data);
-  inOrder(root->right);
+  struct Node *temp = newNode(arr[i]);
+  root = temp;
+
+  root->left = insertLevelOrder(arr, root->left, 2 * i + 1, n);
+
+  root->right = insertLevelOrder(arr, root->right, 2 * i + 2, n);
  }
+ return root;
+}
+
+Node *buildTree(int t[], int n)
+{
+ Node *root = newNode(t[0]);
+ root = insertLevelOrder(t, root, 0, n);
+ return (root);
 }
 
 void inorder(Node *root)
