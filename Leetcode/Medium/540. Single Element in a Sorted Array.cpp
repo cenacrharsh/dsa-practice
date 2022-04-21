@@ -48,6 +48,7 @@ public:
  int singleNonDuplicate(vector<int> &nums)
  {
   int low = 0, high = nums.size() - 2;
+  //* in the loop, we are checking nums[mid] == nums[mid^1] which can be equal to nums[mid] = nums[mid+1] and if mid = nums.size()-1, then mid+1 will give you out of index error.
 
   while (low <= high)
   {
