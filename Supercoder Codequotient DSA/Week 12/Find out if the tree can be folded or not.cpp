@@ -6,6 +6,13 @@
 #include <cstring>
 using namespace std;
 
+//# Tutorial: https://www.youtube.com/watch?v=WNShiFDEr7w
+
+/*
+> Time Complexity: O(n)
+> Space Complexity: O(1)
+*/
+
 struct Node
 {
  int data;
