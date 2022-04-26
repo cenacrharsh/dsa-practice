@@ -25,33 +25,33 @@ class Solution
 public:
  TreeNode *invertTree(TreeNode *root)
  {
-
-  if (nullptr == root)
+  if (root == nullptr)
+  {
    return root;
+  }
 
-  queue<TreeNode *> myQueue; // our queue to do BFS
-  myQueue.push(root);        // push very first item - root
+  queue<TreeNode *> tree;
+  tree.push(root);
 
-  while (!myQueue.empty())
-  { // run until there are nodes in the queue
+  while (!tree.empty())
+  {
+   TreeNode *front = tree.front();
+   tree.pop();
 
-   TreeNode *node = myQueue.front(); // get element from queue
-   myQueue.pop();                    // remove element from queue
-
-   if (node->left != nullptr)
-   { // add left kid to the queue if it exists
-    myQueue.push(node->left);
+   if (front->left != nullptr)
+   {
+    tree.push(front->left);
    }
 
-   if (node->right != nullptr)
-   { // add right kid
-    myQueue.push(node->right);
+   if (front->right != nullptr)
+   {
+    tree.push(front->right);
    }
 
-   // invert left and right pointers
-   TreeNode *tmp = node->left;
-   node->left = node->right;
-   node->right = tmp;
+   // swap
+   TreeNode *temp = front->left;
+   front->left = front->right;
+   front->right = temp;
   }
 
   return root;
