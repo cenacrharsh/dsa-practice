@@ -6,6 +6,40 @@
 #include <cstring>
 using namespace std;
 
+//! Hashmap
+
+class Solution
+{
+public:
+ int maxOperations(vector<int> &nums, int k)
+ {
+  unordered_map<int, int> freq;
+  int count = 0;
+  for (int i = 0; i < nums.size(); i++)
+  {
+   int a = nums[i];
+   int b = k - a;
+   if (freq.find(b) != freq.end())
+   {
+    count++;
+    if (freq[b] > 1)
+    {
+     freq[b]--;
+    }
+    else
+    {
+     freq.erase(b);
+    }
+   }
+   else
+   {
+    freq[nums[i]]++;
+   }
+  }
+  return count;
+ }
+};
+
 //! 2 pointers
 
 class Solution
