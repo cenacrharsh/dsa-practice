@@ -15,11 +15,13 @@ public:
  {
   int n = nums.size();
   vector<vector<int>> ans;
+  //* generate all numbers from 0 -> 2^n - 1
   for (int num = 0; num < (1 << n); num++)
   {
    vector<int> subset;
    for (int i = 0; i < n; i++)
    {
+    //* check if it's a set bit
     if ((num & (1 << i)) != 0)
     {
      subset.push_back(nums[i]);
