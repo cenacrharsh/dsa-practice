@@ -6,7 +6,7 @@
 #include <cstring>
 using namespace std;
 
-//! Contes Solution
+//! Contest Solution
 class Solution
 {
 public:
