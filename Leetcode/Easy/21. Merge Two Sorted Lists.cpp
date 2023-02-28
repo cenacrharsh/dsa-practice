@@ -15,7 +15,7 @@ struct ListNode
  ListNode(int x, ListNode *next) : val(x), next(next) {}
 };
 
-//# Tutorial: https://www.youtube.com/watch?v=Xb4slcp1U38
+// # Tutorial: https://www.youtube.com/watch?v=Xb4slcp1U38, https://www.youtube.com/watch?v=KVf1Uuqfv8E
 
 //! Optimized Code - Iterative
 
@@ -61,6 +61,53 @@ public:
 };
 
 //! Exchanging Links Only
+//* Better Time Complexity
+class Solution
+{
+public:
+ ListNode *mergeTwoLists(ListNode *list1, ListNode *list2)
+ {
+  if (list1 == NULL)
+   return list2;
+  if (list2 == NULL)
+   return list1;
+
+  ListNode *dummyNode = new ListNode(-1);
+  ListNode *currNode = dummyNode;
+
+  while (list1 != NULL && list2 != NULL)
+  {
+   if (list1->val < list2->val)
+   {
+    currNode->next = list1;
+    list1 = list1->next;
+   }
+   else
+   {
+    currNode->next = list2;
+    list2 = list2->next;
+   }
+   currNode = currNode->next;
+  }
+
+  while (list1 != NULL)
+  {
+   currNode->next = list1;
+   list1 = list1->next;
+   currNode = currNode->next;
+  }
+
+  while (list2 != NULL)
+  {
+   currNode->next = list2;
+   list2 = list2->next;
+   currNode = currNode->next;
+  }
+
+  return dummyNode->next;
+ }
+};
+//* Better Space Complexity
 class Solution
 {
 public:
