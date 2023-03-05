@@ -17,7 +17,28 @@ struct TreeNode
 };
 
 //! All Parent Nodes Lie In A Range
+class Solution
+{
+public:
+ bool helper(TreeNode *root, long minValue, long maxValue)
+ {
+  if (root == NULL)
+   return true;
 
+  if (root->val <= minValue || root->val >= maxValue)
+   return false;
+
+  return (helper(root->left, minValue, root->val) &&
+          helper(root->right, root->val, maxValue));
+ }
+
+ bool isValidBST(TreeNode *root)
+ {
+  return helper(root, LONG_MIN, LONG_MAX);
+ }
+};
+
+//* or
 class Solution
 {
 public:
