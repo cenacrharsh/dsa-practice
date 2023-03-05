@@ -6,6 +6,59 @@
 #include <cstring>
 using namespace std;
 
+//! Better Approach
+class Solution
+{
+public:
+ vector<int> spiralOrder(vector<vector<int>> &matrix)
+ {
+  int n = matrix.size();
+  int m = matrix[0].size();
+  vector<int> ans;
+
+  int rowStart = 0, rowEnd = n - 1,
+      colStart = 0, colEnd = m - 1;
+
+  while (rowStart <= rowEnd && colStart <= colEnd)
+  {
+   //* for first row
+   for (int i = colStart; i <= colEnd; i++)
+   {
+    ans.push_back(matrix[rowStart][i]);
+   }
+   rowStart++;
+
+   //* for last col
+   for (int i = rowStart; i <= rowEnd; i++)
+   {
+    ans.push_back(matrix[i][colEnd]);
+   }
+   colEnd--;
+
+   if (rowStart <= rowEnd)
+   {
+    //* for last row
+    for (int i = colEnd; i >= colStart; i--)
+    {
+     ans.push_back(matrix[rowEnd][i]);
+    }
+    rowEnd--;
+   }
+
+   if (colStart <= colEnd)
+   {
+    //* for first col
+    for (int i = rowEnd; i >= rowStart; i--)
+    {
+     ans.push_back(matrix[i][colStart]);
+    }
+    colStart++;
+   }
+  }
+  return ans;
+ }
+};
+
 class Solution
 {
 public:
