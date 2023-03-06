@@ -20,6 +20,7 @@ int lower_bound(vector<int> &v, int target)
   while (high - low > 1)
   {
     int mid = low + (high - low) / 2;
+    // we want to eliminate all lesser elements than target
     if (v[mid] < target)
     {
       low = mid + 1;
