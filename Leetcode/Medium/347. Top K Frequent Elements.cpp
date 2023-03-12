@@ -23,6 +23,7 @@ public:
   {
    freq[nums[i]]++;
   }
+  // min priority queue
   priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
   vector<int> ans;
   for (auto n : freq)
@@ -30,6 +31,7 @@ public:
    int num = n.first;
    int num_freq = n.second;
    pq.push(make_pair(num_freq, num));
+   // when size of pq exceeds k, we pop number with least freq
    if (pq.size() > k)
    {
     pq.pop();
