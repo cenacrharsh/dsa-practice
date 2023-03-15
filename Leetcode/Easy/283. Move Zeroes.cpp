@@ -6,6 +6,26 @@
 #include <cstring>
 using namespace std;
 
+//* Number of operations == Number of non-zero elements
+class Solution
+{
+public:
+ void moveZeroes(vector<int> &nums)
+ {
+  // number of operations == number of non zero elements
+  int lastNonZeroFoundAt = 0;
+  for (int curr = 0; curr < nums.size(); curr++)
+  {
+   if (nums[curr] != 0)
+   {
+    swap(nums[lastNonZeroFoundAt], nums[curr]);
+    lastNonZeroFoundAt++;
+   }
+  }
+ }
+};
+
+//* Number of operations == Number of zeroes elements
 class Solution
 {
 public:
