@@ -8,13 +8,14 @@ using namespace std;
 
 // # Tutorial: https://www.youtube.com/watch?v=ZYpYur0znng
 
-//! Approach 1
+//! Approach 1 - Binary Search
 
 class Solution
 {
 public:
  bool searchMatrix(vector<vector<int>> &matrix, int target)
  {
+  // treating the 2D array as one big 1D array
   int N = matrix.size();
   int M = matrix[0].size();
   int low = 0;
@@ -67,10 +68,12 @@ public:
 
    if (target > matrix[row][col])
    {
+    // if element if > the last element of that row, we move to next row
     row++;
    }
    else
    {
+    // if element if < the last element of that row, we move to lower col values to find the target
     col--;
    }
   }
