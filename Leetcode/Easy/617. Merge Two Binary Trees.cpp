@@ -8,6 +8,11 @@ using namespace std;
 
 //! Using DFS
 
+/*
+> Time Complexity: O(N), N is the min no. of nodes in either Tree
+> Space Complexity: O(N)
+*/
+
 struct TreeNode
 {
  int val;
