@@ -12,7 +12,16 @@ class Solution
 public:
  int climbStairs(int n)
  {
+  if (n == 1)
+  {
+   return 1;
+  }
+  if (n == 2)
+  {
+   return 2;
+  }
   vector<int> stairs(n + 1, 0);
+  stairs[0] = 0;
   stairs[1] = 1; // one way to climb first stair
   stairs[2] = 2; // 2 ways to climb 2nd stair, 1 step or 2 step
   for (int i = 3; i <= n; i++)
