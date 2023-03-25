@@ -6,6 +6,8 @@
 #include <cstring>
 using namespace std;
 
+// # Tutorial: https://www.youtube.com/watch?v=I80Ovvi_nRU
+
 //! Bit Manipulation
 class Solution
 {
