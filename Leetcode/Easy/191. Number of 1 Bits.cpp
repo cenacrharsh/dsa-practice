@@ -32,3 +32,14 @@ public:
   return numOfSetBits;
  }
 };
+
+/*
+//> Count no. of trailing zeroes
+
+int count = 0;
+//* loop until last digit is zero
+while(n % 2 == 0) {
+  n = n >> 1; //* n = n / 2;
+  count++;
+}
+*/
