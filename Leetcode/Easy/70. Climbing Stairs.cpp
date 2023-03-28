@@ -6,50 +6,116 @@
 #include <cstring>
 using namespace std;
 
-//! Bottom Up Approach + Tabulation
+// # Tutorial: https://www.youtube.com/watch?v=mLfjzJsN8us&list=PLgUwDviBIf0qUlt5H_kiKYaNSqJ81PMMY&index=4
+
+//> Ques is same as fibonaci number as recurrence relation is same, only initial values differ
+
+//! Space Optimized DP
 class Solution
 {
 public:
  int climbStairs(int n)
  {
-  if (n == 1)
+  if (n == 0 || n == 1)
   {
    return 1;
   }
-  if (n == 2)
+
+  int prev = 1;
+  int secondPrev = 1;
+
+  for (int i = 2; i <= n; i++)
   {
-   return 2;
+   int curr = prev + secondPrev;
+   secondPrev = prev;
+   prev = curr;
   }
-  vector<int> stairs(n + 1, 0);
-  stairs[0] = 0;
-  stairs[1] = 1; // one way to climb first stair
-  stairs[2] = 2; // 2 ways to climb 2nd stair, 1 step or 2 step
-  for (int i = 3; i <= n; i++)
-  {
-   stairs[i] = stairs[i - 1] + stairs[i - 2]; // since we can reach step n from step n-1 using 1 step and step n-2 using 2 steps, and we are calculating ways to actual steps taken, so reaching n-2th step in m ways then climbing to nth step in 2 steps also makes m ways to reach nth step
-  }
-  return stairs[n];
+
+  return prev;
  }
 };
 
-//! Using Top Down Approach
+//! Tabulation - Bottom Up Approach
 class Solution
 {
 public:
  int climbStairs(int n)
  {
-  int stairs[n + 1];
-  stairs[n] = 1;     // already reached, can't jump
-  stairs[n - 1] = 2; // only one possibility, edge case for when we are at one stair 1
-  for (int i = n - 2; i >= 1; i--)
+  if (n == 0 || n == 1)
   {
-   stairs[i] = stairs[i + 1] + stairs[i + 2];
+   return 1;
   }
-  for (int i = 1; i <= n; i++)
+
+  vector<int> dp(n + 1, -1);
+  dp[0] = 1;
+  dp[1] = 1;
+
+  for (int i = 2; i <= n; i++)
   {
-   cout << stairs[i] << " ";
+   int oneStep = dp[i - 1];
+   int twoStep = dp[i - 2];
+   dp[i] = oneStep + twoStep;
   }
-  cout << endl;
-  return stairs[1];
+
+  return dp[n];
+ }
+};
+
+//! Memoization
+class Solution
+{
+public:
+ int helper(int n, vector<int> &dp)
+ {
+  if (n == 0 || n == 1)
+  {
+   return 1;
+  }
+
+  if (dp[n] != -1)
+  {
+   return dp[n];
+  }
+  else
+  {
+   // climb down one step
+   int oneStep = helper(n - 1, dp);
+
+   // climb down two steps
+   int twoStep = helper(n - 2, dp);
+
+   return dp[n] = oneStep + twoStep;
+  }
+ }
+ int climbStairs(int n)
+ {
+  vector<int> dp(n + 1, -1);
+  return helper(n, dp);
+ }
+};
+
+//! Recursion - Top Down Approach
+class Solution
+{
+public:
+ int helper(int n)
+ {
+  if (n == 0 || n == 1)
+  {
+   return 1;
+  }
+
+  // climb down one step
+  int oneStep = helper(n - 1);
+
+  // climb down two steps
+  int twoStep = helper(n - 2);
+
+  return oneStep + twoStep;
+ }
+
+ int climbStairs(int n)
+ {
+  return helper(n);
  }
 };
