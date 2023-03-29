@@ -33,7 +33,14 @@ public:
  }
 };
 
-//! Using Backtracking
+// # Tutorial: https://www.youtube.com/watch?v=AxNNVECce8c&list=PLgUwDviBIf0rGlzIn_7rsaR2FQ5e6ZOL9&index=8
+
+//! Using Backtracking (Pick & Not Pick)
+
+/*
+> Time Complexity: O(2^N) => for every index we have 2 options
+> Space Complexity: O(N) => max depth of recursion tree at any given time is N
+*/
 
 class Solution
 {
