@@ -25,12 +25,15 @@ public:
         for (int i = 1; i < nums.size(); i++)
         {
             prefixSum += nums[i];
+
+            //* if nums[i] <= ans, it will only bring avg down so no need to check
             if (nums[i] > ans)
             {
                 long long avg = prefixSum / (i + 1);
+                //* if the new avg is >, then it will become our new ans
                 if (avg >= ans)
                 {
-                    // checking if avg has decimal part in it
+                    //* checking if avg has decimal part in it, cause if it does we round it off as we can only increment it by 1 no decimals allowed, so if say 5.4 exists ans new avg, then 6 can only be the ans
                     if ((prefixSum % (i + 1)))
                     {
                         ans = avg + 1;
