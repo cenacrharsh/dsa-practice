@@ -13,7 +13,7 @@ class Solution
 public:
     string toLowerCase(string s)
     {
-        // A : 65, a : 97
+        //* A : 65, a : 97
         for (int i = 0; i < s.size(); i++)
         {
             if (s[i] >= 'A' && s[i] <= 'Z')
