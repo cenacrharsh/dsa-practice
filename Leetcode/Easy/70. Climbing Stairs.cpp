@@ -14,108 +14,108 @@ using namespace std;
 class Solution
 {
 public:
- int climbStairs(int n)
- {
-  if (n == 0 || n == 1)
-  {
-   return 1;
-  }
+    int climbStairs(int n)
+    {
+        if (n == 0 || n == 1)
+        {
+            return 1;
+        }
 
-  int prev = 1;
-  int secondPrev = 1;
+        int prev = 1;
+        int secondPrev = 1;
 
-  for (int i = 2; i <= n; i++)
-  {
-   int curr = prev + secondPrev;
-   secondPrev = prev;
-   prev = curr;
-  }
+        for (int i = 2; i <= n; i++)
+        {
+            int curr = prev + secondPrev;
+            secondPrev = prev;
+            prev = curr;
+        }
 
-  return prev;
- }
+        return prev;
+    }
 };
 
 //! Tabulation - Bottom Up Approach
 class Solution
 {
 public:
- int climbStairs(int n)
- {
-  if (n == 0 || n == 1)
-  {
-   return 1;
-  }
+    int climbStairs(int n)
+    {
+        if (n == 0 || n == 1)
+        {
+            return 1;
+        }
 
-  vector<int> dp(n + 1, -1);
-  dp[0] = 1;
-  dp[1] = 1;
+        vector<int> dp(n + 1, -1);
+        dp[0] = 1;
+        dp[1] = 1;
 
-  for (int i = 2; i <= n; i++)
-  {
-   int oneStep = dp[i - 1];
-   int twoStep = dp[i - 2];
-   dp[i] = oneStep + twoStep;
-  }
+        for (int i = 2; i <= n; i++)
+        {
+            int oneStep = dp[i - 1];
+            int twoStep = dp[i - 2];
+            dp[i] = oneStep + twoStep;
+        }
 
-  return dp[n];
- }
+        return dp[n];
+    }
 };
 
 //! Memoization
 class Solution
 {
 public:
- int helper(int n, vector<int> &dp)
- {
-  if (n == 0 || n == 1)
-  {
-   return 1;
-  }
+    int helper(int n, vector<int> &dp)
+    {
+        if (n == 0 || n == 1)
+        {
+            return 1;
+        }
 
-  if (dp[n] != -1)
-  {
-   return dp[n];
-  }
-  else
-  {
-   // climb down one step
-   int oneStep = helper(n - 1, dp);
+        if (dp[n] != -1)
+        {
+            return dp[n];
+        }
+        else
+        {
+            // climb down one step
+            int oneStep = helper(n - 1, dp);
 
-   // climb down two steps
-   int twoStep = helper(n - 2, dp);
+            // climb down two steps
+            int twoStep = helper(n - 2, dp);
 
-   return dp[n] = oneStep + twoStep;
-  }
- }
- int climbStairs(int n)
- {
-  vector<int> dp(n + 1, -1);
-  return helper(n, dp);
- }
+            return dp[n] = oneStep + twoStep;
+        }
+    }
+    int climbStairs(int n)
+    {
+        vector<int> dp(n + 1, -1);
+        return helper(n, dp);
+    }
 };
 
 //! Recursion - Top Down Approach
 class Solution
 {
 public:
- int helper(int n)
- {
-  if (n == 0 || n == 1)
-  {
-   return 1;
-  }
+    int helper(int n)
+    {
+        if (n == 0 || n == 1)
+        {
+            return 1;
+        }
 
-  // climb down one step
-  int oneStep = helper(n - 1);
+        // climb down one step
+        int oneStep = helper(n - 1);
 
-  // climb down two steps
-  int twoStep = helper(n - 2);
+        // climb down two steps
+        int twoStep = helper(n - 2);
 
-  return oneStep + twoStep;
- }
+        return oneStep + twoStep;
+    }
 
- int climbStairs(int n)
- {
-  return helper(n);
- }
+    int climbStairs(int n)
+    {
+        return helper(n);
+    }
 };
