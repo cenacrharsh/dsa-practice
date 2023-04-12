@@ -51,53 +51,56 @@ After iterating through the whole string the elements remaining in the stack is 
 class Solution
 {
 public:
- string simplifyPath(string path)
- {
-  stack<string> st;
-
-  for (int i = 0; i < path.size(); i++)
-  {
-   if (path[i] == '/') //* ignore all extra /
-   {
-    continue;
-   }
-
-   string temp;
-   while (i < path.size() && path[i] != '/')
-   {
-    temp += path[i]; //* make a string of all char in b/w two /
-    i++;
-   }
-
-   if (temp == ".") //* . indicates stay in the current directory
-   {
-    continue;
-   }
-   else if (temp == "..")
-   {
-    if (!st.empty())
+    string simplifyPath(string path)
     {
-     st.pop(); //* .. indicates move up one directory
+        // approach is to find words in between 2 / and if they are . or .. we need to stay in the same directory or move up 1 directory respectively
+
+        stack<string> st;
+        for (int i = 0; i < path.size(); i++)
+        {
+            if (path[i] == '/') // ignore all extra /
+            {
+                continue;
+            }
+
+            // contruct the word in between 2 /
+            string temp;
+            while (i < path.size() && path[i] != '/')
+            {
+                temp += path[i]; // make a string of all char in b/w two /
+                i++;
+            }
+
+            // now match temp string with . .. or a word
+            if (temp == ".") // . indicates stay in the current directory
+            {
+                continue;
+            }
+            else if (temp == "..")
+            {
+                if (!st.empty())
+                {
+                    st.pop(); // .. indicates move up one directory
+                }
+            }
+            else
+            {
+                st.push(temp); // anything else is a dir name, so push it
+            }
+        }
+
+        // adding all stack elements to ans
+        string ans;
+        while (!st.empty())
+        {
+            ans = "/" + st.top() + ans;
+            st.pop();
+        }
+
+        // if no directory or file is present
+        if (ans.size() == 0)
+            return "/";
+
+        return ans;
     }
-   }
-   else
-   {
-    st.push(temp); //* anything else is a dir name, so push it
-   }
-  }
-
-  //* adding all stack elements to ans
-  string ans;
-  while (!st.empty())
-  {
-   ans = "/" + st.top() + ans;
-   st.pop();
-  }
-
-  //* if no directory or file is present
-  if (ans.size() == 0)
-   return "/";
-
-  return ans;
- }
 };
