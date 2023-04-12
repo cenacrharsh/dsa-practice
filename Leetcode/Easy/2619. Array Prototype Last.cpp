@@ -10,6 +10,11 @@ The at() method takes an integer value and returns the item at that index, allow
 For invalid indexes it will return undefined
 */
 
+Array.prototype.last = function()
+{
+    return this.at(-1) ?? -1;
+};
+
 //! Using Array.prototype.length
 
 Array.prototype.last = function()
