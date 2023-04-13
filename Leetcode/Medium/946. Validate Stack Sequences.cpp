@@ -6,6 +6,28 @@
 #include <cstring>
 using namespace std;
 
+//! Using 2 pointers (Modifies input array)
+class Solution
+{
+public:
+    bool validateStackSequences(vector<int> &pushed, vector<int> &popped)
+    {
+        int i = 0, j = 0;
+        for (int num : pushed)
+        {
+            pushed[i] = num; // similar to pushing in stack
+            i++;
+            while (i > 0 && pushed[i - 1] == popped[j])
+            {
+                i--; // similar to popping in stack
+                j++;
+            }
+        }
+        // if we reach first index again then it's a valid sequence
+        return i == 0;
+    }
+};
+
 //! Using Stack | Greedy Approach
 class Solution
 {
