@@ -12,7 +12,6 @@ public:
     int evalRPN(vector<string> &tokens)
     {
         stack<int> st;
-
         for (int i = 0; i < tokens.size(); i++)
         {
             if (tokens[i] == "+" or tokens[i] == "-" or tokens[i] == "*" or tokens[i] == "/")
@@ -30,12 +29,10 @@ public:
                 {
                     st.push(op1 - op2);
                 }
-
                 else if (tokens[i] == "*")
                 {
                     st.push(op1 * op2);
                 }
-
                 else if (tokens[i] == "/")
                 {
                     st.push(op1 / op2);
@@ -47,7 +44,6 @@ public:
                 st.push(ele);
             }
         }
-
         return st.top();
     }
 };
