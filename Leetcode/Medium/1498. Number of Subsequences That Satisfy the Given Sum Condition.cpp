@@ -6,6 +6,12 @@
 #include <cstring>
 using namespace std;
 
+// # Tutorial: https://www.youtube.com/watch?v=wwDTU32JTQg
+
+/*
+If you pin left element, from [left + 1, right], you can either choose or not choose each element, so 2 ways for each element. There are total (right - left) number of elements from [left + 1, right]. So, 2 x 2 x 2 x ... (right - left) times ==> 2 ^ (right - left).
+*/
+
 //! Using 2 pointer
 
 class Solution
