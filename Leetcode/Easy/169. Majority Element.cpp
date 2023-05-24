@@ -1,4 +1,4 @@
-//# Tutorial: https://www.youtube.com/watch?v=AoX3BPWNnoE
+// # Tutorial: https://www.youtube.com/watch?v=AoX3BPWNnoE
 
 #include <bits/stdc++.h>
 #include <vector>
@@ -25,28 +25,45 @@ using namespace std;
 class Solution
 {
 public:
- int majorityElement(vector<int> &nums)
- {
-  int count = 0;
-  int candidate = 0;
-  for (auto num : nums)
-  {
-   if (count == 0)
-   {
-    candidate = num;
-   }
+    int majorityElement(vector<int> &nums)
+    {
+        int count = 0;
+        int ans;
 
-   if (num == candidate)
-   {
-    count++;
-   }
-   else
-   {
-    count--;
-   }
-  }
-  return candidate;
- }
+        for (int num : nums)
+        {
+            if (count == 0)
+            {
+                ans = num;
+                count = 1;
+            }
+            else if (num == ans)
+            {
+                count++;
+            }
+            else
+            {
+                count--;
+            }
+        }
+
+        // check if it's majority element
+        count = 0;
+        for (int num : nums)
+        {
+            if (ans == num)
+            {
+                count++;
+            }
+        }
+
+        if (count > nums.size() / 2)
+        {
+            return ans;
+        }
+
+        return -1;
+    }
 };
 
 //! Approach 2 - Hasmap
@@ -60,24 +77,24 @@ public:
 class Solution
 {
 public:
- int majorityElement(vector<int> &nums)
- {
-  unordered_map<int, int> freq;
-  int requiredCount = nums.size() / 2;
-  int ans;
-  for (int i = 0; i < nums.size(); i++)
-  {
-   freq[nums[i]]++;
-  }
-  for (auto f : freq)
-  {
-   if (f.second > requiredCount)
-   {
-    ans = f.first;
-   }
-  }
-  return ans;
- }
+    int majorityElement(vector<int> &nums)
+    {
+        unordered_map<int, int> freq;
+        int requiredCount = nums.size() / 2;
+        int ans;
+        for (int i = 0; i < nums.size(); i++)
+        {
+            freq[nums[i]]++;
+        }
+        for (auto f : freq)
+        {
+            if (f.second > requiredCount)
+            {
+                ans = f.first;
+            }
+        }
+        return ans;
+    }
 };
 
 //! Approach 3
@@ -90,39 +107,39 @@ public:
 class Solution
 {
 public:
- int majorityElement(vector<int> &nums)
- {
-  int size = nums.size();
-  sort(nums.begin(), nums.end());
-  int maxCount = INT_MIN;
-  int ans = -1;
-  int i = 0;
-  int startVertex = 0;
+    int majorityElement(vector<int> &nums)
+    {
+        int size = nums.size();
+        sort(nums.begin(), nums.end());
+        int maxCount = INT_MIN;
+        int ans = -1;
+        int i = 0;
+        int startVertex = 0;
 
-  while (i < size)
-  {
-   while (i + 1 < size && nums[i] == nums[i + 1])
-   {
-    i++;
-   }
-   int tempCount = i - startVertex + 1;
-   if (tempCount > maxCount)
-   {
-    maxCount = tempCount;
-    ans = nums[i];
-   }
-   startVertex = i + 1;
-   i++;
-  }
+        while (i < size)
+        {
+            while (i + 1 < size && nums[i] == nums[i + 1])
+            {
+                i++;
+            }
+            int tempCount = i - startVertex + 1;
+            if (tempCount > maxCount)
+            {
+                maxCount = tempCount;
+                ans = nums[i];
+            }
+            startVertex = i + 1;
+            i++;
+        }
 
-  int requiredCount = size / 2;
-  if (maxCount > requiredCount)
-  {
-   return ans;
-  }
-  else
-  {
-   return -1;
-  }
- }
+        int requiredCount = size / 2;
+        if (maxCount > requiredCount)
+        {
+            return ans;
+        }
+        else
+        {
+            return -1;
+        }
+    }
 };
