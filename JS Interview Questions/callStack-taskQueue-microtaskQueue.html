@@ -1,0 +1,74 @@
+<button id="btn1">Predict the future if you want this job</button>
+<button id="btn2">Do you want a bonus</button>
+
+<script>
+    function listener1() {
+        setTimeout(() => console.log("#1 Hello From Timeout 1"), 0);
+        Promise.resolve().then(() => console.log("#1 Hello From Promise 1"));
+        const promise = Promise.resolve();
+        setTimeout(() => console.log("#1 Hello From Timeout 2"), 0);
+        console.log("#1 Hello From Main Thread");
+        setTimeout(
+            () => promise.then(console.log("#1 Hello From Promise 2")),
+            0
+        );
+    }
+
+    function listener2() {
+        setTimeout(() => console.log("#2 Hello From Timeout 1"), 0);
+        Promise.resolve().then(() => console.log("#2 Hello From Promise 1"));
+        const promise = Promise.resolve();
+        setTimeout(() => console.log("#2 Hello From Timeout 2"), 0);
+        console.log("#2 Hello From Main Thread");
+        setTimeout(
+            () => promise.then(console.log("#2 Hello From Promise 2")),
+            0
+        );
+    }
+
+    const btn = document.getElementById("btn1");
+    btn.addEventListener("click", listener1, false);
+    btn.addEventListener("click", listener2, false);
+</script>
+
+<!--
+
+#1 Hello From Main Thread
+#1 Hello From Promise 1
+
+#2 Hello From Main Thread
+#2 Hello From Promise 1
+
+#1 Hello From Timeout 1
+
+#1 Hello From Timeout 2
+
+#1 Hello From Promise 2
+
+#2 Hello From Timeout 1
+
+#2 Hello From Timeout 2
+
+#2 Hello From Promise 2
+
+-->
+
+<!-- 
+
+callStack = []
+
+taskQueue = []
+
+microtaskQueue = []
+
+> JS tries to exhaust everything in microtask queue if it's looking into it,whereas it only picks up one task from the task queue in one cycle, it will pick up one task execute it, then again run the event loop to see if there is anything in the microtask queue and upon exhausting everything there it will run it's next cycle and pick up another task from task queue
+
+> The listener functions itself are callback functions so they get placed in taskqueue, and once listener1 executes it pushes something in microtask queue which gets picked up by JS before listener2 that is waiting in task queue
+
+> Promises go to microtask queue
+
+> As soon as callstack is empty JS looks for microtask queue, Only if microtask queue is empty, JS will look into taskQueue, if not it will exhaust the entire microtask queue
+
+! `unhandledrejection` is generated when the microtask queue is complete: the engine examines promises and, if any of them is in the “rejected” state, then the event triggers.
+
+-->
