@@ -6,6 +6,10 @@
 #include <cstring>
 using namespace std;
 
+// # Tutorial: https://www.youtube.com/watch?v=PUDOxopuv60
+
+//* If you look at the while loop condition, the only time when the condition will break is when L + 1 = R, correct? In this case, we need find the Smallest Letter Greater Than Target so once the while loop condition breaks, we need to return the element that right pointer is pointing to.
+
 //! Binary Search
 class Solution
 {
