@@ -4,10 +4,12 @@
 #include <climits>
 using namespace std;
 
+// # Tutorial: https://www.youtube.com/watch?v=32Ll35mhWg0&list=PLgUwDviBIf0rPG3Ictpu74YWBQ1CaBkm2&index=2
+
 //! Floyd's Tortoise and Hare (Cycle Detection)
 
 /*
-> Time Complexity: O(n)
+> Time Complexity: O(N)
 > Space Complexity: O(1)
 */
 
@@ -22,29 +24,84 @@ In phase 2, we give the tortoise a second chance by slowing down the hare, so th
 class Solution
 {
 public:
-  int findDuplicate(vector<int> &nums)
-  {
-
-    // Find the intersection point of the two runners.
-    int tortoise = nums[0];
-    int hare = nums[0];
-
-    do
+    int findDuplicate(vector<int> &nums)
     {
-      tortoise = nums[tortoise];
-      hare = nums[nums[hare]];
-    } while (tortoise != hare);
+        int slow = nums[0];
+        int fast = nums[0];
 
-    // Find the "entrance" to the cycle.
-    tortoise = nums[0];
-    while (tortoise != hare)
-    {
-      tortoise = nums[tortoise];
-      hare = nums[hare];
+        do
+        {
+            slow = nums[slow];
+            fast = nums[nums[fast]];
+        } while (slow != fast);
+
+        fast = nums[0];
+
+        while (slow != fast)
+        {
+            slow = nums[slow];
+            fast = nums[fast];
+        }
+
+        return slow;
     }
+};
 
-    return hare;
-  }
+//! Multiply by -1 (Modifies the array)
+
+/*
+> Time Complexity: O(N)
+> Space Complexity: O(1)
+*/
+
+class Solution
+{
+public:
+    int findDuplicate(vector<int> &nums)
+    {
+        int ans;
+        for (int i = 0; i < nums.size(); i++)
+        {
+            int num = abs(nums[i]);
+            if (nums[num] < 0)
+            {
+                ans = num;
+                break;
+            }
+            nums[num] *= -1;
+        }
+        return ans;
+    }
+};
+
+//! Using Hashing
+
+/*
+> Time Complexity: O(N)
+> Space Complexity: O(N)
+*/
+
+//! Using Sorting (Modifies the array)
+
+/*
+> Time Complexity: O(N * log(N))
+> Space Complexity: O(N)
+*/
+
+class Solution
+{
+public:
+    int findDuplicate(vector<int> &nums)
+    {
+        sort(nums.begin(), nums.end());
+        int ans;
+        for (int i = 0; i < (nums.size() - 1); i++)
+        {
+            if (nums[i] == nums[i + 1])
+                ans = nums[i];
+        }
+        return ans;
+    }
 };
 
 //! Binary Search
@@ -52,7 +109,7 @@ public:
 /*
 Algorithm
 
-To recap, we need to find the smallest number such that the count of numbers less than or equal to it is greater than the number itself.
+We need to find the smallest number such that the count of numbers less than or equal to it is greater than the number itself.
 
 Apply binary search and start with the entire range of numbers [1,n][1,n].
 
@@ -76,35 +133,35 @@ Repeat step 3 until we've exhausted the search range (i.e. until lowlow > highhi
 class Solution
 {
 public:
-  int findDuplicate(vector<int> &nums)
-  {
-    int low = 1, high = nums.size(), duplicate = -1;
-    while (low <= high)
+    int findDuplicate(vector<int> &nums)
     {
-      int mid = (low + high) / 2;
-
-      int count = 0;
-
-      for (int i = 0; i < nums.size(); i++)
-      {
-        if (nums[i] <= mid)
+        int low = 1, high = nums.size(), duplicate = -1;
+        while (low <= high)
         {
-          count++;
-        }
-      }
+            int mid = (low + high) / 2;
 
-      if (count > mid)
-      {
-        duplicate = mid;
-        high = mid - 1;
-      }
-      else
-      {
-        low = mid + 1;
-      }
+            int count = 0;
+
+            for (int i = 0; i < nums.size(); i++)
+            {
+                if (nums[i] <= mid)
+                {
+                    count++;
+                }
+            }
+
+            if (count > mid)
+            {
+                duplicate = mid;
+                high = mid - 1;
+            }
+            else
+            {
+                low = mid + 1;
+            }
+        }
+        return duplicate;
     }
-    return duplicate;
-  }
 };
 
 //* example: [4,6,4,2,1,4,3,5] -> count(1,2,3,4,5,6,7) = (1,2,3,6,7,8,8)
@@ -112,57 +169,39 @@ public:
 class Solution
 {
 public:
-  int findDuplicate(vector<int> &nums)
-  {
-
-    // Lambda function to count how many numbers are less than or equal to 'cur'
-    auto small_or_equal = [&](int cur)
+    int findDuplicate(vector<int> &nums)
     {
-      int count = 0;
-      for (auto &num : nums)
-      {
-        if (num <= cur)
-          count++;
-      }
-      return count;
-    };
 
-    // 'low' and 'high' represent the range of values of the target
-    int low = 1, high = nums.size();
-    int duplicate = -1;
-    while (low <= high)
-    {
-      int cur = (low + high) / 2;
+        // Lambda function to count how many numbers are less than or equal to 'cur'
+        auto small_or_equal = [&](int cur)
+        {
+            int count = 0;
+            for (auto &num : nums)
+            {
+                if (num <= cur)
+                    count++;
+            }
+            return count;
+        };
 
-      if (small_or_equal(cur) > cur)
-      {
-        duplicate = cur;
-        high = cur - 1;
-      }
-      else
-      {
-        low = cur + 1;
-      }
+        // 'low' and 'high' represent the range of values of the target
+        int low = 1, high = nums.size();
+        int duplicate = -1;
+        while (low <= high)
+        {
+            int cur = (low + high) / 2;
+
+            if (small_or_equal(cur) > cur)
+            {
+                duplicate = cur;
+                high = cur - 1;
+            }
+            else
+            {
+                low = cur + 1;
+            }
+        }
+
+        return duplicate;
     }
-
-    return duplicate;
-  }
-};
-
-//! Using Sorting which modifies the array
-
-class Solution
-{
-public:
-  int findDuplicate(vector<int> &nums)
-  {
-    sort(nums.begin(), nums.end());
-    int ans;
-    for (int i = 0; i < (nums.size() - 1); i++)
-    {
-      if (nums[i] == nums[i + 1])
-        ans = nums[i];
-    }
-    return ans;
-  }
 };
