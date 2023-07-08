@@ -29,6 +29,8 @@ public:
         int slow = nums[0];
         int fast = nums[0];
 
+        //* we can't start both slow & fast from nums[0] without using a do while loop
+
         do
         {
             slow = nums[slow];
