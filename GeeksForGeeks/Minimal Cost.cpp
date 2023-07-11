@@ -21,23 +21,23 @@ using namespace std;
 
 int minimizeCost(vector<int> &height, int n, int k)
 {
- vector<int> dp(n, -1);
- dp[0] = 0;
- for (int i = 1; i < n; i++)
- {
-  int minEnergySpent = INT_MAX;
-  for (int j = 1; j <= k; j++)
-  {
-   int currJumpEnergy = INT_MAX;
-   if (i - j >= 0)
-   {
-    currJumpEnergy = dp[i - j] + abs(height[i] - height[i - j]);
-   }
-   minEnergySpent = min(minEnergySpent, currJumpEnergy);
-  }
-  dp[i] = minEnergySpent;
- }
- return dp[n - 1];
+    vector<int> dp(n, -1);
+    dp[0] = 0;
+    for (int i = 1; i < n; i++)
+    {
+        int minEnergySpent = INT_MAX;
+        for (int j = 1; j <= k; j++)
+        {
+            int currJumpEnergy = INT_MAX;
+            if (i - j >= 0)
+            {
+                currJumpEnergy = dp[i - j] + abs(height[i] - height[i - j]);
+            }
+            minEnergySpent = min(minEnergySpent, currJumpEnergy);
+        }
+        dp[i] = minEnergySpent;
+    }
+    return dp[n - 1];
 }
 
 //! Memoization DP
@@ -49,55 +49,53 @@ int minimizeCost(vector<int> &height, int n, int k)
 
 int helper(vector<int> &height, int index, int k, vector<int> &dp)
 {
- if (index <= 0)
-  return 0;
+    if (index <= 0)
+        return 0;
 
- if (dp[index] != -1)
- {
-  return dp[index];
- }
+    if (dp[index] != -1)
+    {
+        return dp[index];
+    }
 
- int minEnergy = INT_MAX;
- for (int i = 1; i <= k; i++)
- {
-  int currEnergySpent = INT_MAX;
-  if (index - i >= 0)
-  {
-   currEnergySpent = helper(height, index - i, k, dp) +
-                     abs(height[index] - height[index - i]);
-  }
-  minEnergy = min(minEnergy, currEnergySpent);
- }
+    int minEnergy = INT_MAX;
+    for (int i = 1; i <= k; i++)
+    {
+        int currEnergySpent = INT_MAX;
+        if (index - i >= 0)
+        {
+            currEnergySpent = helper(height, index - i, k, dp) + abs(height[index] - height[index - i]);
+        }
+        minEnergy = min(minEnergy, currEnergySpent);
+    }
 
- return dp[index] = minEnergy;
+    return dp[index] = minEnergy;
 }
 int minimizeCost(vector<int> &height, int n, int k)
 {
- vector<int> dp(n, -1);
- return helper(height, n - 1, k, dp);
+    vector<int> dp(n, -1);
+    return helper(height, n - 1, k, dp);
 }
 
 //! Recursion -> Top Down Approach
 int helper(vector<int> &height, int index, int k)
 {
- if (index <= 0)
-  return 0;
+    if (index <= 0)
+        return 0;
 
- int minEnergy = INT_MAX;
- for (int i = 1; i <= k; i++)
- {
-  int currEnergySpent = INT_MAX;
-  if (index - i >= 0)
-  {
-   currEnergySpent = helper(height, index - i, k) +
-                     abs(height[index] - height[index - i]);
-  }
-  minEnergy = min(minEnergy, currEnergySpent);
- }
+    int minEnergy = INT_MAX;
+    for (int i = 1; i <= k; i++)
+    {
+        int currEnergySpent = INT_MAX;
+        if (index - i >= 0)
+        {
+            currEnergySpent = helper(height, index - i, k) + abs(height[index] - height[index - i]);
+        }
+        minEnergy = min(minEnergy, currEnergySpent);
+    }
 
- return minEnergy;
+    return minEnergy;
 }
 int minimizeCost(vector<int> &height, int n, int k)
 {
- return helper(height, n - 1, k);
+    return helper(height, n - 1, k);
 }
