@@ -12,7 +12,7 @@ using namespace std;
 
 //! Space Optimized Tabulation DP
 
-//# Right -> Left
+//# Right -> Left (One array optimization)
 
 /*
 > Time Complexity: O(N * M)
@@ -21,7 +21,7 @@ using namespace std;
 
 
 
-//# Left -> Right
+//# Left -> Right (Two array optimization)
 
 /*
 > Time Complexity: O(N * W)
