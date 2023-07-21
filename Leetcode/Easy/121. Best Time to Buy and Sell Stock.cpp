@@ -1,12 +1,12 @@
-// # Tutorial: https://www.youtube.com/watch?v=4YjEHmw1MX0&list=PL-Jc9J83PIiG8fE6rj9F5a6uyQ5WPdqKy&index=30
-
-//! One Transaction Allowed
-
 #include <bits/stdc++.h>
 #include <vector>
 #include <algorithm>
 #include <climits>
 using namespace std;
+
+// # Tutorial: https://www.youtube.com/watch?v=excAOvwF_Wk&list=PLgUwDviBIf0pwFf-BnpkXxs0Ra0eU2sJY&index=17
+
+//- if you are selling on iTh day, you want to buy the stock in minimum price form [1...i - 1] day
 
 //! Left -> Right
 class Solution
@@ -18,9 +18,9 @@ public:
         int maxProfit = 0;
         for (int i = 1; i < prices.size(); i++)
         {
-            minSellingPrice = min(minSellingPrice, prices[i]);
             int tempProfit = prices[i] - minSellingPrice;
             maxProfit = max(maxProfit, tempProfit);
+            minSellingPrice = min(minSellingPrice, prices[i]);
         }
         return maxProfit;
     }
