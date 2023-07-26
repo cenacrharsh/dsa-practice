@@ -60,9 +60,9 @@ public:
         {
             for (int prev = 0; prev < curr; prev++)
             {
-                if (nums[prev] < nums[curr])
+                if (nums[prev] < nums[curr] && 1 + dp[prev] > dp[curr])
                 {
-                    dp[curr] = max(dp[curr], 1 + dp[prev]);
+                    dp[curr] = 1 + dp[prev];
                 }
             }
             maxLen = max(maxLen, dp[curr]);
