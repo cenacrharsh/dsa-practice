@@ -8,19 +8,20 @@ using namespace std;
 
 int longestIncreasingSubsequence(int arr[], int n)
 {
-    vector<int> dp(n, 1);
+    vector<int> ans;
+    ans.push_back(arr[0]);
 
-    int maxLen = 1;
-    for (int curr = 0; curr < n; curr++)
+    for (int i = 1; i < n; i++)
     {
-        for (int prev = 0; prev < curr; prev++)
+        if (arr[i] > ans.back())
         {
-            if (arr[prev] < arr[curr])
-            {
-                dp[curr] = max(dp[curr], 1 + dp[prev]);
-            }
+            ans.push_back(arr[i]);
         }
-        maxLen = max(maxLen, dp[curr]);
+        else
+        {
+            int index = lower_bound(ans.begin(), ans.end(), arr[i]) - ans.begin();
+            ans[index] = arr[i];
+        }
     }
-    return maxLen;
+    return ans.size();
 }
