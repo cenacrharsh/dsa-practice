@@ -8,16 +8,45 @@ using namespace std;
 
 // # Tutorial: https://www.youtube.com/watch?v=ekcwMsSIzVc&list=PLgUwDviBIf0pwFf-BnpkXxs0Ra0eU2sJY&index=22
 
-//- f(ind, lastInd) -> f(0, -1) -> give me the LIS starting from index 0 with -1 as prev index
+//! Algorithmic Approach with Binary Search (we only get length of LIS not the actual subsequence)
 
-//! Space Optimized Tabulation DP
+/*
+> Time Complexity: O(N * Log(N))
+> Space Complexity: O(N)
+*/
+
+//@ Using Binary Search find the index of arr[i] or find the first element greater than arr[i] -> lower_bound in c++
+class Solution
+{
+public:
+    int lengthOfLIS(vector<int> &nums)
+    {
+        vector<int> ans;
+        ans.push_back(nums[0]);
+        for (int i = 1; i < nums.size(); i++)
+        {
+            if (nums[i] > ans.back())
+            {
+                ans.push_back(nums[i]);
+            }
+            else
+            {
+                int index = lower_bound(ans.begin(), ans.end(), nums[i]) - ans.begin();
+                ans[index] = nums[i];
+            }
+        }
+        return ans.size();
+    }
+};
+
+//! Algorithmic Approach
 
 /*
 > Time Complexity: O(N * N)
 > Space Complexity: O(N)
 */
 
-//@ f(ind) -> the longest subseq. that ends at index ind
+//- f(ind) -> the longest subseq. that ends at index ind
 class Solution
 {
 public:
@@ -41,6 +70,10 @@ public:
         return maxLen;
     }
 };
+
+//! Space Optimized Tabulation DP
+
+//- f(ind, lastInd) -> f(0, -1) -> give me the LIS starting from index 0 with -1 as prev index
 
 /*
 > Time Complexity: O(N * N)

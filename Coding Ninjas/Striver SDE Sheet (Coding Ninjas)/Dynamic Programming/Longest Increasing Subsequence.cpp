@@ -8,7 +8,7 @@ using namespace std;
 
 int longestIncreasingSubsequence(int arr[], int n)
 {
-    vector<int> dp(n + 1, 1);
+    vector<int> dp(n, 1);
 
     int maxLen = 1;
     for (int curr = 0; curr < n; curr++)
