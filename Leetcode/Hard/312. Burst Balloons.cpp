@@ -25,7 +25,7 @@ public:
         nums.insert(nums.begin(), 1);
         nums.push_back(1);
 
-        vector<vector<int>> dp(n + 2, vector<int>(n + 2, 0));
+        vector<vector<int>> dp(n + 2, vector<int>(n + 2, 0)); //* when j == n, index + 1 => n + 1 is required hence total size needs to be n + 2
 
         for (int i = n; i >= 1; i--)
         {
