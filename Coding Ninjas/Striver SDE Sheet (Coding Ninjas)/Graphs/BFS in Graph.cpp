@@ -9,12 +9,12 @@ using namespace std;
 // # Tutorial: https://www.youtube.com/watch?v=-tgVpUgsQ5k&list=PLgUwDviBIf0rGEWe64KWas0Nryn7SCRWw&index=5
 
 /*
-> Time Complexity: O(V) + O(2E) => V = Vertices & E = Edges
+> Time Complexity: O(N) + O(2E) => V = Vertices & E = Edges (inner loop runs degree number of times for each node)
 > Space Complexity: O(3E) = O(E)
 */
 
 //- Total degree of graph = 2E (as each edge is associated with 2 nodes)
-//- V * D = E
+//- N * D = E
 
 vector<int> bfsTraversal(int n, vector<vector<int>> &adj)
 {
