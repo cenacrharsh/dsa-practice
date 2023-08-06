@@ -10,7 +10,7 @@ using namespace std;
 
 /*
 > Time Complexity: O(V) + O(2E) => V = Vertices & E = Edges
-> Space Complexity: O()
+> Space Complexity: O(3E) = O(E)
 */
 
 //- Total degree of graph = 2E (as each edge is associated with 2 nodes)
