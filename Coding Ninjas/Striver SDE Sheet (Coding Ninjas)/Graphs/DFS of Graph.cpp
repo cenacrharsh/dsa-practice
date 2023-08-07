@@ -13,28 +13,42 @@ using namespace std;
 > Space Complexity: O(3N) => dfs, visited and recursion stack space
 */
 
-void helper(int node, vector<int> adj[], vector<int> &visited, vector<int> &dfs)
+void helper(int node, vector<vector<int>> &adj, vector<int> &visited, vector<int> &temp)
 {
     visited[node] = 1;
-    dfs.push_back(node);
+    temp.push_back(node);
 
     // traverse all it's neighbours
     for (auto it : adj[node])
     {
         if (visited[it] != 1)
         {
-            helper(it, adj, visited, dfs);
+            helper(it, adj, visited, temp);
         }
     }
 }
 
-// Function to return a list containing the DFS traversal of the graph.
-vector<int> dfsOfGraph(int V, vector<int> adj[])
+vector<vector<int>> depthFirstSearch(int V, int E, vector<vector<int>> &edges)
 {
-    vector<int> visited(V, 0);
-    vector<int> dfs;
+    vector<vector<int>> adj(V);
+    for (int i = 0; i < edges.size(); i++)
+    {
+        adj[edges[i][0]].push_back(edges[i][1]);
+        adj[edges[i][1]].push_back(edges[i][0]);
+    }
 
-    int start = 0;
-    helper(start, adj, visited, dfs);
+    vector<vector<int>> dfs;
+    vector<int> visited(V, 0);
+
+    for (int i = 0; i < visited.size(); i++)
+    {
+        if (visited[i] != 1)
+        {
+            vector<int> temp;
+            helper(i, adj, visited, temp);
+            dfs.push_back(temp);
+        }
+    }
+
     return dfs;
 }
