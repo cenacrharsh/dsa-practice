@@ -8,6 +8,11 @@ using namespace std;
 
 // # Tutorial: https://www.youtube.com/watch?v=7zmgQSJghpo&list=PLgUwDviBIf0rGEWe64KWas0Nryn7SCRWw&index=11
 
+/*
+> Time Complexity: O(n * m * log(n * m)) + O(n * m * 4) => for loop + dfs
+> Space Complexity: O(n * m)
+*/
+
 int dfs(int row, int col, vector<vector<int>> &visited,
         int **grid, vector<pair<int, int>> &temp,
         int row0, int col0, int n, int m)
