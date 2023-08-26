@@ -10,6 +10,72 @@ using namespace std;
 
 //@ Topological Sort - Liner ordering of elements such that if there is an edge between u and v, u appears before v in that ordering - Only possible in DIRECTED ACYCLIC GRAPH
 
+//! BFS - Kahn's Algorithm
+
+/*
+> Time Complexity: O(V + E)
+> Space Complexity: O(2V)
+*/
+
+#include <bits/stdc++.h>
+
+vector<int> topologicalSort(vector<vector<int>> &graph, int edges, int nodes)
+{
+    vector<vector<int>> adj(nodes);
+    for (int i = 0; i < graph.size(); i++)
+    {
+        adj[graph[i][0]].push_back(graph[i][1]);
+    }
+
+    //* make a vector of indegree of each node
+    vector<int> indegree(nodes);
+    for (int i = 0; i < nodes; i++)
+    {
+        for (auto it : adj[i])
+        {
+            indegree[it]++;
+        }
+    }
+
+    queue<int> q;
+    for (int i = 0; i < nodes; i++)
+    {
+        if (indegree[i] == 0)
+        {
+            q.push(i);
+        }
+    }
+
+    vector<int> ans;
+    while (!q.empty())
+    {
+        int currNode = q.front();
+        q.pop();
+
+        ans.push_back(currNode);
+
+        for (auto it : adj[currNode])
+        {
+            //* remove the link of currNode from each of it's connected node
+            indegree[it]--;
+
+            if (indegree[it] == 0)
+            {
+                q.push(it);
+            }
+        }
+    }
+
+    return ans;
+}
+
+//! DFS
+
+/*
+> Time Complexity: O(V + E)
+> Space Complexity: O(2V)
+*/
+
 void dfsCheck(int node, vector<vector<int>> &adj, vector<int> &visited, stack<int> &st)
 {
     visited[node] = 1;
