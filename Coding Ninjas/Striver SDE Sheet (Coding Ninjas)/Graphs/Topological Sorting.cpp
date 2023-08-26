@@ -6,9 +6,9 @@
 #include <cstring>
 using namespace std;
 
-// # Tutorial: https://www.youtube.com/watch?v=5lZ0iJMrUMk&list=PLgUwDviBIf0rGEWe64KWas0Nryn7SCRWw&index=15
-
 //@ Topological Sort - Liner ordering of elements such that if there is an edge between u and v, u appears before v in that ordering - Only possible in DIRECTED ACYCLIC GRAPH
+
+// # Tutorial: https://www.youtube.com/watch?v=73sneFXuTEg&list=PLgUwDviBIf0rGEWe64KWas0Nryn7SCRWw&index=14
 
 //! BFS - Kahn's Algorithm
 
@@ -68,6 +68,8 @@ vector<int> topologicalSort(vector<vector<int>> &graph, int edges, int nodes)
 
     return ans;
 }
+
+// # Tutorial: https://www.youtube.com/watch?v=5lZ0iJMrUMk&list=PLgUwDviBIf0rGEWe64KWas0Nryn7SCRWw&index=15
 
 //! DFS
 

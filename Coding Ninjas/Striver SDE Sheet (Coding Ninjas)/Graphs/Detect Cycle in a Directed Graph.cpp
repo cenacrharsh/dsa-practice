@@ -6,6 +6,65 @@
 #include <cstring>
 using namespace std;
 
+// # Tutorial: https://www.youtube.com/watch?v=iTBaI90lpDQ&list=PLgUwDviBIf0rGEWe64KWas0Nryn7SCRWw&index=15
+
+//! BFS - Kahn's Algorithm
+
+bool isCyclic(vector<vector<int>> &edges, int v, int e)
+{
+    vector<vector<int>> adj(v);
+    for (int i = 0; i < edges.size(); i++)
+    {
+        adj[edges[i][0]].push_back(edges[i][1]);
+    }
+
+    //* make a vector of indegree of each node
+    vector<int> indegree(v);
+    for (int i = 0; i < v; i++)
+    {
+        for (auto it : adj[i])
+        {
+            indegree[it]++;
+        }
+    }
+
+    queue<int> q;
+    for (int i = 0; i < v; i++)
+    {
+        if (indegree[i] == 0)
+        {
+            q.push(i);
+        }
+    }
+
+    int count = 0;
+    while (!q.empty())
+    {
+        int currNode = q.front();
+        q.pop();
+
+        count++;
+
+        for (auto it : adj[currNode])
+        {
+            //* remove the link of currNode from each of it's connected node
+            indegree[it]--;
+
+            if (indegree[it] == 0)
+            {
+                q.push(it);
+            }
+        }
+    }
+
+    if (count == v)
+    {
+        return false;
+    }
+
+    return true;
+}
+
 // # Tutorial: https://www.youtube.com/watch?v=9twcmtQj4DU&list=PLgUwDviBIf0rGEWe64KWas0Nryn7SCRWw&index=13
 
 //! DFS
