@@ -17,8 +17,6 @@ using namespace std;
 > Space Complexity: O(2V)
 */
 
-#include <bits/stdc++.h>
-
 vector<int> topologicalSort(vector<vector<int>> &graph, int edges, int nodes)
 {
     vector<vector<int>> adj(nodes);
