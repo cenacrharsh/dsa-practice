@@ -6,17 +6,16 @@
 #include <cstring>
 using namespace std;
 
+/*
+    - Dijkstra's Algorithm won't work for negative edge weights as in case of negative edge weights the values of paths keeps decreasing every time and infinite loop occurs in such a case
+*/
+
 // # Tutorial: https://www.youtube.com/watch?v=PATgNiuTP20
 
 //! Using Set
 
 /*
     in PQ we don't have erase operation but in sets we do so we can erase already existing paths which we know are going to take longer for eg. if {8, 5} is about to be inserted but a {10, 5} already exists so we know that when {10, 5} is going to come later it won't effect the results as a lower distance of {8, 5} has already come so we can easily remove it from set and save some iterations but set.erase() also in logarithmic time so overall time complexity can be said to be same
-*/
-
-/*
-    won't work for negative edge weights as in case of negative edge weights
-    the values of paths keeps decreasing every time and infinite loop occurs
 */
 
 vector<int> dijkstra(vector<vector<int>> &edge, int vertices, int edges, int source)
