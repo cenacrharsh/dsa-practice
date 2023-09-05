@@ -8,6 +8,13 @@ using namespace std;
 
 // # Tutorial: https://www.youtube.com/watch?v=0vVofAhAYjc&list=PLgUwDviBIf0rGEWe64KWas0Nryn7SCRWw&index=23
 
+//! Bellman Ford works for negative edges/cycles
+
+/*
+> Time Complexity: O(V * E)
+> Space Complexity: O(V)
+*/
+
 /*
     - Why (N - 1) iterations ?
     @ Since in a graph of N nodes, in worst case you will take N - 1 edges to reach from the first to the last, thereby we iterate for N - 1 iterations
