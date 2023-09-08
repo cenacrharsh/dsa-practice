@@ -6,9 +6,14 @@
 #include <cstring>
 using namespace std;
 
-//! Prim's Algorithm
+//! Prim's Algorithm (Uses Greedy Approach)
 
 // # Tutorial: https://www.youtube.com/watch?v=mJcZjjKzeqk&list=PLgUwDviBIf0rGEWe64KWas0Nryn7SCRWw&index=28
+
+/*
+> Time Complexity: O(E * Log(E)) + O(E * Log(E)) => E * Log(E) (traversal of all edges + traversing all of it's adj nodes)
+> Space Complexity: O(E + V)
+*/
 
 class Solution
 {
