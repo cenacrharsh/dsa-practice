@@ -6,7 +6,12 @@
 #include <cstring>
 using namespace std;
 
-//! Minimum Spanning Tree
+//! Kruskal's Algorithm
+
+/*
+> Time Complexity: O(V + E) + O(E * Log(E)) + O(M * 4alpha)
+> Space Complexity: O(N) + O(N) + O(E)
+*/
 
 // # Tutorial: https://www.youtube.com/watch?v=DMnDM_sxVig&list=PLgUwDviBIf0rGEWe64KWas0Nryn7SCRWw&index=29
 
@@ -63,9 +68,9 @@ public:
 class Solution
 {
 public:
-    // Function to find sum of weights of edges of the Minimum Spanning Tree.
     int spanningTree(int V, vector<vector<int>> adj[])
     {
+        //> O(N + E)
         vector<pair<int, pair<int, int>>> edges;
         for (int i = 0; i < V; i++)
         {
@@ -79,11 +84,13 @@ public:
             }
         }
 
+        //> O(E * Log(E))
         sort(edges.begin(), edges.end());
 
         DisjointSet ds(V);
         int mstWt = 0;
 
+        //> O(M * 4alpha * 2)
         for (auto it : edges)
         {
             int wt = it.first;
