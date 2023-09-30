@@ -13,27 +13,26 @@ using namespace std;
 > Space Complexity: O()
 */
 
-int lowerBound(vector<int> arr, int n, int x)
+int upperBound(vector<int> arr, int n, int x)
 {
-    //* Smallest index i where arr[i] >= x
+    //* smallest index i where arr[i] > x
     int low = 0, high = n - 1;
-    int ans = n; //* if no element >= x exists in array
+    int ans = n;
     while (low <= high)
     {
         int mid = (low + high) / 2;
-        //* maybe an ans
-        if (arr[mid] >= x)
+        if (arr[mid] > x)
         {
             ans = mid;
-            high = mid - 1; //* look for smaller index on left
+            high = mid - 1;
         }
         else
         {
-            low = mid + 1; //* look for possible ans on right
+            low = mid + 1;
         }
     }
     return ans;
 
     //! STL
-    //@ return lower_bound(arr.begin(), arr.end(), x) - arr.begin();
+    //@ return upper_bound(arr.begin(), arr.end(), x) - arr.begin();
 }
