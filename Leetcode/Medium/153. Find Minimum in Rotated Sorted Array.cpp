@@ -8,46 +8,45 @@ using namespace std;
 //! Using Binary Search
 
 /*
-> Time Complexity: O(log n)
+> Time Complexity: O(log (n) base 2)
 > Space Complexity: O(1)
 */
 
 class Solution
 {
 public:
- int findMin(vector<int> &nums)
- {
-  int n = nums.size();
-  int l = 0;
-  int r = n - 1;
-  while (l <= r)
-  {
-   // if array already sorted
-   if (nums[l] <= nums[r])
-   {
-    return nums[l];
-   }
+    int findMin(vector<int> &nums)
+    {
+        //! sorted half may or maynot contain the answer -> pick the min from sorted half and eliminate it
 
-   int mid = l + (r - l) / 2;
-   int next = (mid + 1) % n;     // (n-1 + 1) % n = 0
-   int prev = (mid - 1 + n) % n; // (0 - 1 + n) % n = n - 1
+        int low = 0, high = nums.size() - 1;
+        int ans = INT_MAX;
+        while (low <= high)
+        {
+            int mid = (low + high) / 2;
 
-   // mid lies at pivot element
-   if (nums[prev] > nums[mid] && nums[next] > nums[mid])
-   {
-    return nums[mid];
-   }
-   // mid lies to left of pivot
-   else if (nums[mid] > nums[r])
-   {
-    l = mid + 1;
-   }
-   // mid lies to right of pivot
-   else if (nums[mid] < nums[r])
-   {
-    r = mid - 1;
-   }
-  }
-  return -1;
- }
+            //* if the entire search space is alredy sorted (i.e we have crossed the point of rotation) then nums[low] will always be the smallest element in that search space
+            if (nums[low] <= nums[high])
+            {
+                ans = min(ans, nums[low]);
+                break;
+            }
+
+            //* left half is sorted
+            if (nums[low] <= nums[mid])
+            {
+                //* pick the smallest element i.e arr[low] and eliminate
+                ans = min(ans, nums[low]);
+                low = mid + 1;
+            }
+            //* right half is sorted
+            else
+            {
+                //* pick the smallest element i.e arr[mid] and eliminate
+                ans = min(ans, nums[mid]);
+                high = mid - 1;
+            }
+        }
+        return ans;
+    }
 };
