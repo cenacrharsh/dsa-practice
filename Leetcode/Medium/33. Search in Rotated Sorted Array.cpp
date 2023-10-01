@@ -17,6 +17,7 @@ public:
     int search(vector<int> &nums, int target)
     {
         //* key is to identify the sorted half
+
         int low = 0, high = nums.size() - 1;
         while (low <= high)
         {
