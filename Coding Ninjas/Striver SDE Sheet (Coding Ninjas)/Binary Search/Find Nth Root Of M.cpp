@@ -9,7 +9,7 @@ using namespace std;
 // # Tutorial: https://www.youtube.com/watch?v=rjEJeYCasHs&list=PLgUwDviBIf0pMFMWuuvDNMAkoQFi-h0ZF&index=12
 
 /*
-> Time Complexity: O(log (m) base 2) * O(log (n) base 2) => loop for m numbers * multiplication for n times using exponentiation
+> Time Complexity: O(log (m) base 2) * O(log (n) base 2) => loop for m numbers * multiplication for n times using binary exponentiation
 > Space Complexity: O()
 */
 
