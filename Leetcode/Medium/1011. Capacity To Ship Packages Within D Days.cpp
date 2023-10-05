@@ -6,55 +6,70 @@
 #include <cstring>
 using namespace std;
 
-// # Tutorial: https://www.youtube.com/watch?v=CoDBIX5TCow
+// # Tutorial: https://www.youtube.com/watch?v=MG-Ac4TAvTY&list=PLgUwDviBIf0pMFMWuuvDNMAkoQFi-h0ZF&index=16
+
+/*
+> Time Complexity: O(log (sum - max + 1)) * O(N) => range is sum - max + 1
+> Space Complexity: O(1)
+*/
 
 class Solution
 {
 public:
- bool check(vector<int> &weights, int days, int capacity)
- {
-  int requiredDays = 1;
-  int currentWeight = 0;
-  for (int i : weights)
-  {
-   if (currentWeight + i > capacity)
-   {
-    requiredDays++;
-    currentWeight = 0;
-   }
-   currentWeight += i;
-  }
-  return requiredDays <= days ? true : false;
- }
+    // pair<int, int> totalSumAndMaxWeight(vector<int> &weights) {
+    //     int sum = 0;
+    //     int maxWt = INT_MIN;
+    //     for(int i = 0; i < weights.size(); i++) {
+    //         sum += weights[i];
+    //         maxWt = max(maxWt, weights[i]);
+    //     }
+    //     return make_pair(maxWt, sum);
+    // }
 
- int shipWithinDays(vector<int> &weights, int days)
- {
-  // we do binary search from lowest possible capacity which is the max weight package in the lot, to highest possible capacity that is the sum total of all packages
-  int maxWeight = INT_MIN;
-  int totalWeight = 0;
-  int ans;
-  for (int i : weights)
-  {
-   maxWeight = max(maxWeight, i);
-   totalWeight += i;
-  }
-  int left = maxWeight;
-  int right = totalWeight;
-  while (left <= right)
-  {
-   int mid = (left + right) / 2;
+    int calcDays(vector<int> &weights, int capacity)
+    {
+        int days = 1;
+        int load = 0;
+        for (int i = 0; i < weights.size(); i++)
+        {
+            if (load + weights[i] > capacity)
+            {
+                days++;
+                load = weights[i];
+            }
+            else
+            {
+                load += weights[i];
+            }
+        }
+        return days;
+    }
 
-   if (check(weights, days, mid))
-   {
-    ans = mid;
-    // try and see if it still works if we reduce the capaciy
-    right = mid - 1;
-   }
-   else
-   {
-    left = mid + 1;
-   }
-  }
-  return ans;
- }
+    //* low starts from not possible values while high starts from possible values
+    int shipWithinDays(vector<int> &weights, int days)
+    {
+        //* min capcaity = max(weights) as anything lesser and we won't be able to ship the container of max wt
+        //* max capacity = sum total of all weights so that we can ship them all at once
+
+        // pair<int, int> val = totalSumAndMaxWeight(weights);
+        // int low = val.first, high = val.second;
+
+        int low = *max_element(weights.begin(), weights.end());
+        int high = accumulate(weights.begin(), weights.end(), 0);
+
+        while (low <= high)
+        {
+            int mid = (low + high) / 2;
+            int daysReq = calcDays(weights, mid);
+            if (daysReq <= days)
+            {
+                high = mid - 1;
+            }
+            else
+            {
+                low = mid + 1;
+            }
+        }
+        return low;
+    }
 };
