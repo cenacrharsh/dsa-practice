@@ -9,7 +9,7 @@ using namespace std;
 // # Tutorial:https://www.youtube.com/watch?v=R_Mfw4ew-Vo&list=PLgUwDviBIf0pMFMWuuvDNMAkoQFi-h0ZF&index=20
 
 /*
-> Time Complexity: O(N log(N)) + O(log (max - min)) + O(N)
+> Time Complexity: O(N log(N)) + O(log (max - min)) * O(N)
 > Space Complexity: O(1)
 */
 
