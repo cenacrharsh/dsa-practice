@@ -17,13 +17,13 @@ int upperBound(vector<int> arr, int n, int x)
 {
     //* smallest index i where arr[i] > x
     int low = 0, high = n - 1;
-    int ans = n;
+    // int ans = n;
     while (low <= high)
     {
         int mid = (low + high) / 2;
         if (arr[mid] > x)
         {
-            ans = mid;
+            // ans = mid;
             high = mid - 1;
         }
         else
@@ -31,7 +31,7 @@ int upperBound(vector<int> arr, int n, int x)
             low = mid + 1;
         }
     }
-    return ans;
+    return low;
 
     //! STL
     //@ return upper_bound(arr.begin(), arr.end(), x) - arr.begin();
