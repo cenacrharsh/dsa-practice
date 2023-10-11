@@ -10,27 +10,35 @@ using namespace std;
 
 //! Approach 1 - Binary Search
 
+/*
+> Time Complexity: O(log (n * m) base 2)
+> Space Complexity: O(1)
+*/
+
 class Solution
 {
 public:
     bool searchMatrix(vector<vector<int>> &matrix, int target)
     {
-        //* treating the m * n 2D array as one big 1D array
-        //* m -> row and n -> col
-        int row = matrix.size();
-        int col = matrix[0].size();
-        int low = 0;
-        int high = row * col - 1;
+        //* we can think of it as a flattened array
+        //* we have to convert 1D coordinates to 2D coordinates
+        //* row -> 1D / total col. -> as every row has say m elements and due to 0 based indexing the first element of each row will be a multiple of m, hence to determine how many rows have passed we divide by m
+        //* col -> 1D % total col. -> since every row contains m elements eg. m = 4 and we are on 9, 9 % 4 tells us 2 sets of 4 elements have passed and currently we are 1th coordinate of the curr row, or since first row element is multiple of m the next elements will have coordinate 1, 2, 3... upon % with m
+
+        int n = matrix.size();
+        int m = matrix[0].size();
+        int low = 0, high = (n * m) - 1;
         while (low <= high)
         {
-            int mid = (low + (high - low) / 2);
+            int mid = (low + high) / 2;
+            int row = mid / m;
+            int col = mid % m;
 
-            if (target == matrix[mid / col][mid % col])
+            if (matrix[row][col] == target)
             {
                 return true;
             }
-
-            if (target > matrix[mid / col][mid % col])
+            else if (target > matrix[row][col])
             {
                 low = mid + 1;
             }
@@ -43,41 +51,11 @@ public:
     }
 };
 
-/*
-> Time Complexity: O(log2(n*m))
-> Space Complexity: O(1)
-*/
-
 //! Approach 2
 
-class Solution
-{
-public:
-    bool searchMatrix(vector<vector<int>> &matrix, int target)
-    {
-        int M = matrix.size();
-        int N = matrix[0].size();
-        int row = 0, col = N - 1;
-        // since we move left so j >= 0
-        // since we move down so i < n
-        while (row < M && col >= 0)
-        {
-            if (matrix[row][col] == target)
-            {
-                return 1;
-            }
+//* check if element lies b/w first and last element of row, if yes apply binary search in that row
 
-            if (target > matrix[row][col])
-            {
-                // if element if > the last element of that row, we move to next row
-                row++;
-            }
-            else
-            {
-                // if element if < the last element of that row, we move to lower col values to find the target
-                col--;
-            }
-        }
-        return 0;
-    }
-};
+/*
+> Time Complexity: O(n) * O(log (m) base 2)
+> Space Complexity: O(1)
+*/
