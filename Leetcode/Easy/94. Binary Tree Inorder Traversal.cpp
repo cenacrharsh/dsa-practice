@@ -49,35 +49,41 @@ public:
 
 //! Using Iteration
 
+/*
+> Time Complexity: O(N)
+> Space Complexity: O(N)
+*/
+
 class Solution
 {
 public:
-    vector<int> inorderTraversal(TreeNode *root)
+    //* Root->Left->Right
+    vector<int> preorderTraversal(TreeNode *root)
     {
-        vector<int> ans;
+        vector<int> preorder;
         if (root == NULL)
-            return ans;
-
-        stack<TreeNode *> nodesLeft;
-        TreeNode *currNode = root;
-
-        while (currNode != NULL || !nodesLeft.empty())
         {
-            // push all the left nodes of the currNode
-            while (currNode != NULL)
-            {
-                nodesLeft.push(currNode);
-                currNode = currNode->left;
-            }
-
-            // pop out the last pushed node from stack
-            currNode = nodesLeft.top();
-            nodesLeft.pop();
-            ans.push_back(currNode->val);
-
-            // now move to the right side of the currNode if there is any
-            currNode = currNode->right;
+            return preorder;
         }
-        return ans;
+
+        stack<TreeNode *> st;
+        st.push(root);
+        while (!st.empty())
+        {
+            TreeNode *currNode = st.top();
+            st.pop();
+
+            preorder.push_back(currNode->val);
+
+            if (currNode->right != NULL)
+            {
+                st.push(currNode->right);
+            }
+            if (currNode->left != NULL)
+            {
+                st.push(currNode->left);
+            }
+        }
+        return preorder;
     }
 };

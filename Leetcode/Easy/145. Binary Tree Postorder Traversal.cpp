@@ -8,6 +8,8 @@ using namespace std;
 
 // # Tutorial: https://www.youtube.com/watch?v=RlUu72JrOCQ&list=PLgUwDviBIf0q8Hkd7bK2Bpryj2xVJk8Vk&index=6
 
+//- Left->Right->Root
+
 struct TreeNode
 {
     int val;
@@ -66,7 +68,7 @@ public:
         stack<TreeNode *> nodesLeft;
         TreeNode *currNode = root;
 
-        // we keep going left as long as possible then we move right and try to move as left as we can again
+        //* we keep going left as long as possible then we move right and try to move as left as we can again
         while (currNode != NULL || !nodesLeft.empty())
         {
             if (currNode != NULL)
@@ -76,21 +78,21 @@ public:
             }
             else
             {
-                // since we reached NULL for our currNode while going left so now we try to go right
+                //* since we reached NULL for our currNode while going left so now we try to go right
                 TreeNode *tempNode = nodesLeft.top()->right;
 
-                // we try to move right and it's also NULL
+                //* we try to move right and it's also NULL
                 if (tempNode == NULL)
                 {
-                    // we have reached the extreme leftmost node or the extreme rightmost node so we add it to our answer
+                    //* we have reached the extreme leftmost node or the extreme rightmost node so we add it to our answer
                     tempNode = nodesLeft.top();
                     nodesLeft.pop();
                     ans.push_back(tempNode->val);
 
-                    // check if out tempNode has a root
+                    //* check if out tempNode has a root
                     while (!nodesLeft.empty() && tempNode == nodesLeft.top()->right)
                     {
-                        // if root exists we add it out answer
+                        //* if root exists we add it out answer
                         tempNode = nodesLeft.top();
                         nodesLeft.pop();
                         ans.push_back(tempNode->val);
@@ -98,7 +100,7 @@ public:
                 }
                 else
                 {
-                    // setting the right node as currNode so that we can restart the process of trying to move as left as possible, as once again when we'll hit the end we'll move right and then try to move left again
+                    //* setting the right node as currNode so that we can restart the process of trying to move as left as possible, as once again when we'll hit the end we'll move right and then try to move left again
                     currNode = tempNode;
                 }
             }
@@ -109,6 +111,11 @@ public:
 
 //! Using Iteration (2 stack)
 
+/*
+> Time Complexity: O(N)
+> Space Complexity: O(2N)
+*/
+
 class Solution
 {
 public:
@@ -116,7 +123,9 @@ public:
     {
         vector<int> ans;
         if (root == NULL)
+        {
             return ans;
+        }
 
         stack<TreeNode *> st1, st2;
         st1.push(root);
@@ -126,16 +135,16 @@ public:
             TreeNode *currNode = st1.top();
             st1.pop();
 
-            // first insert the root
+            //* first insert the root
             st2.push(currNode);
 
-            // then insert the left node
+            //* then insert the left node
             if (currNode->left != NULL)
             {
                 st1.push(currNode->left);
             }
 
-            // then insert the right node
+            //* then insert the right node, since we pushing right at end it comes out first and it's children gets pushed first ensuring the left half is at top when finished for Left->Right->Root
             if (currNode->right != NULL)
             {
                 st1.push(currNode->right);

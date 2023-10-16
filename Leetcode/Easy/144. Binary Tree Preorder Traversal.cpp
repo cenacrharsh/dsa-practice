@@ -56,45 +56,49 @@ public:
     }
 };
 
-//! Using Stack (Iterative Solution)
+//! Using Iteration
 
 /*
-> Time Complexity: O(n)
-> Space Complexity: O(n)
+> Time Complexity: O(N)
+> Space Complexity: O(N)
 */
 
 class Solution
 {
 public:
-    vector<int> preorderTraversal(TreeNode *root)
+    //* Left->Root->Right
+    vector<int> inorderTraversal(TreeNode *root)
     {
-        vector<int> ans;
+        vector<int> inorder;
         if (root == NULL)
-            return ans;
-
-        stack<TreeNode *> nodesLeft;
-        nodesLeft.push(root);
-
-        while (!nodesLeft.empty())
         {
-            TreeNode *currNode = nodesLeft.top();
-            nodesLeft.pop();
+            return inorder;
+        }
 
-            // root
-            ans.push_back(currNode->val);
+        stack<TreeNode *> st;
+        TreeNode *node = root;
 
-            // right
-            if (currNode->right != NULL)
+        while (true)
+        {
+            if (node != NULL)
             {
-                nodesLeft.push(currNode->right);
+                st.push(node);
+                node = node->left; //* Left
             }
-
-            // left, pushed after right so that it can come before left while popping
-            if (currNode->left != NULL)
+            else
             {
-                nodesLeft.push(currNode->left);
+                if (st.empty())
+                {
+                    break;
+                }
+
+                node = st.top();
+                st.pop();
+
+                inorder.push_back(node->val); //* Root
+                node = node->right;           //* Right
             }
         }
-        return ans;
+        return inorder;
     }
 };
