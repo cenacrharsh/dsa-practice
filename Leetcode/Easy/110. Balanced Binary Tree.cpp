@@ -6,7 +6,12 @@
 #include <cstring>
 using namespace std;
 
-// # Tutorial: https://www.youtube.com/watch?v=Yt50Jfbd8Po
+// # Tutorial: https://www.youtube.com/watch?v=Yt50Jfbd8Po&list=PLgUwDviBIf0q8Hkd7bK2Bpryj2xVJk8Vk&index=16
+
+/*
+> Time Complexity: O(N)
+> Space Complexity: O(N) => auxiliary stack space
+*/
 
 struct TreeNode
 {
@@ -18,13 +23,6 @@ struct TreeNode
     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
 };
 
-//! DFS & passing height of tree uptill now
-
-/*
-> Time Complexity: O(N)
-> Space Complexity: O(H)
-*/
-
 class Solution
 {
 public:
@@ -35,78 +33,32 @@ public:
             return 0;
         }
 
-        int leftSubtreeHeight = dfsHeight(root->left);
-        if (leftSubtreeHeight == -1)
+        int leftHeight = dfsHeight(root->left);
+        if (leftHeight == -1)
         {
             return -1;
         }
 
-        int rightSubtreeHeight = dfsHeight(root->right);
-        if (rightSubtreeHeight == -1)
+        int rightHeight = dfsHeight(root->right);
+        if (rightHeight == -1)
         {
             return -1;
         }
 
-        if (abs(leftSubtreeHeight - rightSubtreeHeight) > 1)
+        if (abs(leftHeight - rightHeight) > 1)
         {
             return -1;
         }
 
-        return max(leftSubtreeHeight, rightSubtreeHeight) + 1;
+        return 1 + max(leftHeight, rightHeight);
     }
+
     bool isBalanced(TreeNode *root)
     {
-        // return height of bst if balanced
-        // return -1 if at any time not balanced
-        return dfsHeight(root) != -1;
-    }
-};
-
-//! Calc Height of Left & Right Subtree everytime
-
-/*
-> Time Complexity: O(N^2)
-> Space Complexity: O(H)
-*/
-
-class Solution
-{
-public:
-    int height(TreeNode *root)
-    {
-        if (root == NULL)
-        {
-            return 0;
-        }
-
-        int leftSubtreeHeight = height(root->left);
-        int rightSubtreeHeight = height(root->right);
-
-        return max(leftSubtreeHeight, rightSubtreeHeight) + 1;
-    }
-    bool isBalanced(TreeNode *root)
-    {
-        if (root == NULL)
+        if (dfsHeight(root) != -1)
         {
             return true;
         }
-
-        int leftSubtreeHeight = height(root->left);
-        int rightSubtreeHeight = height(root->right);
-
-        if (abs(leftSubtreeHeight - rightSubtreeHeight) > 1)
-        {
-            return false;
-        }
-
-        bool leftSubtree = isBalanced(root->left);
-        bool rightSubtree = isBalanced(root->right);
-
-        if (leftSubtree == false || rightSubtree == false)
-        {
-            return false;
-        }
-
-        return true;
+        return false;
     }
 };
