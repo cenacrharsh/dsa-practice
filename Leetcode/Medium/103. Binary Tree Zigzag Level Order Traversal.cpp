@@ -26,7 +26,8 @@ struct TreeNode
 class Solution
 {
 public:
-    vector<vector<int>> zigzagLevelOrder(TreeNode *root)
+    vector<vector<int>>
+    zigzagLevelOrder(TreeNode *root)
     {
         vector<vector<int>> ans;
         if (root == NULL)
@@ -41,17 +42,16 @@ public:
         while (!nodesLeft.empty())
         {
             int sizeOfCurrLevel = nodesLeft.size();
-            vector<int> row(sizeOfCurrLevel);
+            vector<int> currLevel(sizeOfCurrLevel);
 
             for (int i = 0; i < sizeOfCurrLevel; i++)
             {
                 TreeNode *currNode = nodesLeft.front();
                 nodesLeft.pop();
 
-                // find index to insert curr nodes value
-                int index = (leftToRight) ? i : (sizeOfCurrLevel - 1 - i);
-
-                row[index] = currNode->val;
+                //* depending on flag we either insert from front or back
+                int index = leftToRight ? i : sizeOfCurrLevel - 1 - i;
+                currLevel[index] = currNode->val;
 
                 if (currNode->left != NULL)
                 {
@@ -62,9 +62,10 @@ public:
                     nodesLeft.push(currNode->right);
                 }
             }
-            // alter the direction of traversal
+            //* reverse the direction of traversal
             leftToRight = !leftToRight;
-            ans.push_back(row);
+
+            ans.push_back(currLevel);
         }
         return ans;
     }
