@@ -6,11 +6,11 @@
 #include <cstring>
 using namespace std;
 
-// # Tutorial: https://www.youtube.com/watch?v=WszrfSwMz58&list=PLgUwDviBIf0q8Hkd7bK2Bpryj2xVJk8Vk&index=20
+// # Tutorial: https://www.youtube.com/watch?v=WszrfSwMz58&list=PLgUwDviBIf0q8Hkd7bK2Bpryj2xVJk8Vk&index=18
 
 /*
 > Time Complexity: O(N)
-> Space Complexity: O(1)
+> Space Complexity: O(N)
 */
 
 struct TreeNode
