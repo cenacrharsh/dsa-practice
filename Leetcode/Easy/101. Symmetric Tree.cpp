@@ -8,147 +8,44 @@ using namespace std;
 
 struct TreeNode
 {
- int val;
- TreeNode *left;
- TreeNode *right;
- TreeNode() : val(0), left(nullptr), right(nullptr) {}
- TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode() : val(0), left(nullptr), right(nullptr) {}
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+    TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
 };
 
-//! Iterative
-
-//> 1 queue
-class Solution
-{
-public:
- bool isSymmetric(TreeNode *root)
- {
-  if (root == NULL)
-  {
-   return true;
-  }
-
-  queue<TreeNode *> q;
-
-  q.push(root->left);
-  q.push(root->right);
-
-  while (!q.empty())
-  {
-   TreeNode *left = q.front();
-   q.pop();
-
-   TreeNode *right = q.front();
-   q.pop();
-
-   if (left == NULL && right == NULL)
-   {
-    continue;
-   }
-
-   if (left == NULL || right == NULL)
-   {
-    return false;
-   }
-
-   if (left->val != right->val)
-   {
-    return false;
-   }
-
-   q.push(left->left);
-   q.push(right->right);
-
-   q.push(left->right);
-   q.push(right->left);
-  }
-  return true;
- }
-};
-
-//> 2 queues
-class Solution
-{
-public:
- bool isSymmetric(TreeNode *root)
- {
-  if (root == NULL)
-  {
-   return true;
-  }
-
-  queue<TreeNode *> q1;
-  queue<TreeNode *> q2;
-
-  q1.push(root->left);
-  q2.push(root->right);
-
-  while (!q1.empty() && !q2.empty())
-  {
-   TreeNode *left = q1.front();
-   q1.pop();
-
-   TreeNode *right = q2.front();
-   q2.pop();
-
-   if (left == NULL && right == NULL)
-   {
-    continue;
-   }
-
-   if (left == NULL || right == NULL)
-   {
-    return false;
-   }
-
-   if (left->val != right->val)
-   {
-    return false;
-   }
-
-   q1.push(left->left);
-   q1.push(left->right);
-
-   q2.push(right->right);
-   q2.push(right->left);
-  }
-  return true;
- }
-};
-
-//! Recursive
+// # Tutorial: https://www.youtube.com/watch?v=nKggNAiEpBE&list=PLgUwDviBIf0q8Hkd7bK2Bpryj2xVJk8Vk&index=26
 
 class Solution
 {
 public:
- bool isMirror(TreeNode *node1, TreeNode *node2)
- {
-  if (node1 == NULL && node2 == NULL)
-  {
-   return true;
-  }
+    bool helper(TreeNode *left, TreeNode *right)
+    {
+        if (left == NULL || right == NULL)
+        {
+            return left == right; //* if either is null both should be null else false
+        }
 
-  if (node1 == NULL || node2 == NULL)
-  {
-   return false;
-  }
+        if (left->val != right->val)
+        {
+            return false;
+        }
 
-  if (node1->val != node2->val)
-  {
-   return false;
-  }
+        return helper(left->left, right->right) && helper(left->right, right->left);
+    }
 
-  return (isMirror(node1->left, node2->right) && isMirror(node1->right, node2->left));
- }
+    bool isSymmetric(TreeNode *root)
+    {
+        //* left children of left subtree == right children of right subtree
+        //* right children of left subtree == left children of left subtree
 
- bool isSymmetric(TreeNode *root)
- {
-  if (root == NULL)
-  {
-   return true;
-  }
+        if (root == NULL)
+        {
+            return false;
+        }
 
-  return isMirror(root->left, root->right);
- }
+        return helper(root->left, root->right);
+    }
 };
