@@ -6,54 +6,57 @@
 #include <cstring>
 using namespace std;
 
-// # Tutorial: https://www.youtube.com/watch?v=7Z6ivS-TA3k
+struct TreeNode
+{
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode() : val(0), left(nullptr), right(nullptr) {}
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+    TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+};
+
+// # Tutorial: https://www.youtube.com/watch?v=LgLRTaEMRVc&list=PLgUwDviBIf0q8Hkd7bK2Bpryj2xVJk8Vk&index=36
 
 /*
-> Time Complexity: O(n)
-> Space Complexity: O(n)
+> Time Complexity: O(N) + time to insert in map
+> Space Complexity: O(N) + stack space for recursion
 */
 
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
- *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
- * };
- */
 class Solution
 {
 public:
- TreeNode *buildTree(vector<int> &inorder, vector<int> &postorder)
- {
-  if (inorder.size() == 0 || postorder.size() == 0)
-  {
-   return NULL;
-  }
+    TreeNode *helper(vector<int> &inorder, int inStart, int inEnd, vector<int> &postorder, int postStart, int postEnd, unordered_map<int, int> &inorderMap)
+    {
+        if (inStart > inEnd || postStart > postEnd)
+        {
+            return NULL;
+        }
 
-  TreeNode *root = new TreeNode(postorder.back());
+        TreeNode *root = new TreeNode(postorder[postEnd]);
 
-  if (postorder.size() == 1)
-  {
-   return root;
-  }
+        //* find position of root in inorder
+        int inRoot = inorderMap[root->val];
 
-  auto root_index = find(begin(inorder), end(inorder), postorder.back()) - inorder.begin();
+        //* find no. of elements to the left
+        int numLeft = inRoot - inStart;
 
-  // [9,(3),15,20,7]
-  vector<int> left_inorder(inorder.begin(), inorder.begin() + root_index);
-  vector<int> right_inorder(inorder.begin() + root_index + 1, inorder.end());
+        root->left = helper(inorder, inStart, inRoot - 1, postorder, postStart, postStart + numLeft - 1, inorderMap);
+        root->right = helper(inorder, inRoot + 1, inEnd, postorder, postStart + numLeft, postEnd - 1, inorderMap);
 
-  // [9,15,7,20,(3)]
-  vector<int> left_postorder(postorder.begin(), postorder.begin() + root_index);    // if root index is at index i eg. 1, then we know left contains first i digits i.e 1 element in this case
-  vector<int> right_postorder(postorder.begin() + root_index, postorder.end() - 1); // and the rest elements minus the last element which is the root goes to the right
+        return root;
+    }
 
-  root->left = buildTree(left_inorder, left_postorder);
-  root->right = buildTree(right_inorder, right_postorder);
+    TreeNode *buildTree(vector<int> &inorder, vector<int> &postorder)
+    {
+        unordered_map<int, int> inorderMap; //* (node, position)
+        for (int i = 0; i < inorder.size(); i++)
+        {
+            inorderMap[inorder[i]] = i;
+        }
 
-  return root;
- }
+        TreeNode *root = helper(inorder, 0, inorder.size() - 1, postorder, 0, postorder.size() - 1, inorderMap);
+
+        return root;
+    }
 };
