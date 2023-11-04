@@ -18,6 +18,58 @@ struct TreeNode
     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
 };
 
+//! Morris Traversal
+
+/*
+> Time Complexity: O(N)
+> Space Complexity: O(1)
+*/
+
+class Solution
+{
+public:
+    vector<int> preorderTraversal(TreeNode *root)
+    {
+        vector<int> preorder;
+        TreeNode *curr = root;
+        while (curr != NULL)
+        {
+            //* 2 cases, left is NULL or it exists
+            if (curr->left == NULL)
+            {
+                //* add root to inorder and move right, true for both inorder and preorder as left does'nt exist so root comes before right here as well
+                preorder.push_back(curr->val);
+                curr = curr->right;
+            }
+            else
+            {
+                //* go to left subtree and find the last node of left subtree which will be visited in inorder of left subtree
+                TreeNode *prev = curr->left;
+                //* move as right as possible
+                while (prev->right != NULL && prev->right != curr)
+                {
+                    prev = prev->right;
+                }
+
+                //* prev is NULL or it points curr
+                if (prev->right == NULL)
+                {
+                    prev->right = curr;            //* create thread
+                    preorder.push_back(curr->val); //* we are visiting the root before moving to left
+                    curr = curr->left;             //* normal traversal
+                }
+                else
+                {
+                    //* thread exists
+                    prev->right = NULL; //* cut the thread
+                    curr = curr->right; //* thread indicates left half has been visited
+                }
+            }
+        }
+        return preorder;
+    }
+};
+
 //! Using Recursion
 
 /*
