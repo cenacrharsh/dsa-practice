@@ -21,7 +21,7 @@ struct TreeNode
 //! Morris Traversal
 
 /*
-> Time Complexity: O(N)
+> Time Complexity: O(N) => Amotized 
 > Space Complexity: O(1)
 */
 
