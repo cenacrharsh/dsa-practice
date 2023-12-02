@@ -23,6 +23,21 @@ class Solution
 public:
     TreeNode *searchBST(TreeNode *root, int val)
     {
+        while (root != NULL && root->val != val)
+        {
+            root = val < root->val ? root->left : root->right;
+        }
+        return root;
+    }
+};
+
+//! or
+
+class Solution
+{
+public:
+    TreeNode *searchBST(TreeNode *root, int val)
+    {
         if (root == NULL)
         {
             return NULL;
