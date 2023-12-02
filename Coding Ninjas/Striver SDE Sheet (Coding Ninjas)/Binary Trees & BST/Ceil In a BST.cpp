@@ -1,3 +1,13 @@
+#include <bits/stdc++.h>
+#include <vector>
+#include <algorithm>
+#include <climits>
+#include <unordered_map>
+#include <cstring>
+using namespace std;
+
+// # Tutorial: https://www.youtube.com/watch?v=KSsk8AhdOZA&list=PLgUwDviBIf0q8Hkd7bK2Bpryj2xVJk8Vk&index=42
+
 //* ceil of n => lowest value >= n
 
 struct TreeNode
@@ -13,20 +23,23 @@ struct TreeNode
 int findCeil(TreeNode *root, int key)
 {
     int ceil = -1;
-    if (root->val == key)
+    while (root != NULL)
     {
-        return root->val;
-    }
+        if (root->val == key)
+        {
+            return root->val;
+        }
 
-    if (root->val < key)
-    {
-        root = root->right;
-    }
-    else
-    {
-        //* root->val > key
-        ceil = root->val;
-        root = root->left; //* try to find lower values if possible
+        if (root->val < key)
+        {
+            root = root->right;
+        }
+        else
+        {
+            //* root->val > key
+            ceil = root->val;
+            root = root->left; //* try to find lower values if possible
+        }
     }
 
     return ceil;
