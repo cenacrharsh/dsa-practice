@@ -20,48 +20,40 @@ The loop in peek does the moving from input to output stack. Each element only e
 class MyQueue
 {
 public:
- stack<int> input, output;
+    stack<int> input, output;
 
- MyQueue()
- {
- }
+    MyQueue()
+    {
+    }
 
- void push(int x)
- {
-  input.push(x);
- }
+    void push(int x)
+    {
+        input.push(x);
+    }
 
- int pop()
- {
-  int ele_at_top = peek();
-  output.pop();
-  return ele_at_top;
- }
+    int pop()
+    {
+        int ele_at_top = peek(); //* push elements from input stack to output stack
+        output.pop();
+        return ele_at_top;
+    }
 
- int peek()
- {
-  if (output.empty())
-  {
-   while (!input.empty())
-   {
-    output.push(input.top());
-    input.pop();
-   }
-  }
-  return output.top();
- }
+    //* we only move elements from input to output once, we won't push new elements again unless it's empty
+    int peek()
+    {
+        if (output.empty())
+        {
+            while (!input.empty())
+            {
+                output.push(input.top());
+                input.pop();
+            }
+        }
+        return output.top();
+    }
 
- bool empty()
- {
-  return (input.empty() && output.empty());
- }
+    bool empty()
+    {
+        return (input.empty() && output.empty());
+    }
 };
-
-/**
- * Your MyQueue object will be instantiated and called as such:
- * MyQueue* obj = new MyQueue();
- * obj->push(x);
- * int param_2 = obj->pop();
- * int param_3 = obj->peek();
- * bool param_4 = obj->empty();
- */
