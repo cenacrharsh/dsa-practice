@@ -18,6 +18,7 @@ class Solution
 public:
     void deleteNode(ListNode *node)
     {
+        //* we won't be able to delete node if it's the last node in the list
         if (node != NULL && node->next != NULL)
         {
             ListNode *nextNode = node->next;
