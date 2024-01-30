@@ -16,18 +16,26 @@ public:
     Node(int x, Node *next, Node *prev) : data(x), next(next), prev(prev) {}
 };
 
-Node *deleteLastNode(Node *head)
+/*
+> Time Complexity: O(N)
+> Space Complexity: O(1)
+*/
+
+Node *reverseDLL(Node *head)
 {
     if (head == NULL || head->next == NULL)
     {
-        return NULL;
+        return head;
     }
-    Node *temp = head;
-    while (temp->next->next != NULL)
+    Node *curr = head;
+    Node *last = NULL;
+    while (curr != NULL)
     {
-        temp = temp->next;
+        last = curr->prev;
+        curr->prev = curr->next;
+        curr->next = last;
+
+        curr = curr->prev; //* as links have been reversed;
     }
-    delete (temp->next);
-    temp->next = NULL;
-    return head;
+    return last->prev;
 }
