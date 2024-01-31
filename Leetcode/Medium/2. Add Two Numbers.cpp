@@ -13,43 +13,57 @@ using namespace std;
 
 struct ListNode
 {
- int val;
- ListNode *next;
- ListNode() : val(0), next(nullptr) {}
- ListNode(int x) : val(x), next(nullptr) {}
- ListNode(int x, ListNode *next) : val(x), next(next) {}
+    int val;
+    ListNode *next;
+    ListNode() : val(0), next(nullptr) {}
+    ListNode(int x) : val(x), next(nullptr) {}
+    ListNode(int x, ListNode *next) : val(x), next(next) {}
 };
 
-//# Tutorial: https://www.youtube.com/watch?v=LBVsXSMOIk4
+// # Tutorial: https://www.youtube.com/watch?v=XmRrGzR6udg&list=PLgUwDviBIf0rAuz8tVcM0AymmhTRsfaLU&index=6
 
 class Solution
 {
 public:
- ListNode *addTwoNumbers(ListNode *l1, ListNode *l2)
- {
-  ListNode *dummy = new ListNode();
-  ListNode *temp = dummy;
-  int carry = 0;
-  while (l1 != NULL || l2 != NULL || carry != 0)
-  {
-   int sum = 0;
-   if (l1 != NULL)
-   {
-    sum += l1->val;
-    l1 = l1->next;
-   }
-   if (l2 != NULL)
-   {
-    sum += l2->val;
-    l2 = l2->next;
-   }
+    ListNode *addTwoNumbers(ListNode *l1, ListNode *l2)
+    {
+        ListNode *dummy = new ListNode(-1);
+        ListNode *temp = dummy;
+        ListNode *temp1 = l1;
+        ListNode *temp2 = l2;
+        int carry = 0;
+        while (temp1 != NULL || temp2 != NULL)
+        {
+            int sum = carry;
+            if (temp1 != NULL)
+            {
+                sum += temp1->val;
+            }
+            if (temp2 != NULL)
+            {
+                sum += temp2->val;
+            }
 
-   sum += carry;
-   carry = sum / 10;
-   ListNode *newNode = new ListNode(sum % 10);
-   temp->next = newNode;
-   temp = temp->next;
-  }
-  return dummy->next;
- }
+            ListNode *newNode = new ListNode(sum % 10);
+            carry = sum / 10;
+
+            temp->next = newNode;
+            temp = temp->next;
+
+            if (temp1 != NULL)
+            {
+                temp1 = temp1->next;
+            }
+            if (temp2 != NULL)
+            {
+                temp2 = temp2->next;
+            }
+        }
+        if (carry != 0)
+        {
+            ListNode *newNode = new ListNode(carry);
+            temp->next = newNode;
+        }
+        return dummy->next;
+    }
 };
