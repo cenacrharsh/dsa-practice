@@ -28,10 +28,13 @@ public:
     }
 };
 
-Node *sortList(Node *head)
-{
-    if (head == NULL || head->next == NULL)
-    {
+/*
+> Time Complexity: O(N)
+> Space Complexity: O(1)
+*/
+
+Node* sortList(Node *head){
+    if(head == NULL || head->next == NULL) {
         return head;
     }
     Node *zeroHead = new Node(-1);
@@ -41,20 +44,14 @@ Node *sortList(Node *head)
     Node *one = oneHead;
     Node *two = twoHead;
     Node *temp = head;
-    while (temp != NULL)
-    {
-        if (temp->data == 0)
-        {
+    while(temp != NULL) {
+        if(temp->data == 0) {
             zero->next = temp;
             zero = zero->next;
-        }
-        else if (temp->data == 1)
-        {
+        } else if(temp->data == 1) {
             one->next = temp;
             one = one->next;
-        }
-        else
-        {
+        } else {
             two->next = temp;
             two = two->next;
         }
@@ -63,5 +60,12 @@ Node *sortList(Node *head)
     zero->next = (oneHead->next != NULL) ? oneHead->next : twoHead->next; //* even if 1 is absent it'll point to 2 and if even 2 is absent it'll point to NULL which is fine
     one->next = twoHead->next;
     two->next = NULL;
-    return zeroHead->next; //* if zero itself is absent it'll either point to oneHead->next or twoHead->next
+
+    Node *newHead = zeroHead->next; //* if zero itself is absent it'll either point to oneHead->next or twoHead->next
+
+    delete zeroHead;
+    delete oneHead;
+    delete twoHead;
+
+    return newHead;
 }
