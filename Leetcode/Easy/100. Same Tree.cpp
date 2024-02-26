@@ -35,6 +35,7 @@ public:
             return (p == q); //* handles the case if only one is null so it will return false, also if both are null then we have to return true
         }
 
+        //* the values of both nodes are equal and we get true from both left and right subtrees
         return (p->val == q->val) && isSameTree(p->left, q->left) && isSameTree(p->right, q->right);
     }
 };
