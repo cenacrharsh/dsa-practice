@@ -30,6 +30,7 @@ struct TreeNode
 class Solution
 {
 public:
+    //* by height we mean distance b/w nodes, for eg. 1->2->3->4->5 => height = 4 from node 1
     int dfsHeight(TreeNode *root, int &diameter)
     {
         if (root == NULL)
@@ -42,7 +43,7 @@ public:
 
         diameter = max(diameter, leftHeight + rightHeight);
 
-        return 1 + max(leftHeight, rightHeight);
+        return 1 + max(leftHeight, rightHeight); //* if a node x has lh = 2, rh = 3 then for the node above it it's height is going to be 1 + max(2,3) = 4
     }
 
     int diameterOfBinaryTree(TreeNode *root)
