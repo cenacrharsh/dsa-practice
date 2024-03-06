@@ -8,33 +8,35 @@ using namespace std;
 
 struct ListNode
 {
- int val;
- ListNode *next;
- ListNode(int x) : val(x), next(NULL) {}
+    int val;
+    ListNode *next;
+    ListNode(int x) : val(x), next(NULL) {}
 };
+
+//! Floyd’s Cycle-Finding Algorithm | Tortoise & The Hare Algorithm
 
 class Solution
 {
 public:
- bool hasCycle(ListNode *head)
- {
-  if (head == NULL)
-  {
-   return NULL;
-  }
+    bool hasCycle(ListNode *head)
+    {
+        if (head == NULL)
+        {
+            return NULL;
+        }
 
-  ListNode *slow = head, *fast = head;
+        ListNode *slow = head, *fast = head;
 
-  while (fast != NULL && fast->next != NULL)
-  {
-   slow = slow->next;
-   fast = fast->next->next;
+        while (fast != NULL && fast->next != NULL)
+        {
+            slow = slow->next;
+            fast = fast->next->next;
 
-   if (slow == fast)
-   {
-    return true;
-   }
-  }
-  return false;
- }
+            if (slow == fast)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 };
