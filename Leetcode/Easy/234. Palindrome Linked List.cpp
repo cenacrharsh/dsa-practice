@@ -8,88 +8,74 @@ using namespace std;
 
 struct ListNode
 {
- int val;
- ListNode *next;
- ListNode() : val(0), next(nullptr) {}
- ListNode(int x) : val(x), next(nullptr) {}
- ListNode(int x, ListNode *next) : val(x), next(next) {}
+    int val;
+    ListNode *next;
+    ListNode() : val(0), next(nullptr) {}
+    ListNode(int x) : val(x), next(nullptr) {}
+    ListNode(int x, ListNode *next) : val(x), next(next) {}
 };
+
+// # Tutorial: https://www.youtube.com/watch?v=lRY_G-u_8jk&list=PLgUwDviBIf0rAuz8tVcM0AymmhTRsfaLU&index=11
+
+/*
+> Time Complexity: O(N/2) + O(N/2) + O(N/2) + O(N/2) ~ O(2N) => 2 reversals, 1 finding mid, 1 comparison
+> Space Complexity: O(1)
+*/
 
 class Solution
 {
 public:
- void reverse(ListNode *&head)
- {
-  ListNode *prev = NULL, *curr = head, *nextNode = NULL;
-  while (curr != NULL)
-  {
-   nextNode = curr->next;
-   curr->next = prev;
-   prev = curr;
-   curr = nextNode;
-  }
-  head = prev;
- }
- ListNode *findMiddle(ListNode *head, bool &odd)
- {
-  ListNode *slow = head, *fast = head, *prev = NULL;
-  while (fast != NULL && fast->next != NULL)
-  {
-   prev = slow;
-   slow = slow->next;
-   fast = fast->next->next;
-  }
+    ListNode *reverse(ListNode *head)
+    {
+        ListNode *prev = NULL, *curr = head, *next = head;
+        while (curr != NULL)
+        {
+            next = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = next;
+        }
+        return prev;
+    }
 
-  if (fast != NULL)
-  {
-   odd = true;
-  }
+    bool isPalindrome(ListNode *head)
+    {
+        //* divide the LL into 2 parts, then reverse the second half, then compare one by one the nodes of both halves
+        //* if odd LL stop at middle node (fast->next == NULL), if even then stop at first middle (fast->next->next == NULL)
 
-  prev->next = NULL;
-  return slow;
- }
- bool compare(ListNode *head1, ListNode *head2)
- {
-  ListNode *temp1 = head1;
-  ListNode *temp2 = head2;
+        //* 0 or 1 elements means always Pallindrome
+        if (head == NULL || head->next == NULL)
+        {
+            return true;
+        }
 
-  while (temp1 != NULL && temp2 != NULL)
-  {
-   if (temp1->val == temp2->val)
-   {
-    temp1 = temp1->next;
-    temp2 = temp2->next;
-   }
-   else
-   {
-    return false;
-   }
-  }
-  if (temp1 == NULL && temp2 == NULL)
-  {
-   return true;
-  }
-  return false;
- }
- bool isPalindrome(ListNode *head)
- {
-  if (head == NULL)
-  {
-   return false;
-  }
-  if (head->next == NULL)
-  {
-   return true;
-  }
-  bool odd = false;
-  ListNode *mid = findMiddle(head, odd);
-  if (odd)
-  {
-   mid = mid->next;
-  }
-  reverse(mid);
-  bool ans = compare(head, mid);
-  reverse(mid);
-  return ans;
- }
+        //* find middle of LL
+        ListNode *slow = head, *fast = head;
+        while (fast->next != NULL && fast->next->next != NULL)
+        {
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+
+        //* reverse second half of LL
+        ListNode *newHead = reverse(slow->next);
+
+        //* compare 2 halves
+        ListNode *temp1 = head, *temp2 = newHead;
+        while (temp2 != NULL)
+        {
+            if (temp1->val != temp2->val)
+            {
+                reverse(newHead);
+                return false;
+            }
+            temp1 = temp1->next;
+            temp2 = temp2->next;
+        }
+
+        //* restore original LL
+        reverse(newHead);
+
+        return true;
+    }
 };
