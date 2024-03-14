@@ -33,8 +33,11 @@ public:
         {
             return NULL;
         }
+
         ListNode *slow = head, *fast = head;
-        // odd ele: fast-> next == NULL, even ele (2nd mid): fast == NULL, even ele (1st mid): fast -> next -> next == NULL;
+        //* odd elements: fast-> next == NULL
+        //* even elements: (1st mid): fast -> next -> next == NULL
+        //* even elements: (2nd mid): fast == NULL
         while (fast != NULL && fast->next != NULL)
         {
             slow = slow->next;
