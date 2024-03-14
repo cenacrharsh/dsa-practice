@@ -13,6 +13,8 @@ struct ListNode
     ListNode(int x) : val(x), next(NULL) {}
 };
 
+// # Tutorial: https://www.youtube.com/watch?v=0DYoPz2Tpt4&list=PLgUwDviBIf0rAuz8tVcM0AymmhTRsfaLU&index=13
+
 //! Single Traversal
 
 /*
