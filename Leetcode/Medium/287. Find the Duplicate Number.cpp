@@ -26,11 +26,11 @@ class Solution
 public:
     int findDuplicate(vector<int> &nums)
     {
+        //* if we create a diagram like nums[0] -> nums[nums[0]] -> nums[nums[nums[0]]] we'll see a linked list like pattern with a cycle
         int slow = nums[0];
         int fast = nums[0];
 
         //* we can't start both slow & fast from nums[0] without using a do while loop
-
         do
         {
             slow = nums[slow];
