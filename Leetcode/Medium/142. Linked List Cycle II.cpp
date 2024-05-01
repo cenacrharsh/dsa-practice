@@ -8,46 +8,32 @@ using namespace std;
 
 struct ListNode
 {
- int val;
- ListNode *next;
- ListNode(int x) : val(x), next(NULL) {}
+    int val;
+    ListNode *next;
+    ListNode(int x) : val(x), next(NULL) {}
 };
 
-class Solution
-{
+// # Tutorial: https://www.youtube.com/watch?v=2Kd0KKmmHFc&list=PLgUwDviBIf0rAuz8tVcM0AymmhTRsfaLU&index=18
+
+class Solution {
 public:
- ListNode *detectCycle(ListNode *head)
- {
-  if (head == NULL)
-  {
-   return NULL;
-  }
+    ListNode *detectCycle(ListNode *head) {
+        //* step 1: detect loop
+        //* step 2: find starting point
+        ListNode *slow = head, *fast = head;
+        while(fast != NULL && fast->next != NULL) {
+            slow = slow->next;
+            fast = fast->next->next;
 
-  ListNode *slow = head, *fast = head;
-
-  while (fast != NULL && fast->next != NULL)
-  {
-   slow = slow->next;
-   fast = fast->next->next;
-
-   if (slow == fast)
-   {
-    break;
-   }
-  }
-
-  if (fast == NULL || fast->next == NULL)
-  {
-   return NULL;
-  }
-
-  slow = head;
-  while (slow != fast)
-  {
-   slow = slow->next;
-   fast = fast->next;
-  }
-
-  return slow;
- }
+            if(slow == fast) {
+                slow = head;
+                while(slow != fast) {
+                    slow = slow->next;
+                    fast = fast->next;
+                }
+                return slow;
+            }
+        }
+        return NULL;
+    }
 };
