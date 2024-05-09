@@ -8,99 +8,93 @@ using namespace std;
 
 struct ListNode
 {
- int val;
- ListNode *next;
- ListNode() : val(0), next(nullptr) {}
- ListNode(int x) : val(x), next(nullptr) {}
- ListNode(int x, ListNode *next) : val(x), next(next) {}
+    int val;
+    ListNode *next;
+    ListNode() : val(0), next(nullptr) {}
+    ListNode(int x) : val(x), next(nullptr) {}
+    ListNode(int x, ListNode *next) : val(x), next(next) {}
 };
 
+// # Tutorial: https://www.youtube.com/watch?v=8ocB7a_c-Cc&list=PLgUwDviBIf0rAuz8tVcM0AymmhTRsfaLU&index=27
+
+/*
+> Time Complexity: O(Log(N)) * (N + N/2)
+> Space Complexity: O(Log(N)) -> recursive stack space
+*/
+
 //! Merge Sort
+
 class Solution
 {
 public:
- ListNode *mergeTwoLists(ListNode *list1, ListNode *list2)
- {
-  if (list1 == NULL && list2 == NULL)
-  {
-   return NULL;
-  }
-  ListNode *temp1 = list1, *temp2 = list2, *prevNode = NULL, *head = NULL;
-  if (list1 == NULL)
-  {
-   head = list2;
-   return head;
-  }
-  else if (list2 == NULL)
-  {
-   head = list1;
-   return head;
-  }
-  if (temp1->val <= temp2->val)
-  {
-   head = temp1;
-   prevNode = temp1;
-   temp1 = temp1->next;
-  }
-  else
-  {
-   head = temp2;
-   prevNode = temp2;
-   temp2 = temp2->next;
-  }
-  while (temp1 != NULL && temp2 != NULL)
-  {
-   if (temp1->val <= temp2->val)
-   {
-    prevNode->next = temp1;
-    prevNode = temp1;
-    temp1 = temp1->next;
-   }
-   else
-   {
-    prevNode->next = temp2;
-    prevNode = temp2;
-    temp2 = temp2->next;
-   }
-  }
-  while (temp1 != NULL)
-  {
-   prevNode->next = temp1;
-   prevNode = temp1;
-   temp1 = temp1->next;
-  }
-  while (temp2 != NULL)
-  {
-   prevNode->next = temp2;
-   prevNode = temp2;
-   temp2 = temp2->next;
-  }
-  prevNode->next = NULL;
-  return head;
- }
- ListNode *sortList(ListNode *head)
- {
-  if (head == NULL || head->next == NULL)
-  {
-   return head;
-  }
+    ListNode *merge(ListNode *head1, ListNode *head2)
+    {
+        ListNode *dummy = new ListNode(-1);
+        ListNode *temp = dummy;
+        while (head1 != NULL && head2 != NULL)
+        {
+            if (head1->val < head2->val)
+            {
+                temp->next = head1;
+                head1 = head1->next;
+            }
+            else
+            {
+                temp->next = head2;
+                head2 = head2->next;
+            }
+            temp = temp->next;
+        }
 
-  ListNode *slow = head, *fast = head, *prev = NULL;
-  while (fast != NULL && fast->next != NULL)
-  {
-   prev = slow;
-   slow = slow->next;
-   fast = fast->next->next;
-  }
-  prev->next = NULL;
-  ListNode *list1Head = head;
-  ListNode *list2Head = slow;
+        if (head1 != NULL)
+        {
+            temp->next = head1;
+        }
+        else
+        {
+            //* no need to check condition here, as even if we have same length LL, the last node would be left in either LL at which point the loop would terminate
+            temp->next = head2;
+        }
 
-  list1Head = sortList(list1Head);
-  list2Head = sortList(list2Head);
+        return dummy->next;
+    }
 
-  head = mergeTwoLists(list1Head, list2Head);
+    ListNode *findMiddle(ListNode *head)
+    {
+        //* in case of even length we have to return first middle as if [1,2,3,4] then if middle node is 2 then we can separate the 2 halves as [1,2] and [3,4]
+        ListNode *slow = head, *fast = head;
+        while (fast->next != NULL && fast->next->next != NULL)
+        {
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+        return slow;
+    }
 
-  return head;
- }
+    //! O(Log(N)) -> Max recursive depth is log(N)
+    ListNode *mergeSort(ListNode *head)
+    {
+        //* if head is null or only one node is left
+        if (head == NULL || head->next == NULL)
+        {
+            return head;
+        }
+
+        //* find middle node and make sure it points to null to separate 2 halves of LL
+        ListNode *middleNode = findMiddle(head); //! O(N/2)
+        ListNode *leftHead = head;
+        ListNode *rightHead = middleNode->next;
+        middleNode->next = NULL;
+
+        leftHead = mergeSort(leftHead);
+        rightHead = mergeSort(rightHead);
+
+        //* merge 2 sorted halves of LL and return updated head of LL
+        return merge(leftHead, rightHead); //! O(N)
+    }
+
+    ListNode *sortList(ListNode *head)
+    {
+        return mergeSort(head);
+    }
 };
