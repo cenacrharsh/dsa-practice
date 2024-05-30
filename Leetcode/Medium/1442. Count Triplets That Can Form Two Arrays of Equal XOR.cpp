@@ -19,8 +19,11 @@ class Solution {
 public:
     int countTriplets(vector<int>& arr) {
         //* we'll have to maintain prefix XOR, XOR b/w index i & j == prefixXOR(j) ^ prefixXOR(i - 1)
+
         //* if prefixXOR(i) == prefixXOR(k) => prefixXOR b/w index (i + 1) & k == 0 [eg. 0^1 == 0^1^2^3^4 => 2^3^4 == 0]
+
         //* if the length of subarray b/w index (i + 1) & k == n, then there are (n - 1) good pairs there [eg. 7^2^3^7^2^3 == 0 => 7 = 2^3^7^2^3 because if 7^2^3^7^2^3 == 0 then (7)^(2^3^7^2^3) == 0 and we know a^a == 0 so 7 = 2^3^7^2^3 so on we can make n - 1 combinations], so if len of subarray is N then we can have (N-1) such groups with equal XOR
+        
         //* so if prefixXOR(i) == prefixXOR(k) => prefixXOR b/w index (i + 1) & k == 0 => len(i+1 -> k) - 1 pairs => (k - (i + 1) + 1) - 1 pairs = k - i + 1 pairs
 
         int ans = 0, n = arr.size();
