@@ -7,18 +7,14 @@
 using namespace std;
 
 //! 2 pointers
-class Solution
-{
+class Solution {
 public:
- void reverseString(vector<char> &s)
- {
-  int l = 0, r = s.size() - 1;
-  while (l < r)
-  {
-   // cout << "swapping: " << s[l] << " and " << s[r] << endl;
-   swap(s[l], s[r]);
-   l++;
-   r--;
-  }
- }
+    void reverseString(vector<char>& s) {
+        int left = 0, right = s.size() - 1;
+        while(left <= right) {
+            swap(s[left], s[right]);
+            left++;
+            right--;
+        }
+    }
 };
