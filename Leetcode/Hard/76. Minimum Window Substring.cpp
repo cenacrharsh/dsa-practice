@@ -6,90 +6,48 @@
 #include <cstring>
 using namespace std;
 
-//# Tutorial: https://www.youtube.com/watch?v=e1HlptlipB0
+//# Tutorial: https://www.youtube.com/watch?v=WJaij9ffOIY&list=PLgUwDviBIf0q7vrFA_HEWcqRqMpCXzYAL&index=13
+
+//! Sliding Window
 
 /*
- * acquire till match count == s2.size(), then collect ans and release and update match count, keep releasing till mathcount == s2.size(), as soon as it dec then start acquiring again
- */
+> Time Complexity: O(2N) + O(M)
+> Space Complexity: O(N) / O(256)
+*/
 
-//# Tutorial: https://www.youtube.com/watch?v=e1HlptlipB0
-
-class Solution
-{
+class Solution {
 public:
- string minWindow(string s, string t)
- {
-  int n = s.size();
-  int m = t.size();
+    string minWindow(string s, string t) {
+        int left = 0, right = 0, count = 0, minLength = INT_MAX, startIndex = -1;
+        vector<int> freq(256, 0);
+        // unordered_map<char, int> freq; //* char->freq
 
-  string ans = "";
+        //* we are pre-inserting required characters, so a +ve freq indicates that the char is required, and we only increment count when we encounter a freq > 0
+        for(int i = 0; i < t.size(); i++) {
+            freq[t[i]]++;
+        }
 
-  unordered_map<char, int> map2;
-  for (int i = 0; i < m; i++)
-  {
-   map2[t[i]]++;
-  }
+        while(right < s.size()) {
+            if(freq[s[right]] > 0) {
+                count++;
+            }
+            freq[s[right]]--;
 
-  int match_count = 0;
-  int desired_match_count = t.size();
-  unordered_map<char, int> map1;
-  int i = -1, j = -1;
+            while(count == t.size()) {
+                if(right - left + 1 < minLength) {
+                    minLength = right - left + 1;
+                    startIndex = left;
+                }
+                freq[s[left]]++;
+                //* we are removing characters from left and the moment any characters freq becomes > 0 we know that it was an one of the pre-inserted characters and so count decreases
+                if(freq[s[left]] > 0) {
+                    count--;
+                }
+                left++;
+            }
+            right++;
+        }
 
-  while (true)
-  {
-   bool f1 = false, f2 = false;
-
-   // acquire, i < n - 1 since we are doing i++ before all calc
-   while ((i < n - 1) && (match_count < desired_match_count))
-   {
-    i++;
-    char acquired_character = s.at(i);
-    map1[acquired_character]++;
-
-    if (map1[acquired_character] <= map2[acquired_character])
-    {
-     match_count++;
+        return startIndex == -1 ? "" : s.substr(startIndex, minLength);
     }
-
-    f1 = true;
-   }
-
-   // collect answers and release
-   while ((j < i) && (match_count == desired_match_count))
-   {
-    j++;
-
-    string potential_ans = s.substr(j, i - j + 1);
-
-    if (ans.size() == 0 || potential_ans.size() < ans.size())
-    {
-     ans = potential_ans;
-    }
-
-    char removed_character = s.at(j);
-    if (map1[removed_character] == 1)
-    {
-     map1.erase(removed_character);
-    }
-    else
-    {
-     map1[removed_character]--;
-    }
-
-    if (map1[removed_character] < map2[removed_character])
-    {
-     match_count--;
-    }
-
-    f2 = true;
-   }
-
-   if (f1 == false && f2 == false)
-   {
-    break;
-   }
-  }
-
-  return ans;
- }
 };
