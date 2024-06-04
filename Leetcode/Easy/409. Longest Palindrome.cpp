@@ -6,31 +6,29 @@
 #include <cstring>
 using namespace std;
 
-class Solution
-{
+// # Tutorial: https://www.youtube.com/watch?v=gjYSovOESAU
+
+class Solution {
 public:
- int longestPalindrome(string s)
- {
-  unordered_map<char, int> letter;
-  for (auto c : s)
-  {
-   letter[c]++;
-  }
-  int ans = 0;
-  for (auto it : letter)
-  {
-   ans += (it.second / 2) * 2;
-   // now check if one unique char has been added or not
-   // ans % 2 makes sure we only add it once
-   // letter[i] % 2 checks if we have a leftover char of not
-   if (ans % 2 == 0 && it.second % 2 == 1)
-   {
-    ans++;
-   }
-  }
-  // if char left in s as ans < s.size(), means we got odd freq char
-  // if(ans < s.size()) return ans + 1;
-  // else return ans;
-  return ans;
- }
+    int longestPalindrome(string s) {
+        //* for a valid pallindrome the elements have to occur in pairs
+        unordered_map<char, int> freq;
+        for(auto c : s)
+        {
+            freq[c]++;
+        }
+
+        int ans = 0;
+        bool isOdd = false;
+        for(auto [ch, count] : freq)
+        {
+            if(count % 2 == 0) {
+                ans += count;
+            } else {
+                ans += (count - 1); //* eg. if count = 5, we can still add 4 count in pairs, and leave 1 to add later as part of odd, but since we can only have one odd we'll keep a flag and add +1 at the end
+                isOdd = true;
+            }
+        }
+        return isOdd ? ans + 1 : ans;
+    }
 };
