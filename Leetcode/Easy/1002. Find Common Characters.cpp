@@ -6,38 +6,37 @@
 #include <cstring>
 using namespace std;
 
-//# Tutorial: https://www.youtube.com/watch?v=k1iowWJimbg
+//# Tutorial: https://www.youtube.com/watch?v=lPx-Yz2_gIA
 
-class Solution
-{
+/*
+> Time Complexity: O(N * 26)
+> Space Complexity: O(26 + 26)
+*/
+
+class Solution {
 public:
- vector<string> commonChars(vector<string> &words)
- {
-  vector<int> min_freq(26, INT_MAX); // default value INT_MAX
-  for (string current_word : words)
-  {
-   vector<int> temp_char_freq(26, 0);
-   for (char current_char : current_word)
-   {
-    temp_char_freq[current_char - 'a']++;
-   }
+    vector<string> commonChars(vector<string>& words) {
+        vector<int> finalFreq(26, INT_MAX);
 
-   for (int i = 0; i < 26; i++)
-   {
-    min_freq[i] = min(min_freq[i], temp_char_freq[i]);
-   }
-  }
-  vector<string> ans;
-  for (int i = 0; i < 26; i++)
-  {
-   while (min_freq[i] > 0)
-   {
-    // char ch = char(i + 'a');
-    // string str = string(1, ch);
-    ans.push_back(string(1, i + 'a'));
-    min_freq[i]--;
-   }
-  }
-  return ans;
- }
+        for(int i = 0; i < words.size(); i++) {
+            //* calculate freq of current word
+            vector<int> currFreq(26, 0);
+            for(int j = 0; j < words[i].size(); j++) {
+                currFreq[words[i][j] - 'a']++;
+            }
+
+            //* adjust the final freq by taking minimum of freq in final vs current array
+            for(int k = 0; k < 26; k++) {
+                finalFreq[k] = min(finalFreq[k], currFreq[k]);
+            }
+        }
+
+        vector<string> ans;
+        for(int i = 0; i < 26; i++) {
+            while(finalFreq[i]--) {
+                ans.push_back(string(1, i + 'a'));
+            }
+        }
+        return ans;
+    }
 };
