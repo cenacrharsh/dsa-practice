@@ -18,11 +18,11 @@ public:
     bool checkSubarraySum(vector<int>& nums, int k) {
         //* prefix sum b/w index i & j = prefixSum(j) - prefixSum(i) & if this is divisible by k then we have our good subarray
         //* prefixSum(j) - prefixSum(i) == rangeSum => [prefixSum(j) - prefixSum(i)] % k == rangeSum % k, and we know rangeSum % k should be 0
-        //* [prefixSum(j) - prefixSum(i)] % k == 0 => prefixSum(i)] % k == prefixSum(j) % k
+        //* [prefixSum(j) - prefixSum(i)] % k == 0 => prefixSum(i) % k == prefixSum(j) % k
         //* we'll maintain a prefixSumRemainder map and whereever we have same values we may conclude that the sum of range b/w these 2 occurrences will give, sum % k == 0, also to maintain len >= 2 we'll always look for first and last occurence of that remainder in the map
 
         int prefixSumRemainder = 0;
-        unordered_map<int, int> prefixSumRemainderMap; //* prefixSum->first occurence index
+        unordered_map<int, int> prefixSumRemainderMap; //* prefixSumRemainder->first occurence index
         prefixSumRemainderMap[0] = -1;
         for(int i = 0; i < nums.size(); i++) {
             prefixSumRemainder = (prefixSumRemainder + nums[i]) % k;
