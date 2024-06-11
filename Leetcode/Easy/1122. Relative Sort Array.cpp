@@ -10,6 +10,37 @@ using namespace std;
 
 //! Using Counting Sort
 
+/*
+> Time Complexity: O(N) + O(M) + O(K)
+> Space Complexity: O(K)
+*/
+
+class Solution {
+public:
+    vector<int> relativeSortArray(vector<int>& arr1, vector<int>& arr2) {
+        int maxElement = *max_element(arr1.begin(), arr1.end());
+        vector<int> count(maxElement + 1, 0);
+        for(int num : arr1) {
+            count[num]++;
+        }
+
+        vector<int> ans;
+        for(int num : arr2) {
+            while(count[num]--) {
+                ans.push_back(num);
+            }
+        }
+        
+        for(int i = 0; i <= maxElement; i++) {
+            //* in boolean context all non-zero numbers including negative numbers like -1 are considered true as well, only 0 is considered false
+            while(count[i] > 0 && count[i]--) {
+                ans.push_back(i);
+            }
+        }
+        return ans;
+    }
+};
+
 //! Using Hashmap
 
 /*
