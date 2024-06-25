@@ -8,39 +8,48 @@ using namespace std;
 
 struct TreeNode
 {
- int val;
- TreeNode *left;
- TreeNode *right;
- TreeNode() : val(0), left(nullptr), right(nullptr) {}
- TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode() : val(0), left(nullptr), right(nullptr) {}
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+    TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
 };
 
-class Solution
-{
+// # Tutorial: https://www.youtube.com/watch?v=9Aw18-yQs6o
+
+/*
+> Time Complexity: O(N)
+> Space Complexity: O(N)
+*/
+
+class Solution {
 public:
- int currSum = 0;
+    /*
+    Inorder traverse of BST will give an ascending sequence of all values.
+    By slightly modifying the inorder traverse such that we firstly travel right subtree and then left subtree,
+    we can get the descending order of the BST.
+    That is, before encoutering the current node, we have exactly visited all the values that greater than it.
+    So we just need to set a variable(cur_sum) to keep track the summation of the visited nodes.
+    */
 
- TreeNode *bstToGst(TreeNode *root)
- {
-  if (root == NULL)
-  {
-   return NULL;
-  }
+    int globalSum;
+    void helper(TreeNode* node, int &globalSum) {
+        if(node == NULL) {
+            return;
+        }
 
-  if (root->right)
-  {
-   bstToGst(root->right);
-  }
+        helper(node->right, globalSum);
 
-  root->val += currSum;
-  currSum = root->val;
+        globalSum += node->val;
+        node->val = globalSum;
 
-  if (root->left)
-  {
-   bstToGst(root->left);
-  }
+        helper(node->left, globalSum);
+    }
 
-  return root;
- }
+    TreeNode* bstToGst(TreeNode* root) {
+        globalSum = 0;
+        helper(root, globalSum);
+        return root;
+    }
 };
