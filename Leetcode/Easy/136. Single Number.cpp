@@ -6,18 +6,22 @@
 #include <cstring>
 using namespace std;
 
-//! Using Bitwise Operator ^
+//! Using Bitwise Operator XOR (^)
 
-class Solution
-{
+// # Tutorial: https://www.youtube.com/watch?v=sFBCAl8yBfE&list=PLgUwDviBIf0rnqh8QsJaHyIX7KUiaPUv7&index=5
+
+/*
+> Time Complexity: O(N)
+> Space Complexity: O(1)
+*/
+
+class Solution {
 public:
- int singleNumber(vector<int> &nums)
- {
-  int unique = 0;
-  for (int n : nums)
-  {
-   unique ^= n;
-  }
-  return unique;
- }
+    int singleNumber(vector<int>& nums) {
+        int XOR = 0;
+        for(int i = 0; i < nums.size(); i++) {
+            XOR ^= nums[i];
+        }
+        return XOR;
+    }
 };
