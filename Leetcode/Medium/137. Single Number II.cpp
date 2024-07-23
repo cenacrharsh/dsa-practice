@@ -11,9 +11,47 @@ using namespace std;
 //! Advanced Bit Manipulation Using ^ &
 
 /*
-> Time Complexity: O(N)
+> Time Complexity: O(N + N)
 > Space Complexity: O(1)
 */
+
+class Solution
+{
+public:
+    vector<int> singleNumber(vector<int> &nums)
+    {
+        //* we'll maintain 2 groups
+        //* first we'll xor all number where except num1 and num2 all other numbers will cancel each other out and we'll get num1 ^ num2
+        //* since num1 and num2 have to appear once they have to be distinct and thus we are sure that the bit representation of the numbers would have atleast one digit that would be different
+        //* in num1 ^ num2 we already know that ^ gives 1 if the bits are different so in the result of num1 and num2 wherever we have 1 we can be sure the bits were different and as stated in prev point we are bound to have atleast 1 difference, now we can proceed with any place digit which has 1 but it's easier to find out the rightmost set bit using num & (num - 1) which gives us the same number num but with the rightmost set bit unset so when we XOR num ^ (num & (num - 1)) we receive a number which has the place at which we had the rightmost set bit in num as set and rest 0's
+        //* now using this new number as our filter we'll separate all the numbers, all those which also have set bit at that index as our new number would go into bucket1 other into bucket2, now it's fixed that our num1 and num2 would go into different buckets as we got here only because they had different digits at some places and we chose this number from one of those places, rest numbers would fall in either bucket but their duplicates would also fall in the same bucket
+        //* at last we'll have 2 buckets with all numbers appearing twice with one number occuring once which would be our answer
+
+        long xorOfNum1Num2 = 0; //* if one of the numbers is -2^31 then (-2^31 - 1 would not fit in an integer variable)
+        for (int i = 0; i < nums.size(); i++)
+        {
+            xorOfNum1Num2 = xorOfNum1Num2 ^ nums[i];
+        }
+
+        int filter = xorOfNum1Num2 ^ (xorOfNum1Num2 & (xorOfNum1Num2 - 1));
+
+        int bucket1 = 0, bucket2 = 0;
+        for (int i = 0; i < nums.size(); i++)
+        {
+            //* now we separate numbers depending on whether they have the 1 or a 0 at the place where our filter has 1
+            if (filter & nums[i])
+            {
+                bucket1 = bucket1 ^ nums[i];
+            }
+            else
+            {
+                bucket2 = bucket2 ^ nums[i];
+            }
+        }
+
+        return {bucket1, bucket2};
+    }
+};
 
 class Solution
 {
