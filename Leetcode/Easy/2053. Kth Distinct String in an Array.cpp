@@ -6,52 +6,25 @@
 #include <cstring>
 using namespace std;
 
-class Solution
-{
-public:
- string kthDistinct(vector<string> &arr, int k)
- {
-  unordered_map<string, int> freq;
-  for (string s : arr)
-  {
-   freq[s]++;
-  }
-  int count = 0;
-  for (string s : arr)
-  {
-   if (freq[s] == 1 && --k == 0)
-   {
-    return s;
-   }
-  }
-  return "";
- }
-};
+//! Using Hashmap
 
 class Solution
 {
 public:
- string kthDistinct(vector<string> &arr, int k)
- {
-  unordered_map<string, int> freq;
-  for (string s : arr)
-  {
-   freq[s]++;
-  }
-  int count = 0;
-  string ans = "";
-  for (string s : arr)
-  {
-   if (freq[s] == 1)
-   {
-    count++;
-    if (count == k)
+    string kthDistinct(vector<string> &arr, int k)
     {
-     ans = s;
-     break;
+        unordered_map<string, int> freq;
+        for (string str : arr)
+        {
+            freq[str]++;
+        }
+        for (string str : arr)
+        {
+            if (freq[str] == 1 && --k == 0)
+            {
+                return str;
+            }
+        }
+        return "";
     }
-   }
-  }
-  return ans;
- }
 };
