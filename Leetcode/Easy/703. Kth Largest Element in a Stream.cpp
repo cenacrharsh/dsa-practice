@@ -6,7 +6,7 @@
 #include <cstring>
 using namespace std;
 
-//# Tutorial: https://www.youtube.com/watch?v=0tFmP1Eiilg
+// # Tutorial: https://www.youtube.com/watch?v=0tFmP1Eiilg
 
 //! Using Min Priority Queue
 
@@ -22,31 +22,35 @@ O(K) (can be reduced to O(1) by reusing memory of the existing array
 class KthLargest
 {
 public:
- priority_queue<int, vector<int>, greater<int>> pq;
- int size;
+    //* we'll use a min heap if we need Kth largest element
+    //* we need to maintain the size of the heap == k, so that Kth largest element is always at top
 
- KthLargest(int k, vector<int> &nums)
- {
-  size = k;
-  for (int i = 0; i < nums.size(); i++)
-  {
-   pq.push(nums[i]);
-   if (pq.size() > k)
-   {
-    pq.pop();
-   }
-  }
- }
+    priority_queue<int, vector<int>, greater<int>> minHeap;
+    int size;
 
- int add(int val)
- {
-  pq.push(val);
-  if (pq.size() > size)
-  {
-   pq.pop();
-  }
-  return pq.top();
- }
+    KthLargest(int k, vector<int> &nums)
+    {
+        size = k;
+        for (int i = 0; i < nums.size(); i++)
+        {
+            minHeap.push(nums[i]);
+
+            if (minHeap.size() > size)
+            {
+                minHeap.pop();
+            }
+        }
+    }
+
+    int add(int val)
+    {
+        minHeap.push(val);
+        if (minHeap.size() > size)
+        {
+            minHeap.pop();
+        }
+        return minHeap.top();
+    }
 };
 
 /**
