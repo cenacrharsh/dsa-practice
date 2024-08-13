@@ -8,7 +8,7 @@ using namespace std;
 
 // # Tutorial: https://www.youtube.com/watch?v=OyZFFqQtu98
 
-//! Backtracking
+//! Backtracking (1st Pattern of Solving Array Problems Involving Recursion)
 
 /*
 > Time Complexity: O(2^T * K) => where T is target and K is the time taken to insert element in the data structure, we have 2^T instead of 2^N because here we can choose same element multiple times so it's not just pick non pick but we can pick the same element until we reach target so it's 2^T
