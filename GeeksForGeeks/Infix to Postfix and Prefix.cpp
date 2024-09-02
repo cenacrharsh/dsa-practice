@@ -72,8 +72,8 @@ public:
 //! Infix to Prefix
 
 /*
-> Time Complexity: O()
-> Space Complexity: O()
+> Time Complexity: O(N/2) + O(N/2) + O(2N) => 2 reversal + stack iteration
+> Space Complexity: O(N)
 */
 
 /**
