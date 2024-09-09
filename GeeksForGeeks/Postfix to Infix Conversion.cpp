@@ -8,6 +8,11 @@
 #include <cstring>
 using namespace std;
 
+/*
+> Time Complexity: O(N) + O(N) => loop + concat strings
+> Space Complexity: O(N)
+*/
+
 class Solution
 {
 public:
