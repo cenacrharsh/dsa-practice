@@ -1,36 +1,41 @@
 #include <bits/stdc++.h>
 #include <vector>
+#include <queue>
+#include <stack>
 #include <algorithm>
 #include <climits>
 #include <unordered_map>
 #include <cstring>
 using namespace std;
 
-//# Tutorial: https://www.youtube.com/watch?v=ARkl69eBzhY&t=49s
+// # Tutorial: https://www.youtube.com/watch?v=7PrncD7v9YQ&list=PLgUwDviBIf0pOd5zvVVSzgpo6BaCpHT9c&index=6
 
-// array contains duplicates and same numbers may have different next greater elements, therefore we don't use hashmap, and use stack to store indices
+/*
+> Time Complexity: O(2N + 2N)
+> Space Complexity: O(2N) + O(2N)
+*/
+
 class Solution
 {
 public:
- vector<int> nextGreaterElements(vector<int> &nums)
- {
-  int n = nums.size();
-  vector<int> ans(n, -1);
-  stack<int> st;
-  //* to mimic the effect or circular array, we assume copy of arr is attached next to it
-  for (int i = 0; i < 2 * n; i++)
+  vector<int> nextGreaterElements(vector<int> &nums)
   {
-   while (!st.empty() && nums[i % n] > nums[st.top()])
-   {
-    ans[st.top()] = nums[i % n];
-    st.pop();
-   }
-
-   if (i < n)
-   {
-    st.push(i);
-   }
+    //* we don't actually double the array just deal with hypothetical indices
+    int n = nums.size();
+    stack<int> st;
+    vector<int> ans(n, 0);
+    for (int i = (2 * n) - 1; i >= 0; i--)
+    {
+      while (!st.empty() && st.top() <= nums[i % n])
+      {
+        st.pop();
+      }
+      if (i < n)
+      {
+        ans[i] = st.empty() ? -1 : st.top();
+      }
+      st.push(nums[i % n]);
+    }
+    return ans;
   }
-  return ans;
- }
 };

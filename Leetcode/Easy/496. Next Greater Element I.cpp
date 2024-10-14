@@ -12,6 +12,11 @@ using namespace std;
 
 //! we push first element of nums2 into stack and start iterating from 2nd element, if we find any element i.e. greater than it than we store it in map and pop if off and store the next element in stack, but if not we still store the new element in stack as we have to find the next greater element so now our curr element is the new element in num2 and this way we keep iterating and soon as we find someone greater we map it and pop it, but we do it in a while loop because the curr element might be greater than those elements that are already in stack as well, if yes we map them and pop them if not we now push this new element and move ahead as before, in the end all elements who had a next greater element have been placed in map
 
+/*
+> Time Complexity: O(N + N)
+> Space Complexity: O(N) + O(N)
+*/
+
 class Solution
 {
 public:
