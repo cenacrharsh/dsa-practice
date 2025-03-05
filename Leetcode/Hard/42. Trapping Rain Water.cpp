@@ -5,6 +5,11 @@
 using namespace std;
 
 /*
+> Time Complexity: O(N)
+> Space Complexity: O(1)
+*/
+
+/*
 - For every building we can only store water if there is a taller building to it's left and right.
 - Total Water = Summation (0->n-1) min(leftMax, rightMax) - arr[i], and the main challenge is to find the leftMax and rightMax for each building in optimal time.
 */

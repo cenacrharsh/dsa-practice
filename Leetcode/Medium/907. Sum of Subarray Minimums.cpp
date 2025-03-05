@@ -1,86 +1,65 @@
 #include <bits/stdc++.h>
 #include <vector>
+#include <queue>
+#include <stack>
 #include <algorithm>
 #include <climits>
 #include <unordered_map>
 #include <cstring>
 using namespace std;
 
-// # Tutorial: https://www.youtube.com/watch?v=Ulb3ixSpE4Y
-
-/*
-> Time Complexity: O(N)
-> Space Complexity: O(N)
-*/
-
-//! Monotonic Stack
 class Solution
 {
 public:
-    int sumSubarrayMins(vector<int> &arr)
+  vector<int> findNextSmallerElement(vector<int> &arr)
+  {
+    vector<int> nse(arr.size(), 0);
+    stack<int> st;
+    for (int i = arr.size() - 1; i >= 0; i--)
     {
-        int n = arr.size();
-        vector<int> left(n, 0);
-        vector<int> right(n, 0);
-        stack<pair<int, int>> s1, s2;
-        for (int i = 0; i < n; i++)
-        {
-            int count = 1;
-            while (!s1.empty() && (s1.top().first) > arr[i])
-            {
-                count += s1.top().second;
-                s1.pop();
-            }
-            s1.push({arr[i], count});
-            left[i] = count;
-        }
-        //* to handle duplicate we use = in either left or right
-        for (int i = n - 1; i >= 0; i--)
-        {
-            int count = 1;
-            while (!s2.empty() && (s2.top().first) >= arr[i])
-            {
-                count += s2.top().second;
-                s2.pop();
-            }
-            s2.push({arr[i], count});
-            right[i] = count;
-        }
-        long sum = 0;
-        for (int i = 0; i < n; i++)
-        {
-            long temp = (left[i] * right[i]) % 1000000007;
-            sum += arr[i] * temp;
-        }
-        return (int)(sum % 1000000007);
+      //* pop any element which is >= our curr element, as we are looking for smaller elements
+      while (!st.empty() && arr[st.top()] >= arr[i])
+      {
+        st.pop();
+      }
+      nse[i] = st.empty() ? arr.size() : st.top(); //* if stack is empty we'll pass index N
+      st.push(i);
     }
-};
+    return nse;
+  }
 
-// # TLE
-class Solution
-{
-public:
-    int sumSubarrayMins(vector<int> &arr)
+  vector<int> findPreviousSmallerOrEqualElement(vector<int> &arr)
+  {
+    vector<int> psee(arr.size(), 0);
+    stack<int> st;
+    for (int i = 0; i <= arr.size() - 1; i++)
     {
-        int mod = 1000000007;
-        int sum = 0;
-        for (int i = 0; i < arr.size(); i++)
-        {
-            int minimum = INT_MAX;
-            for (int j = i; j < arr.size(); j++)
-            {
-                if (arr[j] < minimum)
-                {
-                    minimum = arr[j];
-                }
-                // minimum = min(minimum, arr[j]);
-                sum = (sum + minimum) % mod;
-                // for(int k = i; k <= j; k++) {
-                //     cout << arr[k] << " ";
-                // }
-                // cout << " = " << minimum << endl;
-            }
-        }
-        return sum;
+      //* pop any element which is > our curr element, as we are looking for smaller or eq elementsj
+      while (!st.empty() && arr[st.top()] > arr[i])
+      {
+        st.pop();
+      }
+      psee[i] = st.empty() ? -1 : st.top(); //* if stack is empty we'll pass -1
+      st.push(i);
     }
+    return psee;
+  }
+
+  int sumSubarrayMins(vector<int> &arr)
+  {
+    //* Optimised approach is to calculate the contribution of each element as the smallest element in total number of subarrays
+    //* For this we'll need next smallest element as until next smallest element is encountered our current element will be the smallest in the subarray hence contributing to our total answer. Similarly we also need previous smaller element but to avoid duplicate subarrays eg (1, 1) what we'll do is calc prev smaller or eq elementTT
+    long long total = 0, mod = (int)(1e9 + 7);
+    vector<int> nse = findNextSmallerElement(arr);
+    vector<int> psee = findPreviousSmallerOrEqualElement(arr);
+
+    for (int i = 0; i <= arr.size() - 1; i++)
+    {
+      int smallerElementsToTheLeft = i - psee[i];
+      int smallerElementsToTheRight = nse[i] - i;
+
+      total = (total + (smallerElementsToTheLeft * smallerElementsToTheRight * 1LL * arr[i]) % mod) % mod;
+    }
+    return total;
+  }
 };
