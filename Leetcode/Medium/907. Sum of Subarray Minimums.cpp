@@ -8,6 +8,11 @@
 #include <cstring>
 using namespace std;
 
+/*
+> Time Complexity: O(5N)
+> Space Complexity: O(5N)
+*/
+
 class Solution
 {
 public:
