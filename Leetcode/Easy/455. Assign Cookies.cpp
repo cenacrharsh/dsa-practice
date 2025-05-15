@@ -7,32 +7,28 @@
 using namespace std;
 
 /*
-> Time Complexity: O(N * Log(N))
+> Time Complexity: O(NLog(N)) + O(MLog(M)) + M
 > Space Complexity: O(1)
 */
 
 class Solution
 {
 public:
-    int findContentChildren(vector<int> &g, vector<int> &s)
+  int findContentChildren(vector<int> &greed, vector<int> &sizes)
+  {
+    sort(greed.begin(), greed.end());
+    sort(sizes.begin(), sizes.end());
+
+    int l = 0, r = 0;
+    while (l < sizes.size() && r < greed.size())
     {
-        sort(g.begin(), g.end());
-        sort(s.begin(), s.end());
-        int i = 0, j = 0;
-        int ans = 0;
-        while (i < s.size() && j < g.size())
-        {
-            if (s[i] >= g[j])
-            {
-                i++;
-                j++;
-                ans++;
-            }
-            else if (s[i] < g[j])
-            {
-                i++;
-            }
-        }
-        return ans;
+      //* if we can't satisfy the greed factor of current child with current size of cookie then we inc cookie size
+      if (greed[r] <= sizes[l])
+      {
+        r++;
+      }
+      l++;
     }
+    return r;
+  }
 };
