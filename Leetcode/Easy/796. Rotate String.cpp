@@ -10,7 +10,7 @@ using namespace std;
 
 /*
 > Time Complexity: O(N) + O(2N) => Adding 2 String + Search in string of size 2N
-> Space Complexity: O(N) => String size inc by N
+> Space Complexity: O(N) => String size increased by N
 */
 
 class Solution
