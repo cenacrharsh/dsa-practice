@@ -1,5 +1,7 @@
-#include <bits/stdc++.h>
+#include <iostream>
 #include <vector>
+#include <queue>
+#include <stack>
 #include <algorithm>
 #include <climits>
 #include <unordered_map>
@@ -16,42 +18,42 @@ using namespace std;
 class Solution
 {
 public:
-    string reverseWords(string s)
+  string reverseWords(string s)
+  {
+    reverse(s.begin(), s.end());
+    int i = 0, j = 0, start = 0, end = 0;
+    while (i < s.size())
     {
-        reverse(s.begin(), s.end());
-        int i = 0, j = 0, start = 0, end = 0;
-        while (i < s.size())
-        {
-            //* skip over empty spaces
-            while (i < s.size() && s[i] == ' ')
-            {
-                i++;
-            }
+      //* to skip over empty spaces and reach characters
+      while (i < s.size() && s[i] == ' ')
+      {
+        i++;
+      }
 
-            if (i >= s.size())
-            {
-                continue;
-            }
+      //* avoids ' ' being treated as last word
+      if (i >= s.size())
+      {
+        continue;
+      }
 
-            //* move the entire string to the left to remove empty spaces
-            start = j;
-            while (i < s.size() && s[i] != ' ')
-            {
-                s[j] = s[i];
-                j++;
-                i++;
-            }
-            end = j - 1;
+      //* j keeps track of the index of actual characters and one empty space after them
+      start = j;
+      while (i < s.size() && s[i] != ' ')
+      {
+        s[j] = s[i];
+        i++;
+        j++;
+      }
+      end = j - 1; //* now start -> end are the indices of first and last char of current word in new string
 
-            //* reverse the word obtained within the original string
-            reverse(s.begin() + start, s.begin() + end + 1);
+      //* reverse this new portion in original string
+      reverse(s.begin() + start, s.begin() + end + 1); //* reverse function in not inclusive of last index so +1
 
-            //* add a space
-            s[j] = ' ';
-            j++;
-        }
-        return s.substr(0, j - 1);
+      s[j] = ' ';
+      j++;
     }
+    return s.substr(0, j - 1);
+  }
 };
 
 //! Using a Vector to store individual words
@@ -64,34 +66,39 @@ public:
 class Solution
 {
 public:
-    string reverseWords(string s)
+  string reverseWords(string s)
+  {
+    string ans = "";
+    vector<string> str;
+    int left = s.size() - 1, right = s.size() - 1;
+
+    while (left >= 0 && right >= 0)
     {
-        vector<string> words;
-        string ans = "";
-        int i = 0;
-        while (i < s.size())
-        {
-            while (i < s.size() && s[i] == ' ')
-            {
-                i++;
-            }
-            string temp = "";
-            while (i < s.size() && s[i] != ' ')
-            {
-                temp += s[i];
-                i++;
-            }
-            if (temp != "")
-            {
-                words.push_back(temp);
-            }
-        }
-        for (int i = words.size() - 1; i >= 0; i--)
-        {
-            ans += i == 0 ? words[i] : words[i] + ' ';
-        }
-        return ans;
+      while (right >= 0 && s[right] == ' ')
+      {
+        left--;
+        right--;
+      }
+
+      while (left >= 0 && s[left] != ' ')
+      {
+        left--;
+      }
+
+      string temp = s.substr(left + 1, right - left);
+      if (temp.size() > 0)
+      {
+        str.push_back(s.substr(left + 1, right - left));
+      }
+      right = left;
     }
+
+    for (int i = 0; i < str.size(); i++)
+    {
+      ans += i == str.size() - 1 ? str[i] : str[i] + " ";
+    }
+    return ans;
+  }
 };
 
 //! Using Prepend During String Concatenation
@@ -104,27 +111,32 @@ public:
 class Solution
 {
 public:
-    string reverseWords(string s)
+  string reverseWords(string s)
+  {
+    string ans = "";
+    int left = s.size() - 1, right = s.size() - 1;
+
+    while (left >= 0 && right >= 0)
     {
-        string ans = "";
-        int i = 0;
-        while (i < s.size())
-        {
-            while (i < s.size() && s[i] == ' ')
-            {
-                i++;
-            }
-            string temp = "";
-            while (i < s.size() && s[i] != ' ')
-            {
-                temp += s[i];
-                i++;
-            }
-            if (temp != "")
-            {
-                ans = ans == "" ? temp : temp + ' ' + ans;
-            }
-        }
-        return ans;
+      while (right >= 0 && s[right] == ' ')
+      {
+        left--;
+        right--;
+      }
+
+      while (left >= 0 && s[left] != ' ')
+      {
+        left--;
+      }
+
+      string temp = s.substr(left + 1, right - left);
+      if (temp.size() > 0)
+      {
+        ans += temp + " ";
+      }
+      right = left;
     }
+
+    return ans.empty() ? "" : ans.substr(0, ans.size() - 1);
+  }
 };
