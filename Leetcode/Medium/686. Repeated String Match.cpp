@@ -20,7 +20,6 @@ class Solution
 public:
   bool rabinKarpStringSearch(string text, string pattern)
   {
-    cout << text << " " << pattern << endl;
     int n = text.size(), m = pattern.size();
     int p = 7, mod = 101, hashText = 0, hashPattern = 0;
     int powerRight = 1, powerLeft = 1;
@@ -46,7 +45,7 @@ public:
       //* add next character
       hashText = ((hashText + (text[i + m] - 'a' + 1) * powerRight) % mod) % mod;
 
-      hashPattern = (hashPattern * p) % mod;
+      hashPattern = (hashPattern * p) % mod; //* to match to power of p, since due to addition of new char on hashText a new power of p was introduced, we * by p on hashPattern to balance it
 
       powerLeft = (powerLeft * p) % mod;
       powerRight = (powerRight * p) % mod;
