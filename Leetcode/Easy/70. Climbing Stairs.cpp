@@ -1,5 +1,7 @@
-#include <bits/stdc++.h>
+#include <iostream>
 #include <vector>
+#include <queue>
+#include <stack>
 #include <algorithm>
 #include <climits>
 #include <unordered_map>
@@ -41,11 +43,6 @@ class Solution
 public:
     int climbStairs(int n)
     {
-        if (n == 0 || n == 1)
-        {
-            return 1;
-        }
-
         vector<int> dp(n + 1, -1);
         dp[0] = 1;
         dp[1] = 1;
@@ -100,6 +97,7 @@ class Solution
 public:
     int helper(int n)
     {
+        //* we are treating 0 as the goal, so if already there you can't do anything or if at 1 to go at 0 we only have one option
         if (n == 0 || n == 1)
         {
             return 1;
