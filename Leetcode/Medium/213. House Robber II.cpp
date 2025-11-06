@@ -1,5 +1,7 @@
-#include <bits/stdc++.h>
+#include <iostream>
 #include <vector>
+#include <queue>
+#include <stack>
 #include <algorithm>
 #include <climits>
 #include <unordered_map>
@@ -12,41 +14,41 @@ using namespace std;
 class Solution
 {
 public:
- int maxAdjacentSum(vector<int> &nums)
- {
-  int prev = nums[0];
-  int prev2 = 0;
-  for (int i = 0; i < nums.size(); i++)
-  {
-   int rob = nums[i];
-   if (i > 1)
-   {
-    rob += prev2;
-   }
-   int notRob = 0 + prev;
-   int curr = max(rob, notRob);
-   prev2 = prev;
-   prev = curr;
-  }
-  return prev;
- }
+    int nonAdjacent(vector<int> &nums)
+    {
+        int n = nums.size();
+        int prev = nums[0], prev2 = 0;
+        for (int i = 1; i < n; i++)
+        {
+            int pick = nums[i];
+            if (i > 1)
+            {
+                pick += prev2;
+            }
+            int notPick = prev;
+            prev2 = prev;
+            prev = max(pick, notPick);
+        }
+        return prev;
+    }
 
- int rob(vector<int> &nums)
- {
-  if (nums.size() == 1)
-  {
-   return nums[0];
-  }
-  vector<int> temp1, temp2;
-  for (int i = 0; i < nums.size(); i++)
-  {
-   if (i != 0)
-    temp1.push_back(nums[i]);
-   if (i != nums.size() - 1)
-    temp2.push_back(nums[i]);
-  }
-  return max(maxAdjacentSum(temp1), maxAdjacentSum(temp2));
- }
+    int houseRobber(vector<int> &money)
+    {
+        vector<int> temp1, temp2;
+        if (money.size() == 1)
+        {
+            return nonAdjacent(money);
+        }
+
+        for (int i = 0; i < money.size(); i++)
+        {
+            if (i != 0)
+                temp1.push_back(money[i]);
+            if (i != money.size() - 1)
+                temp2.push_back(money[i]);
+        }
+        return max(nonAdjacent(temp1), nonAdjacent(temp2));
+    }
 };
 
 //! Tabulation DP -> Bottom Up Approach

@@ -1,5 +1,7 @@
-#include <bits/stdc++.h>
+#include <iostream>
 #include <vector>
+#include <queue>
+#include <stack>
 #include <algorithm>
 #include <climits>
 #include <unordered_map>
@@ -12,21 +14,20 @@ using namespace std;
 class Solution
 {
 public:
-    int rob(vector<int> &nums)
+    int nonAdjacent(vector<int> &nums)
     {
-        int prev = nums[0];
-        int prev2 = 0;
-        for (int i = 0; i < nums.size(); i++)
+        int n = nums.size();
+        int prev = nums[0], prev2 = 0;
+        for (int i = 1; i < n; i++)
         {
-            int rob = nums[i];
+            int pick = nums[i];
             if (i > 1)
             {
-                rob += prev2;
+                pick += prev2;
             }
-            int notRob = 0 + prev;
-            int curr = max(rob, notRob);
+            int notPick = prev;
             prev2 = prev;
-            prev = curr;
+            prev = max(pick, notPick);
         }
         return prev;
     }
@@ -36,21 +37,22 @@ public:
 class Solution
 {
 public:
-    int rob(vector<int> &nums)
+    int nonAdjacent(vector<int> &nums)
     {
+        int n = nums.size();
         vector<int> dp(nums.size(), -1);
         dp[0] = nums[0];
-        if (nums.size() > 1)
+        for (int i = 1; i < n; i++)
         {
-            dp[1] = max(nums[0], nums[1]);
+            int pick = nums[i];
+            if (i > 1)
+            {
+                pick += dp[i - 2];
+            }
+            int notPick = dp[i - 1];
+            dp[i] = max(pick, notPick);
         }
-        for (int i = 2; i < nums.size(); i++)
-        {
-            int rob = nums[i] + dp[i - 2];
-            int notRob = dp[i - 1];
-            dp[i] = max(rob, notRob);
-        }
-        return dp[nums.size() - 1];
+        return dp[n - 1];
     }
 };
 
@@ -58,32 +60,39 @@ public:
 class Solution
 {
 public:
-    int helper(vector<int> &nums, int houseNumber, vector<int> &dp)
+    //* f(n - 1): max sum of non-adjacent numbers from 0->(n-1)
+    int helper(vector<int> &nums, int currentIndex, vector<int> &dp)
     {
-        if (houseNumber < 0)
+        // if (currentIndex < 0)
+        // {
+        //     return 0;
+        // }
+
+        if (dp[currentIndex] != -1)
         {
-            return 0;
+            return dp[currentIndex];
         }
 
-        if (houseNumber == 0)
+        if (currentIndex == 0)
         {
-            return nums[houseNumber];
+            return nums[currentIndex]; //* reaching index 0 indicates we must have skipped index 1 so we can simply pick value of index 0
         }
 
-        if (dp[houseNumber] != -1)
+        int pick = nums[currentIndex];
+        if (currentIndex > 1)
         {
-            return dp[houseNumber];
+            pick += helper(nums, currentIndex - 2, dp);
         }
+        int notPick = helper(nums, currentIndex - 1, dp);
 
-        int rob = nums[houseNumber] + helper(nums, houseNumber - 2, dp);
-        int notRob = helper(nums, houseNumber - 1, dp);
-
-        return dp[houseNumber] = max(rob, notRob);
+        return dp[currentIndex] = max(pick, notPick);
     }
-    int rob(vector<int> &nums)
+
+    int nonAdjacent(vector<int> &nums)
     {
+        int n = nums.size();
         vector<int> dp(nums.size(), -1);
-        return helper(nums, nums.size() - 1, dp);
+        return helper(nums, n - 1, dp);
     }
 };
 
@@ -91,26 +100,32 @@ public:
 class Solution
 {
 public:
-    int helper(vector<int> &nums, int houseNumber)
+    //* f(n - 1): max sum of non-adjacent numbers from 0->(n-1)
+    int helper(vector<int> &nums, int currentIndex)
     {
-        if (houseNumber < 0)
+        // if (currentIndex < 0)
+        // {
+        //     return 0;
+        // }
+
+        if (currentIndex == 0)
         {
-            return 0;
+            return nums[currentIndex]; //* reaching index 0 indicates we must have skipped index 1 so we can simply pick value of index 0
         }
 
-        if (houseNumber == 0)
+        int pick = nums[currentIndex];
+        if (currentIndex > 1)
         {
-            return nums[houseNumber];
+            pick += helper(nums, currentIndex - 2);
         }
+        int notPick = helper(nums, currentIndex - 1);
 
-        int rob = nums[houseNumber] + helper(nums, houseNumber - 2);
-        int notRob = helper(nums, houseNumber - 1);
-
-        return max(rob, notRob);
+        return max(pick, notPick);
     }
 
-    int rob(vector<int> &nums)
+    int nonAdjacent(vector<int> &nums)
     {
-        return helper(nums, nums.size() - 1);
+        int n = nums.size();
+        return helper(nums, n - 1);
     }
 };
