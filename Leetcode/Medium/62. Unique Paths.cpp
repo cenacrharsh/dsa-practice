@@ -159,7 +159,7 @@ public:
 //! Recursion -> Top Down Approach
 
 /*
-> Time Complexity: O(2^(M * N))
+> Time Complexity: O(2^[(M + N) * (M + N)])
 > Space Complexity: O((M - 1) + (N - 1)) => Path length
 */
 class Solution
