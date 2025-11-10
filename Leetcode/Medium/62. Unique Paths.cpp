@@ -1,5 +1,7 @@
-#include <bits/stdc++.h>
+#include <iostream>
 #include <vector>
+#include <queue>
+#include <stack>
 #include <algorithm>
 #include <climits>
 #include <unordered_map>
@@ -35,15 +37,15 @@ public:
     }
 };
 
-/*------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------------------*/
 
 // # Tutorial: https://www.youtube.com/watch?v=sdE0A2Oxofw&list=PLgUwDviBIf0qUlt5H_kiKYaNSqJ81PMMY&index=25
 
 //! Space Optimized Tabulation DP
 
 /*
-> Time Complexity: O(n * m)
-> Space Complexity: O(n)
+> Time Complexity: O(M * N)
+> Space Complexity: O(N)
 */
 
 class Solution
@@ -51,33 +53,29 @@ class Solution
 public:
     int uniquePaths(int m, int n)
     {
+        //* f(m - 1, n - 1): No. of unique ways to go from 0->(m - 1, n - 1)
+
         vector<int> prev(n, 0);
+
         for (int i = 0; i < m; i++)
         {
-            vector<int> curr(n, 0);
+            vector<int> temp(n, 0);
             for (int j = 0; j < n; j++)
             {
                 if (i == 0 && j == 0)
                 {
-                    curr[j] = 1;
+                    temp[j] = 1;
                 }
                 else
                 {
-                    int up = 0;
-                    int left = 0;
-                    if (i - 1 >= 0)
-                    {
-                        up = prev[j];
-                    }
-                    if (j - 1 >= 0)
-                    {
-                        left = curr[j - 1];
-                    }
-                    curr[j] = up + left;
+                    int up = i > 0 ? prev[j] : 0;
+                    int left = j > 0 ? temp[j - 1] : 0;
+                    temp[j] = up + left;
                 }
             }
-            prev = curr;
+            prev = temp;
         }
+
         return prev[n - 1];
     }
 };
@@ -85,8 +83,8 @@ public:
 //! Tabulation DP -> Bottom Up Approach
 
 /*
-> Time Complexity: O(n * m)
-> Space Complexity: O(n + m)
+> Time Complexity: O(M * N)
+> Space Complexity: O(M + N)
 */
 
 class Solution
@@ -94,31 +92,27 @@ class Solution
 public:
     int uniquePaths(int m, int n)
     {
-        vector<vector<int>> dp(m, vector<int>(n, 0));
+        //* f(m - 1, n - 1): No. of unique ways to go from 0->(m - 1, n - 1)
+
+        vector<vector<int>> dp(m, vector<int>(n, -1));
+
         for (int i = 0; i < m; i++)
         {
             for (int j = 0; j < n; j++)
             {
                 if (i == 0 && j == 0)
                 {
-                    dp[0][0] = 1;
+                    dp[i][j] = 1;
                 }
                 else
                 {
-                    int up = 0;
-                    int left = 0;
-                    if (i - 1 >= 0)
-                    {
-                        up = dp[i - 1][j];
-                    }
-                    if (j - 1 >= 0)
-                    {
-                        left = dp[i][j - 1];
-                    }
+                    int up = i > 0 ? dp[i - 1][j] : 0;
+                    int left = j > 0 ? dp[i][j - 1] : 0;
                     dp[i][j] = up + left;
                 }
             }
         }
+
         return dp[m - 1][n - 1];
     }
 };
@@ -126,36 +120,37 @@ public:
 //! Memoization DP
 
 /*
-> Time Complexity: O(n * m)
-> Space Complexity: O((m-1) + (n-1)) + O(m * n) => recursive stack space + DP vector
+> Time Complexity: O(M * N)
+> Space Complexity: O((M - 1) + (N - 1)) + O(M * N) => recursive stack space + DP vector
 */
 
 class Solution
 {
 public:
-    int helper(int row, int col, vector<vector<int>> &dp)
+    int helper(int currRow, int currCol, vector<vector<int>> &dp)
     {
-        if (row == 0 && col == 0)
+        if (currRow == 0 && currCol == 0)
         {
             return 1;
         }
-        if (row < 0 || col < 0)
+
+        if (currRow < 0 || currCol < 0)
         {
             return 0;
         }
 
-        if (dp[row][col] != -1)
+        if (dp[currRow][currCol] != -1)
         {
-            return dp[row][col];
+            return dp[currRow][currCol];
         }
 
-        int up = helper(row - 1, col, dp);
-        int left = helper(row, col - 1, dp);
-
-        return dp[row][col] = up + left;
+        return dp[currRow][currCol] = helper(currRow, currCol - 1, dp) + helper(currRow - 1, currCol, dp);
     }
+
     int uniquePaths(int m, int n)
     {
+        //* f(m - 1, n - 1): No. of unique ways to go from 0->(m - 1, n - 1)
+
         vector<vector<int>> dp(m, vector<int>(n, -1));
         return helper(m - 1, n - 1, dp);
     }
@@ -164,31 +159,34 @@ public:
 //! Recursion -> Top Down Approach
 
 /*
-> Time Complexity: O(2^(m*n))
-> Space Complexity: O((m-1) + (n-1)) => path length
+> Time Complexity: O(2^(M * N))
+> Space Complexity: O((M - 1) + (N - 1)) => Path length
 */
 class Solution
 {
 public:
-    int helper(int row, int col)
+    int helper(int currRow, int currCol)
     {
-        if (row == 0 && col == 0)
+        if (currRow == 0 && currCol == 0)
         {
             return 1;
         }
-        if (row < 0 || col < 0)
+
+        if (currRow < 0 || currCol < 0)
         {
             return 0;
         }
 
-        int up = helper(row - 1, col);
-        int left = helper(row, col - 1);
+        int left = helper(currRow, currCol - 1);
+        int up = helper(currRow - 1, currCol);
 
-        return up + left;
+        return left + up;
     }
 
     int uniquePaths(int m, int n)
     {
+        //* f(m - 1, n - 1): No. of unique ways to go from 0->(m - 1, n - 1)
+
         return helper(m - 1, n - 1);
     }
 };
