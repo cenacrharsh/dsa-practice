@@ -1,5 +1,7 @@
-#include <bits/stdc++.h>
+#include <iostream>
 #include <vector>
+#include <queue>
+#include <stack>
 #include <algorithm>
 #include <climits>
 #include <unordered_map>
@@ -14,43 +16,44 @@ using namespace std;
 
 /*
 > Time Complexity: O(N * 2)
-> Space Complexity: O(2 * 2)
+> Space Complexity: O(2)
 */
 
 class Solution
 {
 public:
-    int maxProfit(vector<int> &prices)
+    int stockBuySell(vector<int> arr, int n)
     {
-        int n = prices.size();
-        vector<int> next(2, 0), curr(2, 0);
+        //* f(currDay, canBuyOrNot): Max profit one can obtain by buying at i and selling at j
 
-        //* base case
-        next[0] = next[1] = 0;
+        vector<int> front(2, 0);
+        front[0] = 0;
+        front[1] = 0;
 
-        for (int index = n - 1; index >= 0; index--)
+        for (int currDay = n - 1; currDay >= 0; currDay--)
         {
+            vector<int> curr(2, 0);
             for (int canBuy = 0; canBuy <= 1; canBuy++)
             {
-                int profit = 0;
+                long profit = 0;
                 if (canBuy)
                 {
-                    int buy = -prices[index] + next[0];
-                    int notBuy = 0 + next[1];
+                    int buy = -arr[currDay] + front[0];
+                    int notBuy = front[1];
                     profit = max(buy, notBuy);
                 }
                 else
                 {
-                    int sell = prices[index] + next[1];
-                    int notSell = 0 + next[0];
+                    int sell = arr[currDay] + front[1];
+                    int notSell = front[0];
                     profit = max(sell, notSell);
                 }
                 curr[canBuy] = profit;
             }
-            next = curr;
+            front = curr;
         }
 
-        return next[1];
+        return front[1];
     }
 };
 
@@ -64,32 +67,32 @@ public:
 class Solution
 {
 public:
-    int maxProfit(vector<int> &prices)
+    int stockBuySell(vector<int> arr, int n)
     {
-        int n = prices.size();
+        //* f(currDay, canBuyOrNot): Max profit one can obtain by buying at i and selling at j
+
         vector<vector<int>> dp(n + 1, vector<int>(2, 0));
+        dp[n][0] = 0;
+        dp[n][1] = 0;
 
-        // base case
-        dp[n][0] = dp[n][1] = 0;
-
-        for (int index = n - 1; index >= 0; index--)
+        for (int currDay = n - 1; currDay >= 0; currDay--)
         {
             for (int canBuy = 0; canBuy <= 1; canBuy++)
             {
-                int profit = 0;
+                long profit = 0;
                 if (canBuy)
                 {
-                    int buy = -prices[index] + dp[index + 1][0];
-                    int notBuy = 0 + dp[index + 1][1];
+                    int buy = -arr[currDay] + dp[currDay + 1][0];
+                    int notBuy = dp[currDay + 1][1];
                     profit = max(buy, notBuy);
                 }
                 else
                 {
-                    int sell = prices[index] + dp[index + 1][1];
-                    int notSell = 0 + dp[index + 1][0];
+                    int sell = arr[currDay] + dp[currDay + 1][1];
+                    int notSell = dp[currDay + 1][0];
                     profit = max(sell, notSell);
                 }
-                dp[index][canBuy] = profit;
+                dp[currDay][canBuy] = profit;
             }
         }
 
@@ -107,37 +110,38 @@ public:
 class Solution
 {
 public:
-    int helper(int index, int canBuy, vector<int> &prices, vector<vector<int>> &dp)
+    int helper(vector<int> &arr, int currDay, int canBuy, vector<vector<int>> &dp)
     {
-        if (index == prices.size())
+        if (currDay == arr.size())
         {
-            return false;
+            return 0; //* if array is over even if are holding a stock no profit can be made so 0
         }
 
-        if (dp[index][canBuy] != -1)
+        if (dp[currDay][canBuy] != -1)
         {
-            return dp[index][canBuy];
+            return dp[currDay][canBuy];
         }
 
         if (canBuy)
         {
-            int buy = -prices[index] + helper(index + 1, 0, prices, dp);
-            int notBuy = 0 + helper(index + 1, 1, prices, dp);
-            return dp[index][canBuy] = max(buy, notBuy);
+            int buy = -arr[currDay] + helper(arr, currDay + 1, 0, dp);
+            int notBuy = helper(arr, currDay + 1, 1, dp);
+            return dp[currDay][canBuy] = max(buy, notBuy);
         }
         else
         {
-            int sell = prices[index] + helper(index + 1, 1, prices, dp);
-            int notSell = 0 + helper(index + 1, 0, prices, dp);
-            return dp[index][canBuy] = max(sell, notSell);
+            int sell = arr[currDay] + helper(arr, currDay + 1, 1, dp);
+            int notSell = helper(arr, currDay + 1, 0, dp);
+            return dp[currDay][canBuy] = max(sell, notSell);
         }
     }
 
-    int maxProfit(vector<int> &prices)
+    int stockBuySell(vector<int> arr, int n)
     {
-        int n = prices.size();
+        //* f(currDay, canBuyOrNot): Max profit one can obtain by buying at i and selling at j
+
         vector<vector<int>> dp(n, vector<int>(2, -1));
-        return helper(0, 1, prices, dp);
+        return helper(arr, 0, 1, dp);
     }
 };
 
@@ -151,30 +155,33 @@ public:
 class Solution
 {
 public:
-    int helper(int index, int canBuy, vector<int> &prices)
+    int helper(vector<int> &arr, int currDay, int canBuy)
     {
-        if (index == prices.size())
+        if (currDay == arr.size())
         {
-            return false;
+            return 0; //* if array is over even if are holding a stock no profit can be made so 0
         }
 
+        int profit = INT_MIN;
         if (canBuy)
         {
-            int buy = -prices[index] + helper(index + 1, 0, prices);
-            int notBuy = 0 + helper(index + 1, 1, prices);
-            return max(buy, notBuy);
+            int buy = -arr[currDay] + helper(arr, currDay + 1, 0);
+            int notBuy = helper(arr, currDay + 1, 1);
+            profit = max(profit, max(buy, notBuy));
         }
         else
         {
-            int sell = prices[index] + helper(index + 1, 1, prices);
-            int notSell = 0 + helper(index + 1, 0, prices);
-            return max(sell, notSell);
+            int sell = arr[currDay] + helper(arr, currDay + 1, 1);
+            int notSell = helper(arr, currDay + 1, 0);
+            profit = max(profit, max(sell, notSell));
         }
+        return profit;
     }
 
-    int maxProfit(vector<int> &prices)
+    int stockBuySell(vector<int> arr, int n)
     {
-        int n = prices.size();
-        return helper(0, 1, prices);
+        //* f(currDay, canBuyOrNot): Max profit one can obtain by buying at i and selling at j
+
+        return helper(arr, 0, 1);
     }
 };
