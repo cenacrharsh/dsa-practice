@@ -1,5 +1,7 @@
-#include <bits/stdc++.h>
+#include <iostream>
 #include <vector>
+#include <queue>
+#include <stack>
 #include <algorithm>
 #include <climits>
 #include <unordered_map>
@@ -18,36 +20,39 @@ using namespace std;
 class Solution
 {
 public:
-    int maxProfit(vector<int> &prices)
+    int stockBuySell(vector<int> arr, int n)
     {
-        int n = prices.size();
-        vector<vector<int>> next(2, vector<int>(3, 0));
+        vector<vector<int>> front(2, vector<int>(3, 0));
         vector<vector<int>> curr(2, vector<int>(3, 0));
 
-        for (int index = n - 1; index >= 0; index--)
+        //* dp array is already initialized to 0 so no need to handle base cases
+
+        for (int currDay = n - 1; currDay >= 0; currDay--)
         {
             for (int canBuy = 0; canBuy <= 1; canBuy++)
             {
-                for (int maxTransactions = 1; maxTransactions <= 2; maxTransactions++)
+                //* transactionsLeft = 0 is part of base case where every vaule = 0 so we skip calculation for it
+                for (int transactionsLeft = 1; transactionsLeft <= 2; transactionsLeft++)
                 {
-                    if (canBuy == 1)
+                    int profit = 0;
+                    if (canBuy)
                     {
-                        int buy = -prices[index] + next[0][maxTransactions];
-                        int notBuy = 0 + next[1][maxTransactions];
-                        curr[canBuy][maxTransactions] = max(buy, notBuy);
+                        int buy = -arr[currDay] + front[0][transactionsLeft];
+                        int notBuy = front[1][transactionsLeft];
+                        profit = max(buy, notBuy);
                     }
                     else
                     {
-                        int sell = prices[index] + next[1][maxTransactions - 1];
-                        int notSell = 0 + next[0][maxTransactions];
-                        curr[canBuy][maxTransactions] = max(sell, notSell);
+                        int sell = arr[currDay] + front[1][transactionsLeft - 1];
+                        int notSell = front[0][transactionsLeft];
+                        profit = max(sell, notSell);
                     }
+                    curr[canBuy][transactionsLeft] = profit;
                 }
             }
-            next = curr;
+            front = curr;
         }
-
-        return next[1][2]; // initial call we use in recursion f(0, 1, 2);
+        return front[1][2];
     }
 };
 
@@ -61,49 +66,38 @@ public:
 class Solution
 {
 public:
-    int maxProfit(vector<int> &prices)
+    int stockBuySell(vector<int> arr, int n)
     {
-        int n = prices.size();
         vector<vector<vector<int>>> dp(n + 1, vector<vector<int>>(2, vector<int>(3, 0)));
 
-        /*
-        // base case 1, maxTransactions == 0, i.e index and canBuy can have any value
-        for(int i = 0; i < n; i++) {
-            for(int j = 0; j <= 1; j++) {
-                dp[i][j][0] = 0;
-            }
-        }
-        // base case 2, index == n, i.e canBuy and maxTransactions can have any value
-        for(int i = 0; i <= 1; i++) {
-            for(int j = 0; j <= 2; j++) {
-                dp[n][i][j] = 0;
-            }
-        }
-        */
+        //* dp array is already initialized to 0 so no need to handle base cases
 
-        for (int index = n - 1; index >= 0; index--)
+        for (int currDay = n - 1; currDay >= 0; currDay--)
         {
             for (int canBuy = 0; canBuy <= 1; canBuy++)
             {
-                for (int maxTransactions = 1; maxTransactions <= 2; maxTransactions++)
+                //* transactionsLeft = 0 is part of base case where every vaule = 0 so we skip calculation for it
+                for (int transactionsLeft = 1; transactionsLeft <= 2; transactionsLeft++)
                 {
-                    if (canBuy == 1)
+                    int profit = 0;
+                    if (canBuy)
                     {
-                        int buy = -prices[index] + dp[index + 1][0][maxTransactions];
-                        int notBuy = 0 + dp[index + 1][1][maxTransactions];
-                        dp[index][canBuy][maxTransactions] = max(buy, notBuy);
+                        int buy = -arr[currDay] + dp[currDay + 1][0][transactionsLeft];
+                        int notBuy = dp[currDay + 1][1][transactionsLeft];
+                        profit = max(buy, notBuy);
                     }
                     else
                     {
-                        int sell = prices[index] + dp[index + 1][1][maxTransactions - 1];
-                        int notSell = 0 + dp[index + 1][0][maxTransactions];
-                        dp[index][canBuy][maxTransactions] = max(sell, notSell);
+                        int sell = arr[currDay] + dp[currDay + 1][1][transactionsLeft - 1];
+                        int notSell = dp[currDay + 1][0][transactionsLeft];
+                        profit = max(sell, notSell);
                     }
+                    dp[currDay][canBuy][transactionsLeft] = profit;
                 }
             }
         }
 
-        return dp[0][1][2]; // initial call we use in recursion f(0, 1, 2);
+        return dp[0][1][2];
     }
 };
 
@@ -117,80 +111,84 @@ public:
 class Solution
 {
 public:
-    int helper(int index, int canBuy, int maxTransactions, vector<int> &prices, vector<vector<vector<int>>> &dp)
+    int helper(vector<int> arr, int currDay, int canBuy, int transactionsLeft, vector<vector<vector<int>>> &dp)
     {
-        if (maxTransactions == 0)
-            return 0;
-        if (index == prices.size())
-            return 0;
-
-        if (dp[index][canBuy][maxTransactions] != -1)
+        if (transactionsLeft == 0)
         {
-            return dp[index][canBuy][maxTransactions];
+            return 0;
+        }
+        else if (currDay == arr.size())
+        {
+            return 0;
+        }
+
+        if (dp[currDay][canBuy][transactionsLeft] != -1)
+        {
+            return dp[currDay][canBuy][transactionsLeft];
         }
 
         int profit = 0;
         if (canBuy)
         {
-            int buy = -prices[index] + helper(index + 1, 0, maxTransactions, prices, dp);
-            int notBuy = 0 + helper(index + 1, 1, maxTransactions, prices, dp);
+            int buy = -arr[currDay] + helper(arr, currDay + 1, 0, transactionsLeft, dp);
+            int notBuy = helper(arr, currDay + 1, 1, transactionsLeft, dp);
             profit = max(buy, notBuy);
         }
         else
         {
-            int sell = prices[index] + helper(index + 1, 1, maxTransactions - 1, prices, dp);
-            int notSell = 0 + helper(index + 1, 0, maxTransactions, prices, dp);
+            int sell = arr[currDay] + helper(arr, currDay + 1, 1, transactionsLeft - 1, dp);
+            int notSell = helper(arr, currDay + 1, 0, transactionsLeft, dp);
             profit = max(sell, notSell);
         }
-
-        return dp[index][canBuy][maxTransactions] = profit;
+        return dp[currDay][canBuy][transactionsLeft] = profit;
     }
 
-    int maxProfit(vector<int> &prices)
+    int stockBuySell(vector<int> arr, int n)
     {
-        int n = prices.size();
         vector<vector<vector<int>>> dp(n, vector<vector<int>>(2, vector<int>(3, -1)));
-        return helper(0, 1, 2, prices, dp);
+        return helper(arr, 0, 1, 2, dp);
     }
 };
 
 //! Recursion -> Bottom Up Approach
 
 /*
-> Time Complexity: Exponential
+> Time Complexity: O(2^N)
 > Space Complexity: O(N)
 */
 
 class Solution
 {
 public:
-    int helper(int index, int canBuy, int maxTransactions, vector<int> &prices)
+    int helper(vector<int> arr, int currDay, int canBuy, int transactionsLeft)
     {
-        if (maxTransactions == 0)
+        if (transactionsLeft == 0)
+        {
             return 0;
-        if (index == prices.size())
+        }
+        else if (currDay == arr.size())
+        {
             return 0;
+        }
 
         int profit = 0;
         if (canBuy)
         {
-            int buy = -prices[index] + helper(index + 1, 0, maxTransactions, prices);
-            int notBuy = 0 + helper(index + 1, 1, maxTransactions, prices);
+            int buy = -arr[currDay] + helper(arr, currDay + 1, 0, transactionsLeft);
+            int notBuy = helper(arr, currDay + 1, 1, transactionsLeft);
             profit = max(buy, notBuy);
         }
         else
         {
-            int sell = prices[index] + helper(index + 1, 1, maxTransactions - 1, prices);
-            int notSell = 0 + helper(index + 1, 0, maxTransactions, prices);
+            int sell = arr[currDay] + helper(arr, currDay + 1, 1, transactionsLeft - 1);
+            int notSell = helper(arr, currDay + 1, 0, transactionsLeft);
             profit = max(sell, notSell);
         }
-
         return profit;
     }
 
-    int maxProfit(vector<int> &prices)
+    int stockBuySell(vector<int> arr, int n)
     {
-        int n = prices.size();
-        return helper(0, 1, 2, prices);
+        return helper(arr, 0, 1, 2);
     }
 };
