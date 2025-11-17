@@ -25,27 +25,9 @@ using namespace std;
 class Solution
 {
 public:
-    bool canPartition(vector<int> &nums)
+    bool subsetSumEqualK(vector<int> &nums, int target)
     {
-        /*
-            Sum of elements of S1 + sum of elements of S2 = sum of elements of S.
-            Sum of elements of S1 = sum of elements of S2.
-            These two conditions imply that S1 = S2 = (S/2).
-            So all we need to do is find a subset with sum S/2, if yes then other subset is bound to have sum S/2 as well
-        */
-
-        int totalSum = 0;
         int n = nums.size();
-        for (int i = 0; i < n; i++)
-        {
-            totalSum += nums[i];
-        }
-        if (totalSum % 2 != 0)
-        {
-            return false; //* odd sum can't be broken into 2 equal parts, if we skip this then DP might find floor(totalSum / 2) in the array and return true
-        }
-        int target = totalSum / 2;
-
         vector<vector<bool>> dp(n, vector<bool>(target + 1, 0));
 
         for (int i = 0; i < n; i++)
@@ -74,6 +56,30 @@ public:
         }
 
         return dp[n - 1][target];
+    }
+
+    bool canPartition(vector<int> &nums)
+    {
+        /*
+            Sum of elements of S1 + sum of elements of S2 = sum of elements of S.
+            Sum of elements of S1 = sum of elements of S2.
+            These two conditions imply that S1 = S2 = (S/2).
+            So all we need to do is find a subset with sum S/2, if yes then other subset is bound to have sum S/2 as well
+        */
+
+        int totalSum = 0;
+        int n = nums.size();
+        for (int i = 0; i < n; i++)
+        {
+            totalSum += nums[i];
+        }
+        if (totalSum % 2 != 0)
+        {
+            return false; //* odd sum can't be broken into 2 equal parts, if we skip this then DP might find floor(totalSum / 2) in the array and return true
+        }
+        int target = totalSum / 2;
+
+        return subsetSumEqualK(nums, target);
     }
 };
 
