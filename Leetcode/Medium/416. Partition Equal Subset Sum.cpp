@@ -25,7 +25,7 @@ using namespace std;
 class Solution
 {
 public:
-    bool equalPartition(int n, vector<int> arr)
+    bool canPartition(vector<int> &nums)
     {
         /*
             Sum of elements of S1 + sum of elements of S2 = sum of elements of S.
@@ -35,9 +35,10 @@ public:
         */
 
         int totalSum = 0;
+        int n = nums.size();
         for (int i = 0; i < n; i++)
         {
-            totalSum += arr[i];
+            totalSum += nums[i];
         }
         if (totalSum % 2 != 0)
         {
@@ -51,16 +52,20 @@ public:
         {
             dp[i][0] = true;
         }
-        dp[0][arr[0]] = true;
+
+        if (nums[0] <= target)
+        {
+            dp[0][nums[0]] = true;
+        }
 
         for (int currIndex = 1; currIndex < n; currIndex++)
         {
             for (int targetLeft = 1; targetLeft <= target; targetLeft++)
             {
                 bool take = false;
-                if (targetLeft >= arr[currIndex])
+                if (targetLeft >= nums[currIndex])
                 {
-                    take = dp[currIndex - 1][targetLeft - arr[currIndex]];
+                    take = dp[currIndex - 1][targetLeft - nums[currIndex]];
                 }
                 bool notTake = dp[currIndex - 1][targetLeft];
 
