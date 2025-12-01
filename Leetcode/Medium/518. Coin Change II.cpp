@@ -1,5 +1,7 @@
-#include <bits/stdc++.h>
+#include <iostream>
 #include <vector>
+#include <queue>
+#include <stack>
 #include <algorithm>
 #include <climits>
 #include <unordered_map>
@@ -8,8 +10,6 @@ using namespace std;
 
 // # Tutorial: https://www.youtube.com/watch?v=HgyouUi11zk&list=PLgUwDviBIf0pwFf-BnpkXxs0Ra0eU2sJY&index=11
 
-//* f(ind, target) -> till index ind, how many ways can you form target
-
 //! Space Optimized Tabulation DP
 
 /*
@@ -17,38 +17,43 @@ using namespace std;
 > Space Complexity: O(2T)
 */
 
-//* f(ind, target) -> till index ind, how many ways can you form target
 class Solution
 {
 public:
     int change(int amount, vector<int> &coins)
     {
-        int n = coins.size();
-        vector<int> prev(amount + 1, 0), curr(amount + 1, 0);
+        int N = coins.size();
+        vector<int> prev(amount + 1, 0);
+        vector<int> curr(amount + 1, 0);
 
-        for (int amt = 0; amt <= amount; amt++)
+        for (int amountLeft = 0; amountLeft <= amount; amountLeft++)
         {
-            if (amt % coins[0] == 0)
+            if (amountLeft % coins[0] == 0)
             {
-                prev[amt] = 1;
+                prev[amountLeft] = 1;
+            }
+            else
+            {
+                prev[amountLeft] = 0;
             }
         }
 
-        for (int index = 1; index < n; index++)
+        for (int currIndex = 1; currIndex < N; currIndex++)
         {
-            for (int amt = 0; amt <= amount; amt++)
+            for (int amountLeft = 0; amountLeft <= amount; amountLeft++)
             {
-                int take = 0;
-                if (amt >= coins[index])
+                unsigned int notTake = prev[amountLeft];
+                unsigned int take = 0;
+                if (coins[currIndex] <= amountLeft)
                 {
-                    take = curr[amt - coins[index]];
+                    take = curr[amountLeft - coins[currIndex]];
                 }
-                int notTake = prev[amt];
 
-                curr[amt] = take + notTake;
+                curr[amountLeft] = take + notTake;
             }
             prev = curr;
         }
+
         return prev[amount];
     }
 };
@@ -65,32 +70,37 @@ class Solution
 public:
     int change(int amount, vector<int> &coins)
     {
-        int n = coins.size();
-        vector<vector<int>> dp(n, vector<int>(amount + 1, 0));
+        int N = coins.size();
+        vector<vector<int>> dp(N, vector<int>(amount + 1, 0));
 
-        for (int amt = 0; amt <= amount; amt++)
+        for (int amountLeft = 0; amountLeft <= amount; amountLeft++)
         {
-            if (amt % coins[0] == 0)
+            if (amountLeft % coins[0] == 0)
             {
-                dp[0][amt] = 1;
+                dp[0][amountLeft] = 1;
+            }
+            else
+            {
+                dp[0][amountLeft] = 0;
             }
         }
 
-        for (int index = 1; index < n; index++)
+        for (int currIndex = 1; currIndex < N; currIndex++)
         {
-            for (int amt = 0; amt <= amount; amt++)
+            for (int amountLeft = 0; amountLeft <= amount; amountLeft++)
             {
-                int take = 0;
-                if (amt >= coins[index])
+                unsigned int notTake = dp[currIndex - 1][amountLeft];
+                unsigned int take = 0;
+                if (coins[currIndex] <= amountLeft)
                 {
-                    take = dp[index][amt - coins[index]];
+                    take = dp[currIndex][amountLeft - coins[currIndex]];
                 }
-                int notTake = dp[index - 1][amt];
 
-                dp[index][amt] = take + notTake;
+                dp[currIndex][amountLeft] = take + notTake;
             }
         }
-        return dp[n - 1][amount];
+
+        return dp[N - 1][amount];
     }
 };
 
@@ -98,17 +108,17 @@ public:
 
 /*
 > Time Complexity: O(N * T)
-> Space Complexity: O(N * T) + O(T)
+> Space Complexity: O(N * T) + O(N)
 */
 
 class Solution
 {
 public:
-    int helper(int index, int amount, vector<int> &coins, vector<vector<int>> &dp)
+    int helper(vector<int> &coins, int currIndex, int amountLeft, vector<vector<int>> &dp)
     {
-        if (index == 0)
+        if (currIndex == 0)
         {
-            if (amount % coins[index] == 0)
+            if (amountLeft % coins[currIndex] == 0)
             {
                 return 1;
             }
@@ -118,26 +128,25 @@ public:
             }
         }
 
-        if (dp[index][amount] != -1)
+        if (dp[currIndex][amountLeft] != -1)
         {
-            return dp[index][amount];
+            return dp[currIndex][amountLeft];
         }
 
+        int notTake = helper(coins, currIndex - 1, amountLeft, dp);
         int take = 0;
-        if (amount >= coins[index])
+        if (coins[currIndex] <= amountLeft)
         {
-            take = helper(index, amount - coins[index], coins, dp);
+            take = helper(coins, currIndex, amountLeft - coins[currIndex], dp);
         }
-        int notTake = helper(index - 1, amount, coins, dp);
 
-        return dp[index][amount] = take + notTake;
+        return dp[currIndex][amountLeft] = take + notTake;
     }
 
     int change(int amount, vector<int> &coins)
     {
-        int n = coins.size();
-        vector<vector<int>> dp(n, vector<int>(amount + 1, -1));
-        return helper(n - 1, amount, coins, dp);
+        vector<vector<int>> dp(coins.size(), vector<int>(amount + 1, -1));
+        return helper(coins, coins.size() - 1, amount, dp);
     }
 };
 
@@ -151,11 +160,11 @@ public:
 class Solution
 {
 public:
-    int helper(int index, int amount, vector<int> &coins)
+    int helper(vector<int> &coins, int currIndex, int amountLeft)
     {
-        if (index == 0)
+        if (currIndex == 0)
         {
-            if (amount % coins[index] == 0)
+            if (amountLeft % coins[currIndex] == 0)
             {
                 return 1;
             }
@@ -165,19 +174,19 @@ public:
             }
         }
 
+        int notTake = helper(coins, currIndex - 1, amountLeft);
         int take = 0;
-        if (amount >= coins[index])
+        if (coins[currIndex] <= amountLeft)
         {
-            take = helper(index, amount - coins[index], coins);
+            take = helper(coins, currIndex, amountLeft - coins[currIndex]);
         }
-        int notTake = helper(index - 1, amount, coins);
 
         return take + notTake;
     }
 
     int change(int amount, vector<int> &coins)
     {
-        int n = coins.size();
-        return helper(n - 1, amount, coins);
+        //* f(ind, target) -> till index ind, how many ways can you form target
+        return helper(coins, coins.size() - 1, amount);
     }
 };
