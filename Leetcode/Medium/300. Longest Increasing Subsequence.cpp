@@ -1,5 +1,7 @@
-#include <bits/stdc++.h>
+#include <iostream>
 #include <vector>
+#include <queue>
+#include <stack>
 #include <algorithm>
 #include <climits>
 #include <unordered_map>
@@ -15,27 +17,30 @@ using namespace std;
 > Space Complexity: O(N)
 */
 
-//@ Using Binary Search find the index of arr[i] or find the first element greater than arr[i] -> lower_bound in c++
+//* Using Binary Search find the index of arr[i] or find the first element greater than arr[i] -> lower_bound in c++
 class Solution
 {
 public:
     int lengthOfLIS(vector<int> &nums)
     {
-        vector<int> ans;
-        ans.push_back(nums[0]);
-        for (int i = 1; i < nums.size(); i++)
+        int n = nums.size();
+        vector<int> temp;
+        temp.push_back(nums[0]);
+        int len = 1;
+        for (int i = 1; i < n; i++)
         {
-            if (nums[i] > ans.back())
+            if (nums[i] > temp.back())
             {
-                ans.push_back(nums[i]);
+                temp.push_back(nums[i]);
+                len++;
             }
             else
             {
-                int index = lower_bound(ans.begin(), ans.end(), nums[i]) - ans.begin();
-                ans[index] = nums[i];
+                int index = lower_bound(temp.begin(), temp.end(), nums[i]) - temp.begin();
+                temp[index] = nums[i];
             }
         }
-        return ans.size();
+        return len;
     }
 };
 
@@ -71,9 +76,9 @@ public:
     }
 };
 
-//! Space Optimized Tabulation DP
+//--------------------------------------------------------------------------------------------------------
 
-//- f(ind, lastInd) -> f(0, -1) -> give me the LIS starting from index 0 with -1 as prev index
+//! Space Optimized Tabulation DP
 
 /*
 > Time Complexity: O(N * N)
@@ -86,29 +91,29 @@ public:
     int lengthOfLIS(vector<int> &nums)
     {
         int n = nums.size();
-        vector<int> next(n + 1, 0), curr(n + 1, 0);
+        vector<int> next(n + 1, 0);
+        vector<int> curr(n + 1, 0);
 
-        //* base case, when index == n -> 0
-
-        for (int index = n - 1; index >= 0; index--)
+        for (int currIndex = n - 1; currIndex >= 0; currIndex--)
         {
-            for (int prevIndex = index - 1; prevIndex >= -1; prevIndex--)
+            //* prevIndex can't go beyond index itself so it will always start from currIndex - 1
+            for (int prevIndex = currIndex - 1; prevIndex >= -1; prevIndex--)
             {
-                //* +1 in 2nd parameter of dp is due to index change dp[...][index/prevIndex + 1]
-                int take = INT_MIN;
-                if (prevIndex == -1 || nums[index] > nums[prevIndex])
-                {
-                    take = 1 + next[index + 1];
-                }
-
+                //* we have to follow coordinate shift for 2nd index since in recursion we stored 2nd parameter in +1 state
                 int notTake = 0 + next[prevIndex + 1];
+
+                int take = 0;
+                if (prevIndex == -1 || nums[currIndex] > nums[prevIndex])
+                {
+                    take = 1 + next[currIndex + 1];
+                }
 
                 curr[prevIndex + 1] = max(take, notTake);
             }
             next = curr;
         }
 
-        return curr[-1 + 1];
+        return next[0];
     }
 };
 
@@ -127,26 +132,25 @@ public:
         int n = nums.size();
         vector<vector<int>> dp(n + 1, vector<int>(n + 1, 0));
 
-        //* base case, when index == n -> 0
-
-        for (int index = n - 1; index >= 0; index--)
+        for (int currIndex = n - 1; currIndex >= 0; currIndex--)
         {
-            for (int prevIndex = index - 1; prevIndex >= -1; prevIndex--)
+            //* prevIndex can't go beyond index itself so it will always start from currIndex - 1
+            for (int prevIndex = currIndex - 1; prevIndex >= -1; prevIndex--)
             {
-                //* +1 in 2nd parameter of dp is due to index change dp[...][index/prevIndex + 1]
-                int take = INT_MIN;
-                if (prevIndex == -1 || nums[index] > nums[prevIndex])
+                //* we have to follow coordinate shift for 2nd index since in recursion we stored 2nd parameter in +1 state
+                int notTake = 0 + dp[currIndex + 1][prevIndex + 1];
+
+                int take = 0;
+                if (prevIndex == -1 || nums[currIndex] > nums[prevIndex])
                 {
-                    take = 1 + dp[index + 1][index + 1];
+                    take = 1 + dp[currIndex + 1][currIndex + 1];
                 }
 
-                int notTake = 0 + dp[index + 1][prevIndex + 1];
-
-                dp[index][prevIndex + 1] = max(take, notTake);
+                dp[currIndex][prevIndex + 1] = max(take, notTake);
             }
         }
 
-        return dp[0][-1 + 1];
+        return dp[0][0];
     }
 };
 
@@ -160,33 +164,33 @@ public:
 class Solution
 {
 public:
-    int helper(int index, int prevIndex, vector<int> &nums, vector<vector<int>> &dp)
+    int helper(vector<int> &nums, int currIndex, int prevIndex, vector<vector<int>> &dp)
     {
-        if (index == nums.size())
+        if (currIndex == nums.size())
         {
             return 0;
         }
 
-        if (dp[index][prevIndex + 1] != -1)
+        if (dp[currIndex][prevIndex + 1] != -1)
         {
-            return dp[index][prevIndex + 1];
+            return dp[currIndex][prevIndex + 1];
         }
 
-        int take = INT_MIN;
-        if (prevIndex == -1 || nums[index] > nums[prevIndex])
+        int notTake = 0 + helper(nums, currIndex + 1, prevIndex, dp);
+        int take = 0;
+        if (prevIndex == -1 || nums[currIndex] > nums[prevIndex])
         {
-            take = 1 + helper(index + 1, index, nums, dp);
+            take = 1 + helper(nums, currIndex + 1, currIndex, dp);
         }
 
-        int notTake = 0 + helper(index + 1, prevIndex, nums, dp);
-
-        return dp[index][prevIndex + 1] = max(take, notTake);
+        return dp[currIndex][prevIndex + 1] = max(take, notTake);
     }
 
     int lengthOfLIS(vector<int> &nums)
     {
-        vector<vector<int>> dp(nums.size(), vector<int>(nums.size() + 1, -1));
-        return helper(0, -1, nums, dp);
+        int n = nums.size();
+        vector<vector<int>> dp(n, vector<int>(n + 1, -1)); //* coordinate shift required to account for -1, since we can't store -1 in index, so treat -1 as 0 and so on
+        return helper(nums, 0, -1, dp);
     }
 };
 
@@ -200,26 +204,27 @@ public:
 class Solution
 {
 public:
-    int helper(int index, int prevIndex, vector<int> &nums)
+    int helper(vector<int> &nums, int currIndex, int prevIndex)
     {
-        if (index == nums.size())
+        if (currIndex == nums.size())
         {
             return 0;
         }
 
-        int take = INT_MIN;
-        if (prevIndex == -1 || nums[index] > nums[prevIndex])
+        int notTake = 0 + helper(nums, currIndex + 1, prevIndex);
+        int take = 0;
+        if (prevIndex == -1 || nums[currIndex] > nums[prevIndex])
         {
-            take = 1 + helper(index + 1, index, nums);
+            take = 1 + helper(nums, currIndex + 1, currIndex);
         }
-
-        int notTake = 0 + helper(index + 1, prevIndex, nums);
 
         return max(take, notTake);
     }
 
     int lengthOfLIS(vector<int> &nums)
     {
-        return helper(0, -1, nums);
+        //* f(currIndex, prevIndex) => f(0, -1): give the length of LIS starting from index 0 whose previous index is -1
+        int n = nums.size();
+        return helper(nums, 0, -1);
     }
 };
