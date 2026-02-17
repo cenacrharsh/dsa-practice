@@ -1,46 +1,55 @@
-#include <bits/stdc++.h>
+#include <iostream>
 #include <vector>
+#include <queue>
+#include <stack>
 #include <algorithm>
 #include <climits>
 #include <unordered_map>
 #include <cstring>
 using namespace std;
 
-//! Approach - 1
-class Solution
-{
-public:
- int maxSubArray(vector<int> &nums)
- {
-  int currMax = 0;
-  int maxSubArr = INT_MIN;
-  for (auto num : nums)
-  {
-   currMax = max(num, currMax + num);
-   maxSubArr = max(maxSubArr, currMax);
-  }
-  return maxSubArr;
- }
-};
+//! Brute Force (Triple for loops to generate all subarrays)
 
-//! Approach - 2
+//! Better (2 for loops and use prefix sum)
+
+//! Optimal | Kadane's Algorithm
+
+/*
+> Time Complexity: O(N)
+> Space Complexity: O(1)
+*/
+
 class Solution
 {
 public:
- int maxSubArray(vector<int> &nums)
- {
-  int n = nums.size();
-  int currSum = 0;
-  int maxSum = INT_MIN;
-  for (int i = 0; i < n; i++)
-  {
-   currSum += nums[i];
-   maxSum = max(maxSum, currSum);
-   if (currSum < 0)
-   {
-    currSum = 0;
-   }
-  }
-  return maxSum;
- }
+    int maxSubArray(vector<int> &nums)
+    {
+        int currSum = 0, maxSum = INT_MIN;
+        int startIndex = -1, endIndex = -1, currStart = -1;
+
+        for (int i = 0; i < nums.size(); i++)
+        {
+            if (currSum == 0)
+            {
+                currStart = i;
+            }
+
+            currSum += nums[i];
+
+            if (currSum > maxSum)
+            {
+                maxSum = currSum;
+                startIndex = currStart;
+                endIndex = i;
+            }
+
+            //* a subarray with a sum less than 0 will always reduce the answer and so this type of subarray cannot be a part of the subarray with maximum sum
+            if (currSum < 0)
+            {
+                currSum = 0;
+            }
+        }
+
+        return maxSum;
+    }
 };
