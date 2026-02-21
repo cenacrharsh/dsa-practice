@@ -1,18 +1,19 @@
-// # Tutorial: https://www.youtube.com/watch?v=yDbkQd9t2ig
-
 //> only two element can be majority element as only two element can occur more than n / 3 times
 
-#include <bits/stdc++.h>
+#include <iostream>
 #include <vector>
+#include <queue>
+#include <stack>
 #include <algorithm>
 #include <climits>
 #include <unordered_map>
+#include <cstring>
 using namespace std;
 
 //! Approach 1 - Boyer Moore Voting Algo
 
 /*
-> Time Complexity: O(n)
+> Time Complexity: O(N)
 > Space Complexity: O(1)
 */
 
@@ -22,7 +23,7 @@ public:
     vector<int> majorityElement(vector<int> &nums)
     {
         int size = nums.size();
-        int num1 = -1, num2 = -1, count1 = 0, count2 = 0;
+        int num1 = INT_MIN, num2 = INT_MIN, count1 = 0, count2 = 0;
 
         for (int i = 0; i < size; i++)
         {
