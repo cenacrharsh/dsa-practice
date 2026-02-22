@@ -1,30 +1,36 @@
-#include <bits/stdc++.h>
+#include <iostream>
 #include <vector>
+#include <queue>
+#include <stack>
 #include <algorithm>
 #include <climits>
 #include <unordered_map>
 #include <cstring>
 using namespace std;
 
-// # Tutorial: https://www.youtube.com/watch?v=n7uwj04E0I4&list=PLgUwDviBIf0oF6QL8m22w1hIDC1vJ_BHz&index=39
+//! Without Extra Space + Gap Method of Shell Sort
 
-//! Without Extra Space
+//! Without Extra Space + 2 Pointers & Sorting
 
-//* compare the largest element in nums1 and smallest element in nums2, if largest element of nums1 is > smallest element of nums2 then we swap and move forward, once we find an element in nums1 and nums2 such that nums1 < nums2 we don't have to check any further since arr is sorted
+/*
+> Time Complexity: O(min(N, M)) + O(N * Log N) + O(M * Log N)
+> Space Complexity: O(1)
+*/
 
 class Solution
 {
 public:
-    // Function to merge the arrays.
-    void merge(long long arr1[], long long arr2[], int n, int m)
+    void merge(vector<int> &nums1, int m, vector<int> &nums2, int n)
     {
-        int left = n - 1;
-        int right = 0;
-        while (left >= 0 && right < m)
+        //* target the largest element in nums1 and compare it with smallest element in nums2, if nums1 element is smaller than nums2 then swap and keep going until we find a element which is already in it's right place after which we don't need to look further as array are already sorted so rest would automatically be in the right place
+        //* now correct elements are present in nums1 and nums2, just sort them since they are not in the right order
+
+        int left = m - 1, right = 0;
+        while (left >= 0 && right < n)
         {
-            if (arr1[left] > arr2[right])
+            if (nums1[left] >= nums2[right])
             {
-                swap(arr1[left], arr2[right]);
+                swap(nums1[left], nums2[right]);
                 left--;
                 right++;
             }
@@ -34,39 +40,97 @@ public:
             }
         }
 
-        sort(arr1, arr1 + n);
-        sort(arr2, arr2 + m);
+        sort(nums1.begin(), nums1.begin() + m);
+        sort(nums2.begin(), nums2.end());
+
+        right = 0;
+        while (right < n)
+        {
+            nums1[m + right] = nums2[right];
+            right++;
+        }
     }
 };
 
-//! With Extra Space
+//! Without Extra Space + 2 Pointers => Works only if extra space is present in nums1
+
+/*
+> Time Complexity: O(M + N)
+> Space Complexity: O(1)
+*/
+
 class Solution
 {
 public:
     void merge(vector<int> &nums1, int m, vector<int> &nums2, int n)
     {
-        vector<int> merged(n + m);
-        int i = 0, j = 0, k = 0;
-        while (i < m && j < n)
+        int left = m - 1, right = n - 1;
+        int index = m + n - 1;
+
+        //* get the largest element and place it at the end, keep going till nums2 is finished, at that point nums1 will already have it's elements in order
+        while (right >= 0)
         {
-            if (nums1[i] <= nums2[j])
+            if (left >= 0 && nums1[left] >= nums2[right])
             {
-                merged[k++] = nums1[i++];
+                nums1[index] = nums1[left];
+                left--;
+                index--;
             }
             else
             {
-                merged[k++] = nums2[j++];
+                nums1[index] = nums2[right];
+                right--;
+                index--;
             }
         }
-        while (i < m)
+    }
+};
+
+//! Using Extra Space
+
+/*
+> Time Complexity: O(N + M) + O(N + M) => Sort + Place in original array
+> Space Complexity: O(N + M)
+*/
+
+class Solution
+{
+public:
+    void merge(vector<int> &nums1, int m, vector<int> &nums2, int n)
+    {
+        vector<int> merged(m + n);
+        int left = 0, right = 0, index = 0;
+
+        while (left < m && right < n)
         {
-            merged[k++] = nums1[i++];
+            if (nums1[left] <= nums2[right])
+            {
+                merged[index] = nums1[left];
+                left++;
+                index++;
+            }
+            else
+            {
+                merged[index] = nums2[right];
+                right++;
+                index++;
+            }
         }
-        while (j < n)
+
+        while (left < m)
         {
-            merged[k++] = nums2[j++];
+            merged[index] = nums1[left];
+            left++;
+            index++;
         }
-        for (i = 0; i < (m + n); i++)
+        while (right < n)
+        {
+            merged[index] = nums2[right];
+            right++;
+            index++;
+        }
+
+        for (int i = 0; i < m + n; i++)
         {
             nums1[i] = merged[i];
         }
