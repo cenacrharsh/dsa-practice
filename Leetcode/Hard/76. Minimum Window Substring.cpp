@@ -1,53 +1,106 @@
-#include <bits/stdc++.h>
+#include <iostream>
 #include <vector>
+#include <queue>
+#include <stack>
 #include <algorithm>
 #include <climits>
 #include <unordered_map>
 #include <cstring>
 using namespace std;
 
-//# Tutorial: https://www.youtube.com/watch?v=WJaij9ffOIY&list=PLgUwDviBIf0q7vrFA_HEWcqRqMpCXzYAL&index=13
-
-//! Sliding Window
+//! Optimal, Sliding Window
 
 /*
-> Time Complexity: O(2N) + O(M)
-> Space Complexity: O(N) / O(256)
+> Time Complexity: O(M) + O(2 * N)
+> Space Complexity: O(256)
 */
 
-class Solution {
+class Solution
+{
 public:
-    string minWindow(string s, string t) {
-        int left = 0, right = 0, count = 0, minLength = INT_MAX, startIndex = -1;
+    string minWindow(string s, string t)
+    {
         vector<int> freq(256, 0);
-        // unordered_map<char, int> freq; //* char->freq
-
-        //* we are pre-inserting required characters, so a +ve freq indicates that the char is required, and we only increment count when we encounter a freq > 0
-        for(int i = 0; i < t.size(); i++) {
+        for (int i = 0; i < t.size(); i++)
+        {
             freq[t[i]]++;
         }
 
-        while(right < s.size()) {
-            if(freq[s[right]] > 0) {
+        int left = 0, right = 0, count = 0, startIndex = -1, minLen = INT_MAX;
+        while (right < s.size())
+        {
+            if (freq[s[right]] > 0)
+            {
                 count++;
             }
             freq[s[right]]--;
 
-            while(count == t.size()) {
-                if(right - left + 1 < minLength) {
-                    minLength = right - left + 1;
+            while (count == t.size())
+            {
+                if (right - left + 1 < minLen)
+                {
+                    minLen = min(minLen, right - left + 1);
                     startIndex = left;
                 }
                 freq[s[left]]++;
-                //* we are removing characters from left and the moment any characters freq becomes > 0 we know that it was an one of the pre-inserted characters and so count decreases
-                if(freq[s[left]] > 0) {
+                if (freq[s[left]] > 0)
+                {
                     count--;
                 }
                 left++;
             }
             right++;
         }
+        return startIndex == -1 ? "" : s.substr(startIndex, minLen);
+    }
+};
 
-        return startIndex == -1 ? "" : s.substr(startIndex, minLength);
+//! Brute Force
+
+/*
+> Time Complexity: O(N^2)
+> Space Complexity: O(256)
+*/
+
+class Solution
+{
+public:
+    string minWindow(string s, string t)
+    {
+        int minLen = 1e9;
+        int startIndex = -1;
+        for (int i = 0; i < s.size(); i++)
+        {
+            vector<int> freq(256, 0);
+            int count = 0;
+            for (int j = 0; j < t.size(); j++)
+            {
+                freq[t[j]]++;
+            }
+
+            for (int j = i; j < s.size(); j++)
+            {
+                if (freq[s[j]] > 0)
+                {
+                    count++;
+                }
+
+                freq[s[j]]--;
+
+                if (count == t.size())
+                {
+                    if (j - i + 1 < minLen)
+                    {
+                        minLen = min(minLen, (j - i + 1));
+                        startIndex = i;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
+        }
+        return startIndex == -1 ? "" : s.substr(startIndex, minLen);
     }
 };
