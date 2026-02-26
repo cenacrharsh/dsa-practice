@@ -8,7 +8,7 @@
 #include <cstring>
 using namespace std;
 
-//! Sliding Window
+//! Optimal, Sliding Window
 
 /*
 > Time Complexity: O(2 * 2N)
@@ -49,7 +49,7 @@ public:
     }
 };
 
-//! Hashmap + 2 Pointers
+//! Better, Hashmap + 2 Pointers
 
 /*
 > Time Complexity: O(N)
