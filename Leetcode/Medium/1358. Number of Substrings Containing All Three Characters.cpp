@@ -1,62 +1,96 @@
-#include <bits/stdc++.h>
+#include <iostream>
 #include <vector>
+#include <queue>
+#include <stack>
 #include <algorithm>
 #include <climits>
 #include <unordered_map>
 #include <cstring>
 using namespace std;
 
-// # Tutorial: 1358. Number of Substrings Containing All Three Characters
-
-//! Sliding Window
+//! Optimal
 
 /*
 > Time Complexity: O(N)
-> Space Complexity: O(1)
+> Space Complexity: O(3)
 */
 
-class Solution {
+class Solution
+{
 public:
-    int numberOfSubstrings(string s) {
-        //* with every character there is a substring that ends on it, and if this substring is valid say b/w index 2->5, then substrings with index 0,1->5 also valid
+    int numberOfSubstrings(string s)
+    {
+        //* we know that at every character there is a substring that ends at it, so for every character we figure out what is the least no. of character we have to go to the left to achive all 3 chars, then from there and for every character before it we know we have a valid substring
+        //* eg. b b a c b a -> at index 4 we know a c b is the min substring so we can say all char at 0 1 2 till index 4 are also valid
 
-        //* while traversing from left we maintain out what is the last seen position of each character and as soon as we reach a char where we have all 3 there we figure out the least window size possible which ofcourse starts from min(posA, posB, posC)->index j and hence all substrings starting from 0->min(posA, posB, posC) are now valid = min(posA, posB, posC) + 1 substrings
-
-        vector<int> lastSeen(3, -1);
         int count = 0;
-        for(int i = 0; i < s.size(); i++) {
-            lastSeen[s[i] - 'a'] = i;
+        vector<int> lastSeenIndex = {-1, -1, -1};
+        for (int i = 0; i < s.size(); i++)
+        {
+            lastSeenIndex[s[i] - 'a'] = i;
 
-            if(lastSeen[0] != -1 && lastSeen[1] != -1 && lastSeen[2] != -1) {
-                count += 1 + min(lastSeen[0], min(lastSeen[1], lastSeen[2]));
+            if (lastSeenIndex[0] != -1 && lastSeenIndex[1] != -1 && lastSeenIndex[2] != -1)
+            {
+                int leastIndex = min(lastSeenIndex[0], min(lastSeenIndex[1], lastSeenIndex[2]));
+                count += leastIndex + 1;
             }
         }
         return count;
     }
 };
 
-//! Brute Force -> TLE
+//! Optimized Brute Force, if a substring already has the 3 char then all that come after it will have it automatically so no need to go till the end
 
 /*
 > Time Complexity: O(N^2)
-> Space Complexity: O(1)
+> Space Complexity: O(3)
 */
 
-class Solution {
+class Solution
+{
 public:
-    int numberOfSubstrings(string s) {
-        //* if at index j we find that the substring contains all the required characters then all the substrings infront of it would also have the req char, so we can just add all the substrings from index j till end of the string
-        
+    int numberOfSubstrings(string s)
+    {
         int count = 0;
-        vector<int> hash(3, -1);
-        for(int i = 0; i < s.size(); i++) {
-            hash.assign(3, -1);   
-            for(int j = i; j < s.size(); j++) {
-                hash[s[j] - 'a'] = 1;
-
-                if(hash[0] + hash[1] + hash[2] == 3) {
-                    count += s.size() - j;
+        for (int i = 0; i < s.size(); i++)
+        {
+            vector<int> freq(3, 0);
+            for (int j = i; j < s.size(); j++)
+            {
+                freq[s[j] - 'a'] = 1;
+                if (freq[0] + freq[1] + freq[2] == 3)
+                {
+                    count += (s.size() - j);
                     break;
+                }
+            }
+        }
+        return count;
+    }
+};
+
+//! Brute Force
+
+/*
+> Time Complexity: O(N^2)
+> Space Complexity: O(3)
+*/
+
+class Solution
+{
+public:
+    int numberOfSubstrings(string s)
+    {
+        int count = 0;
+        for (int i = 0; i < s.size(); i++)
+        {
+            vector<int> freq(3, 0);
+            for (int j = i; j < s.size(); j++)
+            {
+                freq[s[j] - 'a'] = 1;
+                if (freq[0] + freq[1] + freq[2] == 3)
+                {
+                    count++;
                 }
             }
         }
