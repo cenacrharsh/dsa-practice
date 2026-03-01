@@ -1,15 +1,17 @@
-#include <bits/stdc++.h>
+#include <iostream>
 #include <vector>
+#include <queue>
+#include <stack>
 #include <algorithm>
-#include <climits>
+#include <set>
 #include <unordered_map>
 #include <cstring>
 using namespace std;
 
-// # Tutorial: https://www.youtube.com/watch?v=eD95WRfh81c&list=PLgUwDviBIf0oF6QL8m22w1hIDC1vJ_BHz&index=36
+//! Optimal
 
 /*
-> Time Complexity: O(N^3)
+> Time Complexity: O(N * Log(N)) + O(N^2)
 > Space Complexity: O(1)
 */
 
@@ -18,48 +20,41 @@ class Solution
 public:
     vector<vector<int>> fourSum(vector<int> &nums, int target)
     {
-        int n = nums.size();
         vector<vector<int>> ans;
         sort(nums.begin(), nums.end());
-
-        for (int i = 0; i < n; i++)
+        //* use 4 pointers, fix 2 i and j, and use 2 pointers to move
+        for (int i = 0; i < nums.size(); i++)
         {
             if (i > 0 && nums[i] == nums[i - 1])
                 continue;
-            for (int j = i + 1; j < n; j++)
+            for (int j = i + 1; j < nums.size(); j++)
             {
                 if (j > i + 1 && nums[j] == nums[j - 1])
                     continue;
-                int l = j + 1;
-                int r = n - 1;
-                while (l < r)
+
+                int k = j + 1;
+                int l = nums.size() - 1;
+                while (k < l)
                 {
                     long long sum = nums[i] + nums[j];
-                    sum += nums[l];
-                    sum += nums[r];
+                    sum += nums[k] + nums[l];
                     if (sum == target)
                     {
-                        vector<int> temp = {nums[i], nums[j], nums[l], nums[r]};
-                        ans.push_back(temp);
-
-                        while (l < r && nums[l] == nums[l + 1])
-                        {
-                            l++;
-                        }
-                        while (l < r && nums[r] == nums[r - 1])
-                        {
-                            r--;
-                        }
-                        l++;
-                        r--;
+                        ans.push_back({nums[i], nums[j], nums[k], nums[l]});
+                        k++;
+                        l--;
+                        while (k < l && nums[k] == nums[k - 1])
+                            k++;
+                        while (k < l && nums[l] == nums[l + 1])
+                            l--;
                     }
                     else if (sum < target)
                     {
-                        l++;
+                        k++;
                     }
-                    else
+                    else if (sum > target)
                     {
-                        r--;
+                        l--;
                     }
                 }
             }
@@ -67,3 +62,47 @@ public:
         return ans;
     }
 };
+
+//! Better
+
+/*
+> Time Complexity: O(N^3 * Log(M)) => M is size of hashset
+> Space Complexity: O(N) + O(quads) * 2
+*/
+
+class Solution
+{
+public:
+    vector<vector<int>> fourSum(vector<int> &nums, int target)
+    {
+        set<vector<int>> st;
+        for (int i = 0; i < nums.size(); i++)
+        {
+            for (int j = i + 1; j < nums.size(); j++)
+            {
+                set<int> hashSet;
+                for (int k = j + 1; k < nums.size(); k++)
+                {
+                    long long sum = (long long)nums[i] + nums[j] + nums[k];
+                    long long targetLeft = target - sum;
+                    if (hashSet.find(targetLeft) != hashSet.end())
+                    {
+                        vector<int> temp = {nums[i], nums[j], nums[k], (int)targetLeft};
+                        sort(temp.begin(), temp.end());
+                        st.insert(temp);
+                    }
+                    hashSet.insert(nums[k]);
+                }
+            }
+        }
+        vector<vector<int>> ans(st.begin(), st.end());
+        return ans;
+    }
+};
+
+//! Brute Force
+
+/*
+> Time Complexity: O(N^4)
+> Space Complexity: O()
+*/
