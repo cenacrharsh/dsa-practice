@@ -1,25 +1,42 @@
-#include <bits/stdc++.h>
+#include <iostream>
 #include <vector>
-#include <algorithm>
+#include <queue>
+#include <stack>
+#include <unordered_set>
 #include <climits>
 #include <unordered_map>
+#include <map>
 #include <cstring>
 using namespace std;
+
+/*
+> Time Complexity: O(M * N + M log M) where M = length of strs array, N = avg length of each string
+> Space Complexity: O(M + N)
+*/
 
 class Solution
 {
 public:
-    vector<int> intersection(vector<int> &nums1, vector<int> &nums2)
+    vector<vector<string>> groupAnagrams(vector<string> &strs)
     {
-        unordered_set<int> set1(begin(nums1), end(nums1));
-        unordered_set<int> set2(begin(nums2), end(nums2));
-        vector<int> ans;
-        for (auto i : set1)
+        map<vector<int>, vector<string>> anagramGroups; //* freq map of word -> array of words which match that freq map
+        for (string str : strs)
         {
-            if (set2.find(i) != set2.end())
+            //* create freq map for the current word
+            vector<int> freq(26, 0);
+            for (char ch : str)
             {
-                ans.push_back(i);
+                freq[ch - 'a']++;
             }
+
+            //* insert the current freq map in hashmap
+            anagramGroups[freq].push_back(str);
+        }
+
+        vector<vector<string>> ans;
+        for (auto it : anagramGroups)
+        {
+            ans.push_back(it.second);
         }
         return ans;
     }
