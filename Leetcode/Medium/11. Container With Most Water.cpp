@@ -1,35 +1,37 @@
-#include <bits/stdc++.h>
+#include <iostream>
 #include <vector>
+#include <queue>
+#include <stack>
 #include <algorithm>
 #include <climits>
 #include <unordered_map>
 #include <cstring>
 using namespace std;
 
-//# Tutorial: https://www.youtube.com/watch?v=6PrIRPpTI9Q
+// # Tutorial: https://www.youtube.com/watch?v=6PrIRPpTI9Q
 
 class Solution
 {
 public:
- int maxArea(vector<int> &height)
- {
-  int maxWater = INT_MIN;
-  int l = 0, r = height.size() - 1;
-  while (l < r)
-  {
-   int water = 0;
-   if (height[l] < height[r])
-   {
-    water = height[l] * (r - l);
-    l++;
-   }
-   else
-   {
-    water = height[r] * (r - l);
-    r--;
-   }
-   maxWater = max(maxWater, water);
-  }
-  return maxWater;
- }
+    int maxArea(vector<int> &height)
+    {
+        int maxWater = INT_MIN;
+        int l = 0, r = height.size() - 1;
+        while (l < r)
+        {
+            int water = 0;
+            if (height[l] < height[r])
+            {
+                water = height[l] * (r - l);
+                l++;
+            }
+            else
+            {
+                water = height[r] * (r - l);
+                r--;
+            }
+            maxWater = max(maxWater, water);
+        }
+        return maxWater;
+    }
 };
