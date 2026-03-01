@@ -19,6 +19,8 @@ using namespace std;
 > Space Complexity: O(1)
 */
 
+//- With indices of subarray
+
 class Solution
 {
 public:
@@ -44,6 +46,29 @@ public:
             }
 
             //* a subarray with a sum less than 0 will always reduce the answer and so this type of subarray cannot be a part of the subarray with maximum sum
+            if (currSum < 0)
+            {
+                currSum = 0;
+            }
+        }
+
+        return maxSum;
+    }
+};
+
+//- Without indices
+
+class Solution
+{
+public:
+    int maxSubArray(vector<int> &nums)
+    {
+        int currSum = 0, maxSum = INT_MIN;
+
+        for (int i = 0; i < nums.size(); i++)
+        {
+            currSum += nums[i];
+            maxSum = max(maxSum, currSum);
             if (currSum < 0)
             {
                 currSum = 0;
