@@ -1,5 +1,7 @@
-#include <bits/stdc++.h>
+#include <iostream>
 #include <vector>
+#include <queue>
+#include <stack>
 #include <algorithm>
 #include <climits>
 #include <unordered_map>
@@ -34,6 +36,7 @@ public:
         }
         return findLastRight(root->right);
     }
+
     TreeNode *helper(TreeNode *root)
     {
         if (root->left == NULL)
@@ -49,6 +52,7 @@ public:
         lastRight->right = rightChild; //* connect the right subtree to the maximum value in left subtree
         return root->left;
     }
+
     TreeNode *deleteNode(TreeNode *root, int key)
     {
         if (root == NULL)
