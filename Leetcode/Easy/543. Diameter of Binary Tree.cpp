@@ -1,5 +1,7 @@
-#include <bits/stdc++.h>
+#include <iostream>
 #include <vector>
+#include <queue>
+#include <stack>
 #include <algorithm>
 #include <climits>
 #include <unordered_map>
@@ -27,23 +29,47 @@ struct TreeNode
 
 //- for a given node the max length of path that goes through it is leftHeight + rightHeight
 
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+
 class Solution
 {
 public:
-    //* by height we mean distance b/w nodes, for eg. 1->2->3->4->5 => height = 4 from node 1
+    /**
+     * This function returns the number of NODES on the longest path down to a leaf.
+     * Example: 1->2->3 returns 3.
+     */
     int dfsHeight(TreeNode *root, int &diameter)
     {
         if (root == NULL)
         {
+            // Base case: A null tree has 0 nodes.
             return 0;
         }
 
-        int leftHeight = dfsHeight(root->left, diameter);
-        int rightHeight = dfsHeight(root->right, diameter);
+        // Recursively find the max nodes in left and right subtrees
+        int leftNodes = dfsHeight(root->left, diameter);
+        int rightNodes = dfsHeight(root->right, diameter);
 
-        diameter = max(diameter, leftHeight + rightHeight);
+        /**
+         * DIAMETER LOGIC:
+         * The number of edges passing through this node is (leftNodes + rightNodes).
+         * Since leftNodes and rightNodes are counts, their sum naturally represents
+         * the total number of edges connecting those two paths.
+         */
+        diameter = max(diameter, leftNodes + rightNodes);
 
-        return 1 + max(leftHeight, rightHeight); //* if a node x has lh = 2, rh = 3 then for the node above it it's height is going to be 1 + max(2,3) = 4
+        // Return the number of nodes in the longest path including this current node
+        return 1 + max(leftNodes, rightNodes);
     }
 
     int diameterOfBinaryTree(TreeNode *root)
